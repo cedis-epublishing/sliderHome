@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE locale SYSTEM "../../../../../lib/pkp/dtd/locale.dtd">
+
+<!--
+  * plugins/generic/home/locale/en_US/locale.xml
+  *
+  * Copyright (c) 2015 Language Science Press
+  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+  *
+  * Localization strings for this plugin.
+  *
+  -->
+
+<locale name="en_US" full_name="U.S. English">
+
+	<message key="plugins.generic.sliderHome.displayName">Home Plugin</message>
+	<message key="plugins.generic.sliderHome.description">Provides a template for the home page.</message>
+	<message key="plugins.generic.sliderHome.tabname">Slider</message>	
+	<message key="plugins.generic.sliderHome.gridTitle">Slider Content</message>	
+	<message key="plugins.generic.sliderHome.addSliderContent">Add Slider Content</message>	
+	<message key="plugins.generic.sliderHome.tooltip.editSliderContent">Edit Slider Content</message>
+  	<message key="plugins.generic.sliderHome.grid.title">Slider fields</message>
+	<message key="plugins.generic.sliderHome.noneCreated">No fields have been created yet.</message>
+	<message key="plugins.generic.sliderHome.name">Field name</message>
+	<message key="plugins.generic.sliderHome.content">Content</message>	
+
+</locale>
+
