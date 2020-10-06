@@ -26,9 +26,9 @@ class SliderHomePlugin extends GenericPlugin {
 				
 				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay'));
 				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab'));
-	//			HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
+				HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
-	//			HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));
+				HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));
 				
 			}
 			return true;
