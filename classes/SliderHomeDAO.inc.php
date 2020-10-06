@@ -41,22 +41,18 @@ class SliderHomeDAO extends DAO {
 		$result = $this->retrieve(
 			'SELECT content FROM slider WHERE context_id ='.$contextId . ' ORDER BY sequence'
 		);
-
+		$sliderContent = array();
 		if ($result->RecordCount() == 0) {
 			$result->Close();
-			return null;
-		} else {
-
-			$sliderContent = array();
+		} else {			
 			while (!$result->EOF) {
 				$row = $result->getRowAssoc(false);
 				$sliderContent[]= $this->convertFromDB($row['content'],null);
 				$result->MoveNext();
 			}
 			$result->Close();
-			return $sliderContent;
 		}
-
+		return $sliderContent;
 	}
 
 	function getByContextId($contextId, $rangeInfo = null) {

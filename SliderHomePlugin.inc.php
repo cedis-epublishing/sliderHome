@@ -22,12 +22,14 @@ class SliderHomePlugin extends GenericPlugin {
 	 */
 	function register($category, $path, $mainContextId = null) {			
 		if (parent::register($category, $path, $mainContextId)) {
-			if ($this->getEnabled($mainContextId)) {				
+			if ($this->getEnabled($mainContextId)) {
+				
 				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay'));
 				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab'));
-				HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
+	//			HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
-				HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));				
+	//			HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));
+				
 			}
 			return true;
 		}
@@ -68,17 +70,19 @@ class SliderHomePlugin extends GenericPlugin {
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
 		$contentArray = $sliderHomeDao->getAllContent($request->getContext()->getId());
-		
-		$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
-		foreach ($contentArray as $value) {
-			$sliderContent.= "<div class='swiper-slide'>";
-			$sliderContent.= $value;
-			$sliderContent.= "</div>";
+		$sliderContent = "";
+		if (!empty($contentArray)) {
+			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
+			foreach ($contentArray as $value) {
+				$sliderContent.= "<div class='swiper-slide'>";
+				$sliderContent.= $value;
+				$sliderContent.= "</div>";
+			}
+			$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
 		}
-		$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
 		return $sliderContent;
 	}
-	
+
 	// OJS: thers a template hook on the journal index page
 	function callbackIndexJournal($hookName, $args) {		
 		$output =& $args[2];
@@ -100,19 +104,6 @@ class SliderHomePlugin extends GenericPlugin {
 			</script>";
 		return false;
 	}	
-	
-/*			
-		switch ($applicationName) {
-			case 'ojs2':
-				$templateMgr->display($this->getTemplateResource('homeOJS.tpl'));
-				break;
-			case 'omp':
-				$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
-				break;
-			default:
-				assert(false);
-		}
-		*/	
 		
 	// OMP: no template hook on the index template -> use display hook to replace template
 	function callbackDisplay($hookName, $args) {
@@ -123,8 +114,9 @@ class SliderHomePlugin extends GenericPlugin {
 		switch ($template) {
 			case 'frontend/pages/index.tpl':	
 				if ($applicationName=="omp") {
-					$this->getSliderContent($request);
+					$sliderContent = $this->getSliderContent($request);
 					$templateMgr->assign('sliderContent',$sliderContent);
+					$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
 					return true;					
 				}
 		}
@@ -150,14 +142,14 @@ class SliderHomePlugin extends GenericPlugin {
 	 * @copydoc PKPPlugin::getDisplayName()
 	 */
 	function getDisplayName() {
-		return __('plugins.generic.home.displayName');
+		return __('plugins.generic.sliderHome.displayName');
 	}
 
 	/**
 	 * @copydoc PKPPlugin::getDescription()
 	 */
 	function getDescription() {
-		return __('plugins.generic.home.description');
+		return __('plugins.generic.sliderHome.description');
 	}
 	
 	/**

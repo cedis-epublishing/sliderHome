@@ -13,8 +13,8 @@
 
 <locale name="en_US" full_name="U.S. English">
 
-	<message key="plugins.generic.sliderHome.displayName">Home Plugin</message>
-	<message key="plugins.generic.sliderHome.description">Provides a template for the home page.</message>
+	<message key="plugins.generic.sliderHome.displayName">Slider Home Plugin</message>
+	<message key="plugins.generic.sliderHome.description">Displays a slider on the start page.</message>
 	<message key="plugins.generic.sliderHome.tabname">Slider</message>	
 	<message key="plugins.generic.sliderHome.gridTitle">Slider Content</message>	
 	<message key="plugins.generic.sliderHome.addSliderContent">Add Slider Content</message>	

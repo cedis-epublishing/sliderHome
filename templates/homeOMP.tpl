@@ -32,69 +32,22 @@
 
 <div class="page page_homepage">
 
-{$sliderContent}
-{**
-  <div class="swiper-container" >
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-		<img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/landschaft.jpg">
-		<div class="slider-text">
-			<h3>Series all around the world</h3>
-			<p>Language Science Press has 19 series with over 240 editorial board members from over 40 countries on all continents</p>               <a title="series" href="/series">Read more ...</a></p>
-		</div>	  
-	  </div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild1.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild2.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild3.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild4.png"></div>	  
-    </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
-  </div>
- **}
-  
-  {**				
-<p><img src="/public/site/images/snordhoff/ebm2.png" alt=""></p>
-<div>
-<h3>Series all around the world</h3>
-<p>Language Science Press has 19 series with over 240 editorial board members from over 40 countries on all contintents                 <a title="series" href="/series">Read more ...</a></p>
-</div>				
-  <div class="swiper-container" >
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild1.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild2.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild3.png"></div>
-      <div class="swiper-slide"><img src="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/public/presses/1/bild4.png"></div>	  
-    </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
-  </div>
-  **}
-  
-  
+	{$sliderContent}
 
-  <!-- Swiper JS -->
-  <script src="../package/swiper-bundle.min.js"></script>
-
-  <!-- Initialize Swiper -->
-  <script>
-    var swiper = new Swiper('.swiper-container', {
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-        renderBullet: function (index, className) {
-          return '<span class="' + className + '">' + '</span>';
-        },
-      },
-	  speed: 2000,
-	  autoplay: { delay: 200000,disableOnInteraction:true, stopOnLastSlide:true },
-    });
-  </script>
-
-
-
-
-
+	<!-- Initialize Swiper -->
+	<script>
+		var swiper = new Swiper('.swiper-container', {
+			pagination: {
+				el: '.swiper-pagination',
+				clickable: true,
+				renderBullet: function (index, className) {
+					return '<span class="' + className + '">' + '</span>';
+				},
+			},
+			speed: 2000,
+			autoplay: { delay: 200000,disableOnInteraction:true, stopOnLastSlide:true },
+		});
+	</script>
 
 	{* Homepage Image *}
 	{if !$activeTheme->getOption('useHomepageImageAsHeader') && $homepageImage}
