@@ -7,58 +7,50 @@
 }
 
 .swiper-wrapper p {
-	margin:0;
+	margin:0 !important;
 }
 
 .slider-text {
-	margin-top: -130px;
-	padding: 10px;
-	position: absolute;
+	margin-top: -130px  !important;
+	padding: 10px !important ;
+	position: absolute !important ;
 	z-index: 1000;
 	background-color:rgba(255,255,255,0.6);
-	width: 100%;
-	height: 100px;
+	width: 100% !important ;
+	height: 100px  !important ;
 }
 
 @media only screen and (max-width: 1200px) {
 .slider-text {
-	margin-top: -130px;
+	margin-top: -130px  !important ;
 	background-color:rgba(255,255,255,0.6);
-	height: auto;
+	height: auto !important ;
 }
 }
 
 @media only screen and (max-width: 600px) {
 .slider-text {
-	margin-top: -150px;
+	margin-top: -150px  !important;
 	background-color:rgba(255,255,255,0.6);
-	height: auto;
+	height: auto !important ;
 }
 }
-
-
-
-
-
-
-
-
 
 .slider-text p {
-	margin: 10px 0 10px 0;
+	margin: 10px 0 10px 0 !important;
 }
 
 .slider-text h3 {
-	margin: 0;
+	margin: 0 !important;
 }
 
 .swiper-slide {
-	 position: relative;	 
+	 position: relative !important ;	 
 }
 
 .swiper-pagination {
 	position:relative !important;
-	--swiper-theme-color: #666;	
+	--swiper-theme-color: #666 !important ;	
 }
 
 .swiper-pagination-bullets {
@@ -69,45 +61,4 @@
 	margin: 0 7px !important;
 	height: 13px !important;
 	width: 13px !important;
-}	
-	
-
-
-/*
-    .swiper-slide {
-      text-align: center;
-      font-size: 18px;
-      background: #fff;
-
-       Center slide text vertically 
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: -webkit-flex;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      -webkit-justify-content: center;
-      justify-content: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      -webkit-align-items: center;
-      align-items: center;
-    }
-	*/
-/*
-    .swiper-pagination-bullet {
-      width: 20px;
-      height: 20px;
-      text-align: center;
-      line-height: 20px;
-      font-size: 12px;
-      color: #000;
-      opacity: 1;
-      background: rgba(0, 0, 0, 0.2);
-    }
-
-    .swiper-pagination-bullet-active {
-      color: #fff;
-      background: #007aff;
-    }
-	*/
+}

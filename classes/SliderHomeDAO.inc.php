@@ -23,7 +23,7 @@ class SliderHomeDAO extends DAO {
 		if ($contextId) $params[] = $contextId;
 
 		$result = $this->retrieve(
-			'SELECT * FROM langsci_slider_content WHERE field_id = ?'
+			'SELECT * FROM slider WHERE slider_content_id = ?'
 			. ($contextId?' AND context_id = ?':''),
 			$params
 		);
@@ -39,7 +39,7 @@ class SliderHomeDAO extends DAO {
 	function getAllContent($contextId) {
 
 		$result = $this->retrieve(
-			'SELECT content FROM langsci_slider_content WHERE context_id ='.$contextId . ' ORDER BY sequence'
+			'SELECT content FROM slider WHERE context_id ='.$contextId . ' ORDER BY sequence'
 		);
 
 		if ($result->RecordCount() == 0) {
@@ -61,18 +61,17 @@ class SliderHomeDAO extends DAO {
 
 	function getByContextId($contextId, $rangeInfo = null) {
 		$result = $this->retrieveRange(
-			'SELECT * FROM langsci_slider_content WHERE context_id = ? ORDER BY sequence',
+			'SELECT * FROM slider WHERE context_id = ? ORDER BY sequence',
 			(int) $contextId,
 			$rangeInfo
 		);
-
 		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	function getMaxSequence($contextId) {
 
 		$result = $this->retrieve(
-			'SELECT MAX(sequence) as maxseq FROM langsci_slider_content WHERE context_id ='.$contextId
+			'SELECT MAX(sequence) as maxseq FROM slider WHERE context_id ='.$contextId
 		);
 
 		if ($result->RecordCount() == 0) {
@@ -87,7 +86,7 @@ class SliderHomeDAO extends DAO {
 	function insertObject($sliderContent) {
 
 		$this->update(
-			'INSERT INTO langsci_slider_content (context_id, name, content, sequence)
+			'INSERT INTO slider (context_id, name, content, sequence)
 			VALUES (?,?,?,?)',
 			array(
 				(int) $sliderContent->getContextId(),
@@ -96,21 +95,19 @@ class SliderHomeDAO extends DAO {
 				$sliderContent->getSequence()
 			)
 		);
-
 		$sliderContent->setId($this->getInsertId());
-
 		return $sliderContent->getId();
 	}
 
 	function updateObject($sliderContent) {
 
 		$this->update(
-			'UPDATE	langsci_slider_content
+			'UPDATE	slider
 			SET	context_id = ?,
 				name = ?,
 				content = ?,
 				sequence = ?
-			WHERE field_id = ?',
+			WHERE slider_content_id = ?',
 			array(
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
@@ -121,10 +118,10 @@ class SliderHomeDAO extends DAO {
 		);
 	}
 	
-	function deleteById($sliderContent) {
+	function deleteById($sliderContentId) {
 		$this->update(
-			'DELETE FROM langsci_slider_content WHERE field_id = ?',
-			(int) $sliderContent
+			'DELETE FROM langsci_slider_content WHERE slider_content_id = ?',
+			(int) $sliderContentId
 		);
 	}
 
@@ -138,7 +135,7 @@ class SliderHomeDAO extends DAO {
 
 	function _fromRow($row) {
 		$sliderContent = $this->newDataObject();
-		$sliderContent->setId($row['field_id']);
+		$sliderContent->setId($row['slider_content_id']);
 		$sliderContent->setName($row['name']);
 		$sliderContent->setContent($row['content']);
 		$sliderContent->setContextId($row['context_id']);
@@ -147,7 +144,7 @@ class SliderHomeDAO extends DAO {
 	}
 
 	function getInsertId() {
-		return $this->_getInsertId('langsci_slider_content', 'field_id');
+		return $this->_getInsertId('slider', 'slider_content_id');
 	}
 
 }

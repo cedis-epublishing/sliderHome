@@ -148,20 +148,18 @@ class SliderHomeGridHandler extends GridHandler {
 	// Public Grid Actions
 	//
 	/**
-	 * Display the grid's containing page.
+	 * Display the grid's containing page. 
+	 * for OJS 3.1.2
 	 * @param $args array
 	 * @param $request PKPRequest
 	 */
-	 /*
 	function index($args, $request) {
 		$context = $request->getContext();
 		import('lib.pkp.classes.form.Form');
-		$form = new Form(self::$plugin->getTemplatePath() . 'sliderContent.tpl');
-		$json = new JSONMessage(true, $form->fetch($request));
-		return $json->getString();
-	}*/
+		$form = new Form(self::$plugin->getTemplateResource('sliderSettingsTab.tpl'));
+		return new JSONMessage(true, $form->fetch($request));		
+	}
 	
-
 	/**
 	 * An action to add a new user
 	 * @param $args array Arguments to the request

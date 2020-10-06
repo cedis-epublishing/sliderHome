@@ -23,6 +23,7 @@
 	<message key="plugins.generic.sliderHome.noneCreated">No fields have been created yet.</message>
 	<message key="plugins.generic.sliderHome.name">Field name</message>
 	<message key="plugins.generic.sliderHome.content">Content</message>	
-
+	<message key="plugins.generic.sliderHome.noneExist">No content yet.</message>	
+	
 </locale>
 

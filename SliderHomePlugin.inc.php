@@ -23,74 +23,110 @@ class SliderHomePlugin extends GenericPlugin {
 	function register($category, $path, $mainContextId = null) {			
 		if (parent::register($category, $path, $mainContextId)) {
 			if ($this->getEnabled($mainContextId)) {				
-				HookRegistry::register('TemplateManager::display',array($this, 'handleDisplay'));
-				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackShowWebsiteSettingsTabs'));				
-				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));				
+				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay'));
+				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab'));
+				HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
+				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
+				HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));				
 			}
 			return true;
 		}
 		return false;
 	}
 	
-	/**
-	 * Extend the website settings tabs to include static pages
-	 * @param $hookName string The name of the invoked hook
-	 * @param $args array Hook parameters
-	 * @return boolean Hook handling status
-	 */
-	function callbackShowWebsiteSettingsTabs($hookName, $args) {
+	// OJS 3.1.2: Add tab fro slider content grid in website settings
+	function callbackWebsiteSettingsTab($hookName, $args) {
+		$versionDao = DAORegistry::getDAO('VersionDAO');
+		$currentVersion = $versionDao->getCurrentVersion();
+		$version = $currentVersion->getMajor().".".$currentVersion->getMinor().".".$currentVersion->getRevision();
+		$product = $currentVersion->getProduct();
+		
+		if ($product=="ojs2" && $version="3.1.2") {
+			$templateMgr = $args[1];
+			$output =& $args[2];
+			$request =& Registry::get('request');
+			$dispatcher = $request->getDispatcher();
+			$output .= '<li><a name="sliderHome" href="' . $dispatcher->url($request, ROUTE_COMPONENT, null, 'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler', 'index') . '">' . __('plugins.generic.sliderHome.tabname') . '</a></li>';
+		}
+		return false; // Permit other plugins to continue interacting with this hook
+	}
+	
+	// OMP/OJs 3.2: Add tab for slider content grid in website settings appearance
+	function callbackAppearanceTab($hookName, $args) {		
 		$templateMgr = $args[1];
 		$output =& $args[2];
 		$request =& Registry::get('request');
 		$dispatcher = $request->getDispatcher();
-
-		$output .= $templateMgr->fetch($this->getTemplateResource('sliderTab.tpl'));
+		$output .= $templateMgr->fetch($this->getTemplateResource('appearanceTab.tpl'));
 
 		// Permit other plugins to continue interacting with this hook
 		return false;
 	}
-
-	function handleDisplay($hookName, $args) {
 	
+	// get markup for slider content, incl. containers/wrappers
+	function getSliderContent($request) {
+		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+		$sliderHomeDao = new SliderHomeDao();
+		$contentArray = $sliderHomeDao->getAllContent($request->getContext()->getId());
+		
+		$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
+		foreach ($contentArray as $value) {
+			$sliderContent.= "<div class='swiper-slide'>";
+			$sliderContent.= $value;
+			$sliderContent.= "</div>";
+		}
+		$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
+		return $sliderContent;
+	}
+	
+	// OJS: thers a template hook on the journal index page
+	function callbackIndexJournal($hookName, $args) {		
+		$output =& $args[2];
+		$request = $this->getRequest();
+		$output .= $this->getSliderContent($request);
+		$output .= 
+			"<script>
+				var swiper = new Swiper('.swiper-container', {
+					pagination: {
+						el: '.swiper-pagination',
+						clickable: true,
+						renderBullet: function (index, className) {
+							return '<span class=\"' + className + '\">' + '</span>';
+						},
+					},
+					speed: 2000,
+					autoplay: { delay: 200000,disableOnInteraction:true, stopOnLastSlide:true },
+				});
+			</script>";
+		return false;
+	}	
+	
+/*			
+		switch ($applicationName) {
+			case 'ojs2':
+				$templateMgr->display($this->getTemplateResource('homeOJS.tpl'));
+				break;
+			case 'omp':
+				$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
+				break;
+			default:
+				assert(false);
+		}
+		*/	
+		
+	// OMP: no template hook on the index template -> use display hook to replace template
+	function callbackDisplay($hookName, $args) {
 		$request = $this->getRequest();
 		$templateMgr =& $args[0];
 		$template =& $args[1];
-			
+		$applicationName = Application::getApplication()->getName();
 		switch ($template) {
-
 			case 'frontend/pages/index.tpl':	
-
-				import('plugins.generic.sliderHome.classes.SliderHomeDAO');
-				$sliderHomeDao = new SliderHomeDao();
-				$contentArray = $sliderHomeDao->getAllContent($request->getPress()->getId());
-				
-				$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
-				foreach ($contentArray as $value) {
-					$sliderContent.= "<div class='swiper-slide'>";
-					$sliderContent.= $value;
-					$sliderContent.= "</div>";
+				if ($applicationName=="omp") {
+					$this->getSliderContent($request);
+					$templateMgr->assign('sliderContent',$sliderContent);
+					return true;					
 				}
-				$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
-				$templateMgr->assign('sliderContent',$sliderContent);
-
-				//$templateMgr->assign('title',__('plugins.generic.home.title'));
-				//$templateMgr->assign('baseUrl',$request->getBaseUrl());
-				//$templateMgr->assign('baseUrl',"langsci-press.org");
-									// todo. omp vs ojs
-									
-				$application = Application::get();
-				$applicationName = $application->getName();
-				switch ($applicationName) {
-					case 'ojs2':
-						$templateMgr->display($this->getTemplateResource('homeOJS.tpl'));
-						break;
-					case 'omp':
-						$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
-						break;
-					default:
-						assert(false);
-				}
-			return true;
 		}
 		return false;
 	}
@@ -125,13 +161,12 @@ class SliderHomePlugin extends GenericPlugin {
 	}
 	
 	/**
-	 * Get the name of the settings file to be installed on new context
-	 * creation.
-	 * @return string
+	 * Get the filename of the ADODB schema for this plugin.
+	 * @return string Full path and filename to schema descriptor.
 	 */
-	function getContextSpecificPluginSettingsFile() {
-		return $this->getPluginPath() . '/settings.xml';
-	}	
+	function getInstallSchemaFile() {
+		return $this->getPluginPath() . '/schema.xml';
+	}
 }
 
 ?>
