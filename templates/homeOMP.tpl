@@ -15,16 +15,9 @@
  * @uses $numAnnouncementsHomepage int Number of announcements to display on the
  *       homepage
  * @uses $additionalHomeContent string HTML blob of arbitrary content added by
- *  an editor/admin. <link rel="stylesheet" href="http://ojs-test.cedis.fu-berlin.de/omp-cf-1/plugins/generic/sliderHome/css/sliderHome.css">
+ *  an editor/admin.
  *}
 {include file="frontend/components/header.tpl"}
-
-<link rel="stylesheet" href="plugins/generic/sliderHome/css/sliderHome.css">
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-
-<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 <div class="page page_homepage">
 

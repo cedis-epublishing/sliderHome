@@ -42,7 +42,6 @@ class SliderHomePlugin extends GenericPlugin {
 		$currentVersion = $versionDao->getCurrentVersion();
 		$version = $currentVersion->getMajor().".".$currentVersion->getMinor().".".$currentVersion->getRevision();
 		$product = $currentVersion->getProduct();
-		
 		if ($product=="ojs2" && $version="3.1.2") {
 			$templateMgr = $args[1];
 			$output =& $args[2];
@@ -64,26 +63,8 @@ class SliderHomePlugin extends GenericPlugin {
 		// Permit other plugins to continue interacting with this hook
 		return false;
 	}
-	
-	// get markup for slider content, incl. containers/wrappers
-	function getSliderContent($request) {
-		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
-		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($request->getContext()->getId());
-		$sliderContent = "";
-		if (!empty($contentArray)) {
-			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
-			foreach ($contentArray as $value) {
-				$sliderContent.= "<div class='swiper-slide'>";
-				$sliderContent.= $value;
-				$sliderContent.= "</div>";
-			}
-			$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
-		}
-		return $sliderContent;
-	}
 
-	// OJS: thers a template hook on the journal index page
+	// OJS: there's a template hook on the journal index page
 	function callbackIndexJournal($hookName, $args) {		
 		$output =& $args[2];
 		$request = $this->getRequest();
@@ -106,22 +87,66 @@ class SliderHomePlugin extends GenericPlugin {
 	}	
 		
 	// OMP: no template hook on the index template -> use display hook to replace template
-	function callbackDisplay($hookName, $args) {
+	function callbackDisplay($hookName, $args) {	
 		$request = $this->getRequest();
 		$templateMgr =& $args[0];
 		$template =& $args[1];
-		$applicationName = Application::getApplication()->getName();
+		$applicationName = Application::getApplication()->getName();		
 		switch ($template) {
 			case 'frontend/pages/index.tpl':	
 				if ($applicationName=="omp") {
 					$sliderContent = $this->getSliderContent($request);
 					$templateMgr->assign('sliderContent',$sliderContent);
+					$this->addHeader($templateMgr,$request->getBaseUrl());
 					$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
 					return true;					
 				}
+			case 'frontend/pages/indexJournal.tpl':
+				$this->addHeader($templateMgr,$request->getBaseUrl());
 		}
 		return false;
 	}
+	
+	private function addHeader($templateMgr,$baseUrl) {
+		$templateMgr->addHeader(
+			'slider',
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/sliderHome.css'>"
+		);
+		$templateMgr->addHeader(
+			'swiper',
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.css'>"
+		);
+		$templateMgr->addHeader(
+			'swiper-min',
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
+		);		
+		$templateMgr->addHeader(
+			'swiper-js',
+			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.js'></script>"
+		);
+		$templateMgr->addHeader(
+			'swiper-min-js',
+			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
+		);
+	}
+	
+	// get markup for slider content, incl. containers/wrappers
+	private function getSliderContent($request) {
+		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+		$sliderHomeDao = new SliderHomeDao();
+		$contentArray = $sliderHomeDao->getAllContent($request->getContext()->getId());
+		$sliderContent = "";
+		if (!empty($contentArray)) {
+			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
+			foreach ($contentArray as $value) {
+				$sliderContent.= "<div class='swiper-slide'>";
+				$sliderContent.= $value;
+				$sliderContent.= "</div>";
+			}
+			$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
+		}
+		return $sliderContent;
+	}	
 	
 	/**
 	 * Set up handler

@@ -13,7 +13,14 @@
 
 <locale name="de_DE" full_name="German">
 
-	<message key="plugins.generic.home.displayName">Startseiten Plugin</message>
-	<message key="plugins.generic.home.description">Stellt Startseitentemplate zur Verfügung</message>
+	<message key="plugins.generic.sliderHome.displayName">Slider Plugin</message>
+	<message key="plugins.generic.sliderHome.description">Zeigt auf der Startseite einen Slider an.</message>
+	<message key="plugins.generic.sliderHome.tabname">Slider</message>	
+	<message key="plugins.generic.sliderHome.gridTitle">Sliderinhalte</message>	
+	<message key="plugins.generic.sliderHome.addSliderContent">Sliderinhalt hinzufügen</message>	
+	<message key="plugins.generic.sliderHome.tooltip.editSliderContent">Sliderinhalt bearbeiten</message>
+	<message key="plugins.generic.sliderHome.name">Name</message>
+	<message key="plugins.generic.sliderHome.content">Inhalt</message>	
+	<message key="plugins.generic.sliderHome.noneExist">Kein Inhalt vorhanden.</message>
 
 </locale>
