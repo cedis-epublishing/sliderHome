@@ -22,5 +22,6 @@
 	<message key="plugins.generic.sliderHome.name">Name</message>
 	<message key="plugins.generic.sliderHome.content">Inhalt</message>	
 	<message key="plugins.generic.sliderHome.noneExist">Kein Inhalt vorhanden.</message>
+	<message key="plugins.generic.sliderHome.showSliderContent">Diesen Sliderinhalt auf der Startseite anzeigen.</message>	
 
 </locale>

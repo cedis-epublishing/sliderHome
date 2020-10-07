@@ -32,12 +32,15 @@
 			{fbvElement type="textarea" rich=true label="plugins.generic.sliderHome.content" id="content" value=$content inline=true multilingual=false size=$fbvStyles.size.MEDIUM}
 		{/fbvFormSection}
 
+		{fbvFormSection list=true}
+					{fbvElement type="checkbox" id="showContent" name="showContent" checked=$showContent label="plugins.generic.sliderHome.showSliderContent"}				
+		{/fbvFormSection}
+		
 		{fbvFormSection class="formButtons"}
 			{fbvElement type="submit" class="submitFormButton" id="submitFormButton" label="common.save"}
 		{/fbvFormSection}
 
 	{/fbvFormArea}
-
 
 </form>
 

@@ -39,7 +39,7 @@ class SliderHomeDAO extends DAO {
 	function getAllContent($contextId) {
 
 		$result = $this->retrieve(
-			'SELECT content FROM slider WHERE context_id ='.$contextId . ' ORDER BY sequence'
+			'SELECT content FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
 		);
 		$sliderContent = array();
 		if ($result->RecordCount() == 0) {
@@ -81,14 +81,21 @@ class SliderHomeDAO extends DAO {
 
 	function insertObject($sliderContent) {
 
+$myfile = 'test.txt';
+$newContentCF5344 = print_r($sliderContent->getShowContent(), true);
+$contentCF2343 = file_get_contents($myfile);
+$contentCF2343 .= "\n insert: " . $newContentCF5344 ;
+file_put_contents($myfile, $contentCF2343 );
+	
 		$this->update(
-			'INSERT INTO slider (context_id, name, content, sequence)
-			VALUES (?,?,?,?)',
+			'INSERT INTO slider (context_id, name, content, sequence, show_content)
+			VALUES (?,?,?,?,?)',
 			array(
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
 				$sliderContent->getContent(),
-				$sliderContent->getSequence()
+				$sliderContent->getSequence(),
+				$sliderContent->getShowContent()				
 			)
 		);
 		$sliderContent->setId($this->getInsertId());
@@ -96,19 +103,25 @@ class SliderHomeDAO extends DAO {
 	}
 
 	function updateObject($sliderContent) {
-
+$myfile = 'test.txt';
+$newContentCF5344 = print_r((int)$sliderContent->getShowContent(), true);
+$contentCF2343 = file_get_contents($myfile);
+$contentCF2343 .= "\n update: " . $newContentCF5344 ;
+file_put_contents($myfile, $contentCF2343 );
 		$this->update(
 			'UPDATE	slider
 			SET	context_id = ?,
 				name = ?,
 				content = ?,
-				sequence = ?
+				sequence = ?,
+				show_content = ?
 			WHERE slider_content_id = ?',
 			array(
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
 				$sliderContent->getContent(),
 				$sliderContent->getSequence(),
+				(int)$sliderContent->getShowContent(),				
 				(int) $sliderContent->getId()
 			)
 		);
@@ -136,6 +149,7 @@ class SliderHomeDAO extends DAO {
 		$sliderContent->setContent($row['content']);
 		$sliderContent->setContextId($row['context_id']);
 		$sliderContent->setSequence($row['sequence']);
+		$sliderContent->setShowContent($row['show_content']);		
 		return $sliderContent;
 	}
 

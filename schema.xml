@@ -34,7 +34,10 @@
 		</field>		
 		<field name="sequence" type="I8">
 			<NOTNULL/>
-		</field>	
+		</field>
+		<field name="show_content" type="I8">
+			<NOTNULL/>
+		</field>		
 		<descr>Content for slider</descr>
 	</table>
 </schema>

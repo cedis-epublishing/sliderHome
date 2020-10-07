@@ -48,6 +48,14 @@ class SliderContent extends DataObject {
 	function getContent() {
 		return $this->getData('content');
 	}
+	
+	function getShowContent() {
+		return $this->getData('showContent');
+	}
+
+	function setShowContent($showContent) {
+		$this->setData('showContent', $showContent);
+	}	
 
 	function getSequence() {
 		return $this->getData('sequence');

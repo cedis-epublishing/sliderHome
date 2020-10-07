@@ -43,18 +43,18 @@ class SliderHomeForm extends Form {
 
 		if ($this->sliderContentId) {
 			$sliderHomeDao = new SliderHomeDAO();
-			
 			$sliderContent = $sliderHomeDao->getById($this->sliderContentId, $this->contextId);
 			$this->setData('name', $sliderContent->getName());
-			$this->setData('content', $sliderContent->getContent());			
+			$this->setData('content', $sliderContent->getContent());
+			$this->setData('showContent', $sliderContent->getShowContent());			
 		}
 	}
 
 	/**
 	 * Assign form data to user-submitted data.
 	 */
-	function readInputData() {
-		$this->readUserVars(array('name','content'));
+	function readInputData() {	
+		$this->readUserVars(array('name','content','showContent'));
 	}
 
 	/**
@@ -64,7 +64,6 @@ class SliderHomeForm extends Form {
 
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('sliderContentId', $this->sliderContentId);
-		//$templateMgr->assign('baseUrl',$request->getBaseUrl());
 		
 		if (!$this->sliderContentId) {
 				$this->setData('content',
@@ -91,10 +90,10 @@ class SliderHomeForm extends Form {
 			// Create a new item
 			$sliderContent = $sliderHomeDao->newDataObject();
 			$sliderContent->setContextId($this->contextId);
-		}
-
+		}		
 		$sliderContent->setName($this->getData('name'));
 		$sliderContent->setContent($this->getData('content'));
+		$sliderContent->setShowContent(!empty($this->getData('showContent')));		
 		if ($this->sliderContentId) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
 			$sliderHomeDao->updateObject($sliderContent);
