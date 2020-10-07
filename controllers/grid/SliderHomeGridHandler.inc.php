@@ -156,7 +156,7 @@ class SliderHomeGridHandler extends GridHandler {
 	function index($args, $request) {
 		$context = $request->getContext();
 		import('lib.pkp.classes.form.Form');
-		$form = new Form(self::$plugin->getTemplateResource('sliderSettingsTab.tpl'));
+		$form = new Form(self::$plugin->getTemplateResource('websiteSettingsTab.tpl'));
 		return new JSONMessage(true, $form->fetch($request));		
 	}
 	
