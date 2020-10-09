@@ -44,10 +44,6 @@ class SliderHomeGridHandler extends GridHandler {
 	//
 	// Overridden template methods
 	//
-
-	//
-	// Overridden template methods
-	//
 	/**
 	 * @copydoc GridHandler::authorize()
 	 */

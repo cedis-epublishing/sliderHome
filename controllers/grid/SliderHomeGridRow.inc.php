@@ -60,21 +60,6 @@ class SliderHomeGridRow extends GridRow {
 					__('grid.action.delete'),
 					'delete'
 				)
-			);			
-			
-			$this->addAction(
-				new LinkAction(
-					'remove',
-					new RemoteActionConfirmationModal(
-						$request->getSession(),
-						__('common.confirmDelete'),
-						__('common.remove'),
-						$router->url($request, null, null, 'deleteSliderContent', null, array('sliderContentId' => $sliderContentId)),
-						'modal_delete'
-					),
-					__('grid.action.remove'),
-					'delete'
-				)
 			);
 		}
 	}

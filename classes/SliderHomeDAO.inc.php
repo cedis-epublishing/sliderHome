@@ -79,14 +79,7 @@ class SliderHomeDAO extends DAO {
 		}
 	}
 
-	function insertObject($sliderContent) {
-
-$myfile = 'test.txt';
-$newContentCF5344 = print_r($sliderContent->getShowContent(), true);
-$contentCF2343 = file_get_contents($myfile);
-$contentCF2343 .= "\n insert: " . $newContentCF5344 ;
-file_put_contents($myfile, $contentCF2343 );
-	
+	function insertObject($sliderContent) {	
 		$this->update(
 			'INSERT INTO slider (context_id, name, content, sequence, show_content)
 			VALUES (?,?,?,?,?)',
@@ -103,11 +96,6 @@ file_put_contents($myfile, $contentCF2343 );
 	}
 
 	function updateObject($sliderContent) {
-$myfile = 'test.txt';
-$newContentCF5344 = print_r((int)$sliderContent->getShowContent(), true);
-$contentCF2343 = file_get_contents($myfile);
-$contentCF2343 .= "\n update: " . $newContentCF5344 ;
-file_put_contents($myfile, $contentCF2343 );
 		$this->update(
 			'UPDATE	slider
 			SET	context_id = ?,
@@ -129,7 +117,7 @@ file_put_contents($myfile, $contentCF2343 );
 	
 	function deleteById($sliderContentId) {
 		$this->update(
-			'DELETE FROM langsci_slider_content WHERE slider_content_id = ?',
+			'DELETE FROM slider WHERE slider_content_id = ?',
 			(int) $sliderContentId
 		);
 	}
