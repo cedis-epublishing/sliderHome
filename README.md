@@ -1,21 +1,24 @@
 - Home Plugin
-- Version: 1.0
+- Version: 2.0
 - Author: Carola Fanselow
 
 About
 -----
-This plugin replaces the template for the home page in OMP (frontend/pages/index.tpl). In index.tpl, it adds a slider that is populated with data from table 'langsci_slider_content'. The table can be created and managed with the Plugin "Slider Content Plugin".  
+This plugin creates a swiper slider on the OJS/OMP homepage. Images and image caputes can be added in the OJS/OMP backend (website settings). Data is stored in table "slider". 
 
 License
 -------
 Copyright (c) 2016 Language Science Press
+Copyright (c) 2020 Freie Universität Berlin
 
 This plugin is licensed under the GNU General Public License v2. 
 
 System Requirements
 -------------------
 This plugin is compatible with...
- - OMP 1.2.0
+ - OMP 3.2
+ - OJS 3.2
+ - OJS 3.1.2
 
 Installation
 ------------
