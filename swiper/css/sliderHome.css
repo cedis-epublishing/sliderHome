@@ -4,6 +4,7 @@
 
 .swiper-wrapper {
 	padding-bottom: 10px !important;
+	align-items: center;
 }
 
 .swiper-wrapper p {
@@ -45,7 +46,10 @@
 }
 
 .swiper-slide {
-	 position: relative !important ;	 
+	 position: relative !important ;
+	 display: flex;
+	 flex-direction: column;
+	 align-items: center;
 }
 
 .swiper-pagination {

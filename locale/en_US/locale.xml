@@ -25,6 +25,8 @@
 	<message key="plugins.generic.sliderHome.content">Content</message>
 	<message key="plugins.generic.sliderHome.noneExist">No content yet.</message>
 	<message key="plugins.generic.sliderHome.showSliderContent">Show this slider content on home page.</message>	
-	
+	<message key="plugins.generic.slider.settings.form.maxHeight.description">Maximum slider height as percentage of screen height.</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight">Slider height.</message>
+
 </locale>
 

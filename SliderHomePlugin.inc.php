@@ -72,6 +72,7 @@ class SliderHomePlugin extends GenericPlugin {
 		$output .= 
 			"<script>
 				var swiper = new Swiper('.swiper-container', {
+					autoHeight: true, //enable auto height
 					pagination: {
 						el: '.swiper-pagination',
 						clickable: true,
@@ -132,15 +133,19 @@ class SliderHomePlugin extends GenericPlugin {
 	
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
+
+		$contextId = $request->getContext()->getId();
+		$maxHeight = $this->getSetting($contextId, 'maxHeight');
+
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($request->getContext()->getId());
+		$contentArray = $sliderHomeDao->getAllContent($contextId);
 		$sliderContent = "";
 		if (!empty($contentArray)) {
 			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
 			foreach ($contentArray as $value) {
 				$sliderContent.= "<div class='swiper-slide'>";
-				$sliderContent.= $value;
+				$sliderContent.= preg_replace("#<img#","<img style='max-height:".$maxHeight."vh'",$value);
 				$sliderContent.= "</div>";
 			}
 			$sliderContent.= "</div><div class='swiper-pagination'></div></div>";

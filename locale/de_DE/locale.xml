@@ -23,5 +23,6 @@
 	<message key="plugins.generic.sliderHome.content">Inhalt</message>	
 	<message key="plugins.generic.sliderHome.noneExist">Kein Inhalt vorhanden.</message>
 	<message key="plugins.generic.sliderHome.showSliderContent">Diesen Sliderinhalt auf der Startseite anzeigen.</message>	
-
+	<message key="plugins.generic.slider.settings.form.maxHeight.description">Maximale Höhe des Slider in Prozenz des Bildschirms.</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight">Sliderhöhe.</message>
 </locale>
