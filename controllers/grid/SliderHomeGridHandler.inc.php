@@ -2,7 +2,7 @@
 
 /**
  * @file plugins/generic/sliderHome/classes/SliderHomeGridHandler.inc.php
- *
+ *fz
  * Copyright (c) 2016 Language Science Press
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
@@ -37,7 +37,7 @@ class SliderHomeGridHandler extends GridHandler {
 		parent::__construct();	
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN),
-			array('index', 'fetchGrid', 'fetchRow','addSliderContent', 'editSliderContent', 'updateSliderContent', 'delete','saveSequence','showSettingsForm','submitSettingsForm')
+			array('index', 'fetchGrid', 'fetchRow','addSliderContent', 'editSliderContent', 'updateSliderContent', 'delete','saveSequence')
 		);
 	} 
 
@@ -153,6 +153,7 @@ class SliderHomeGridHandler extends GridHandler {
 		$context = $request->getContext();
 		import('lib.pkp.classes.form.Form');
 		$form = new Form(self::$plugin->getTemplateResource('websiteSettingsTab.tpl'));
+
 		return new JSONMessage(true, $form->fetch($request));		
 	}
 	
@@ -255,36 +256,6 @@ class SliderHomeGridHandler extends GridHandler {
 		$sliderContent = $sliderHomeDao->getById($rowId, $contextId);
 		$sliderContent->setSequence($newSequence);
 		$sliderHomeDao->updateObject($sliderContent);
-	}
-
-	/**
-	 * Display Form
-	 * @param $args array
-	 * @param $request PKPRequest
-	 */
-	function showSettingsForm($args, $request) {
-		// import('lib.pkp.classes.form.Form');
-		// $form = new Form(self::$plugin->getTemplateResource('settingsForm.tpl'));
-		$context = $request->getContext();
-		import('plugins/generic/sliderHome/controllers/grid/form/SliderSettingsForm');
-		$form = new SliderSettingsForm($this::$plugin, $context?$context->getId():CONTEXT_ID_NONE);
-		return new JSONMessage(true, $form->fetch($request));		
-	}
-
-	/**
-	 * Submit SettninsForm
-	 * @param $args array
-	 * @param $request PKPRequest
-	 */
-	function submitSettingsForm($args, $request) {
-		import('plugins/generic/sliderHome/controllers/grid/form/SliderSettingsForm');
-		$context = $request->getContext();
-		$form = new SliderSettingsForm($this::$plugin, $context?$context->getId():CONTEXT_ID_NONE);
-		$form->readInputData();
-		$form->execute($args, $request);
-		// redirect back to the right tab
-		$request->redirect(null, 'management', 'settings', 'website', null, null);
-
 	}
 }
 

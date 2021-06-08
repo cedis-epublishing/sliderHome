@@ -29,11 +29,17 @@ class SliderHomePlugin extends GenericPlugin {
 				HookRegistry::register('Templates::Management::Settings::website', array($this, 'callbackWebsiteSettingsTab'));				
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler'));
 				HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal'));
+				HookRegistry::register('slidersettingstabform::Constructor', array($this, 'callbackSliderFormConstruct'));
 				
 			}
 			return true;
 		}
 		return false;
+	}
+
+	function callbackSliderFormConstruct($hookname, $args) {
+		$args[0]->_setPlugin($this);
+		$args[0]->_setContextId(Application::getRequest()->getContext()->getId());
 	}
 	
 	// OJS 3.1.2: Add tab fro slider content grid in website settings
@@ -47,7 +53,15 @@ class SliderHomePlugin extends GenericPlugin {
 			$output =& $args[2];
 			$request =& Registry::get('request');
 			$dispatcher = $request->getDispatcher();
-			$output .= '<li><a name="sliderHome" href="' . $dispatcher->url($request, ROUTE_COMPONENT, null, 'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler', 'index') . '">' . __('plugins.generic.sliderHome.tabname') . '</a></li>';
+			$output .= '<li><a name="sliderHome" href="' . $dispatcher->url(
+					$request,
+					ROUTE_COMPONENT,
+					null,
+					'plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler',
+					'showTab',
+					null,
+					array('tab' => 'sliderHome')
+				) . '">' . __('plugins.generic.sliderHome.tabname') . '</a></li>';
 		}
 		return false; // Permit other plugins to continue interacting with this hook
 	}
@@ -64,8 +78,14 @@ class SliderHomePlugin extends GenericPlugin {
 		return false;
 	}
 
-	// OJS: there's a template hook on the journal index page
-	function callbackIndexJournal($hookName, $args) {		
+	// OJS: there's a template hook on the frontend journal index page
+	function callbackIndexJournal($hookName, $args) {	
+		
+		$contextId = Application::getRequest()->getContext()->getId();
+		$speed = $this->getSetting($contextId, 'speed'); #default 2000
+		$delay = $this->getSetting($contextId, 'delay'); #default 200000
+		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
+
 		$output =& $args[2];
 		$request = $this->getRequest();
 		$output .= $this->getSliderContent($request);
@@ -80,8 +100,8 @@ class SliderHomePlugin extends GenericPlugin {
 							return '<span class=\"' + className + '\">' + '</span>';
 						},
 					},
-					speed: 2000,
-					autoplay: { delay: 200000,disableOnInteraction:true, stopOnLastSlide:true },
+					speed: ".$speed.",
+					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },
 				});
 			</script>";
 		return false;
@@ -163,6 +183,12 @@ class SliderHomePlugin extends GenericPlugin {
 			define('SLIDERHOME_PLUGIN_NAME', $this->getName());
 			import($component);
 			SliderHomeGridHandler::setPlugin($this);
+			return true;
+		}	
+		if ($component == 'plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler') {			
+			define('SLIDERHOME_PLUGIN_NAME', $this->getName());
+			import($component);
+			SliderHomeSettingsTabFormHandler::setPlugin($this);
 			return true;
 		}
 		return false;
