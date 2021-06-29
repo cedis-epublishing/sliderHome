@@ -100,6 +100,10 @@ class SliderHomePlugin extends GenericPlugin {
 							return '<span class=\"' + className + '\">' + '</span>';
 						},
 					},
+					navigation: {
+						nextEl: '.swiper-button-next',
+    					prevEl: '.swiper-button-prev',
+					},
 					speed: ".$speed.",
 					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },
 				});
@@ -168,7 +172,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$sliderContent.= preg_replace("#<img#","<img style='max-height:".$maxHeight."vh'",$value);
 				$sliderContent.= "</div>";
 			}
-			$sliderContent.= "</div><div class='swiper-pagination'></div></div>";
+			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";
 		}
 		return $sliderContent;
 	}	
