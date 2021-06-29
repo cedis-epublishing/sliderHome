@@ -23,21 +23,6 @@
 
 	{$sliderContent}
 
-	<!-- Initialize Swiper -->
-	<script>
-		var swiper = new Swiper('.swiper-container', {
-			pagination: {
-				el: '.swiper-pagination',
-				clickable: true,
-				renderBullet: function (index, className) {
-					return '<span class="' + className + '">' + '</span>';
-				},
-			},
-			speed: 2000,
-			autoplay: { delay: 200000,disableOnInteraction:true, stopOnLastSlide:true },
-		});
-	</script>
-
 	{* Homepage Image *}
 	{if !$activeTheme->getOption('useHomepageImageAsHeader') && $homepageImage}
 		<img src="{$publicFilesDir}/{$homepageImage.uploadName|escape:"url"}" alt="{$homepageImageAltText|escape}">

@@ -2,7 +2,7 @@
 
 /**
  * @file plugins/generic/sliderHome/classes/SliderHomeGridHandler.inc.php
- *
+ *fz
  * Copyright (c) 2016 Language Science Press
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
@@ -153,6 +153,7 @@ class SliderHomeGridHandler extends GridHandler {
 		$context = $request->getContext();
 		import('lib.pkp.classes.form.Form');
 		$form = new Form(self::$plugin->getTemplateResource('websiteSettingsTab.tpl'));
+
 		return new JSONMessage(true, $form->fetch($request));		
 	}
 	

@@ -67,11 +67,15 @@ class SliderHomeForm extends Form {
 		
 		if (!$this->sliderContentId) {
 				$this->setData('content',
-"<img src='#'>
-<div class='slider-text'><h3>Title</h3>
+"<div>
+<p><img src='#'></p>
+<div class='slider-text'>
+<h3>Title</h3>
 <p>Text
 <a href='#'>Read more ...</a>
-</p>");	
+</p>
+</div>
+</div>");	
 		}
 
 		return parent::fetch($request,$template,$display);
