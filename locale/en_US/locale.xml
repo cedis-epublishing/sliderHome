@@ -26,13 +26,13 @@
 	<message key="plugins.generic.sliderHome.noneExist">No content yet.</message>
 	<message key="plugins.generic.sliderHome.showSliderContent">Show this slider content on home page.</message>	
 	<message key="plugins.generic.slider.settings.form.maxHeight.description">Maximum slider height as percentage of screen height.</message>
-	<message key="plugins.generic.slider.settings.form.maxHeight">Slider height.</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight">Slider height</message>
 	<message key="plugins.generic.slider.settings.form.maxHeight.error">Error: slider height should be in the range of 0 to 100!</message>
 	<message key="plugins.generic.slider.settings.form.speed.description">Duration of transition between slides (in ms).</message>
-	<message key="plugins.generic.slider.settings.form.speed">Slider speed.</message>
+	<message key="plugins.generic.slider.settings.form.speed">Slider speed</message>
 	<message key="plugins.generic.slider.settings.form.speed.error">Error: slider speed should be a positive number!</message>
 	<message key="plugins.generic.slider.settings.form.delay.description">Delay between transitions (in ms).</message>
-	<message key="plugins.generic.slider.settings.form.delay">Slider delay.</message>
+	<message key="plugins.generic.slider.settings.form.delay">Slider delay</message>
 	<message key="plugins.generic.slider.settings.form.delay.error">Error: slider delay should be a positive number!</message>
 	<message key="plugins.generic.slider.settings.form.stopOnLastSlide">Stop slideshow after last slide.</message>
 </locale>

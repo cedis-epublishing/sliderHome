@@ -23,14 +23,14 @@
 	<message key="plugins.generic.sliderHome.content">Inhalt</message>	
 	<message key="plugins.generic.sliderHome.noneExist">Kein Inhalt vorhanden.</message>
 	<message key="plugins.generic.sliderHome.showSliderContent">Diesen Sliderinhalt auf der Startseite anzeigen.</message>	
-	<message key="plugins.generic.slider.settings.form.maxHeight.description">Maximale Höhe des Slider in Prozenz des Bildschirms.</message>
-	<message key="plugins.generic.slider.settings.form.maxHeight">Sliderhöhe.</message>
-	<message key="plugins.generic.slider.settings.form.maxHeight.error">Fehler: die Sliderhöhe sollte im Bereich 0 to 100 liegen!</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight.description">Maximale Höhe des Sliders in Prozent des Bildschirms.</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight">Höhe des Sliders</message>
+	<message key="plugins.generic.slider.settings.form.maxHeight.error">Fehler: Die Höhe sollte im Bereich 0 to 100 liegen!</message>
 	<message key="plugins.generic.slider.settings.form.speed.description">Dauer des Übergangs zwischen Slides (in ms).</message>
-	<message key="plugins.generic.slider.settings.form.speed">Slider-Geschwindigkeit.</message>
-	<message key="plugins.generic.slider.settings.form.speed.error">Fehler: Die Slider-Geschwindigkeit sollte eine positive Zahl sein!</message>
+	<message key="plugins.generic.slider.settings.form.speed">Geschwindigkeit des Sliders</message>
+	<message key="plugins.generic.slider.settings.form.speed.error">Fehler: Die Geschwindigkeit sollte eine positive Zahl sein!</message>
 	<message key="plugins.generic.slider.settings.form.delay.description">Verzögerung zwischen den Übergängen (in ms).</message>
-	<message key="plugins.generic.slider.settings.form.delay">Slider_Verzögerung.</message>
-	<message key="plugins.generic.slider.settings.form.delay.error">Fehler: Die Slider-Verzögerung sollte eine positive Zahl sein!</message>
+	<message key="plugins.generic.slider.settings.form.delay">Verzögerung des Sliders</message>
+	<message key="plugins.generic.slider.settings.form.delay.error">Fehler: Die Verzögerung sollte eine positive Zahl sein!</message>
 	<message key="plugins.generic.slider.settings.form.stopOnLastSlide">Slideshow nach einem Durchlauf anhalten.</message>
 </locale>
