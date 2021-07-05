@@ -1,4 +1,4 @@
-<script>
+{* <script>
 	$(function() {ldelim}
 		// Attach the form handler.
 		$('#sliderSettingsTabForm').pkpHandler('$.pkp.controllers.form.AjaxFormHandler');
@@ -28,4 +28,4 @@
 		{/fbvFormSection}
 	{/fbvFormArea}
 	{fbvFormButtons submitText="common.save" hideCancel=true}
-</form>
+</form> *}

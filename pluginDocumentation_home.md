@@ -2,16 +2,16 @@ Key data
 ============
 
 - name of the plugin: Home Plugin
-- author: Carola Fanselow
-- current version: 2.0
-- tested on OMP 3.2.1, OJS 3.2.1, OJS 3.1.2
+- author: Carola Fanselow, Ronald Steffen
+- current version: 2.1.0.0
+- tested on OJS 3.2
 - community plugin: yes
-- date: 2020/11/06
+- date: 2021/07/05
 
 Description
 ============
 
-This plugin creates a swiper slider on the OJS/OMP homepage. Images and image caputes can be added in the OJS/OMP backend (website settings). Data is stored in table "slider".
+This plugin creates a swiper slider on the OJS homepage. Images and image caputes can be added in the OJS backend (website settings). Data is stored in table "slider".
  
 Implementation
 ================
@@ -35,8 +35,6 @@ Database access, server access
  
 Classes, plugins, external software
 -----------------------
-- OMP classes used (php): 
-- OMP classes used (js, jqeury, ajax): 0
 - necessary plugins: 0
 - optional plugins: 0 
 - use of external software: yes
