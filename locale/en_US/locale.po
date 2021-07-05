@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Slider Home Plugin"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Displays a slider on the start page."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Slider Content"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Add Slider Content"
+
+msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
+msgstr "Edit Slider Content"
+
+msgid "plugins.generic.sliderHome.grid.title"
+msgstr "Slider fields"
+
+msgid "plugins.generic.sliderHome.noneCreated"
+msgstr "No fields have been created yet."
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Field name"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "Content"
+
+msgid "plugins.generic.sliderHome.noneExist"
+msgstr "No content yet."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Show this slider content on home page."
+
+msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgstr "Maximum slider height as percentage of screen height."
+
+msgid "plugins.generic.slider.settings.form.maxHeight"
+msgstr "Slider height"
+
+msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgstr "Error: slider height should be in the range of 0 to 100!"
+
+msgid "plugins.generic.slider.settings.form.speed.description"
+msgstr "Duration of transition between slides (in ms)."
+
+msgid "plugins.generic.slider.settings.form.speed"
+msgstr "Slider speed"
+
+msgid "plugins.generic.slider.settings.form.speed.error"
+msgstr "Error: slider speed should be a positive number!"
+
+msgid "plugins.generic.slider.settings.form.delay.description"
+msgstr "Delay between transitions (in ms)."
+
+msgid "plugins.generic.slider.settings.form.delay"
+msgstr "Slider delay"
+
+msgid "plugins.generic.slider.settings.form.delay.error"
+msgstr "Error: slider delay should be a positive number!"
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgstr "Stop slideshow after last slide."
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Slider repetition"
+
+msgid "plugins.generic.slider.settings.form.success"
+msgstr "The slider settings have been updated. <a href=\"{$url}\" target=\"_blank\">View Now</a>"
+
+msgid "plugins.generic.slider.settings.form.groupLabel"
+msgstr "Slider Settings"
+
+msgid "plugins.generic.slider.settings.form.groupDescription"
+msgstr "Please note:<br>The slider height is determined by the height of largest image shown. Only if this height exceeds the vertical resolution of the screen the slider height can be limited by setting the maximum slider height as percentage of the screen vertical resolution. Otherwise this setting will have no effect."

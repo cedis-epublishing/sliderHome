@@ -1,5 +1,5 @@
 - Home Plugin
-- Version: 2.1.1.0
+- Version: 2.1.0.0
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -16,7 +16,7 @@ This plugin is licensed under the GNU General Public License v2.
 System Requirements
 -------------------
 This plugin is compatible with...
- - OJS 3.1.2
+ - OJS 3.2
 
 Installation
 ------------

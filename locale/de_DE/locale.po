@@ -1,0 +1,84 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Zeigt auf der Startseite einen Slider an."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Sliderinhalte"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Sliderinhalt hinzufügen"
+
+msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
+msgstr "Sliderinhalt bearbeiten"
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Name"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "Inhalt"
+
+msgid "plugins.generic.sliderHome.noneExist"
+msgstr "Kein Inhalt vorhanden."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Diesen Sliderinhalt auf der Startseite anzeigen."
+
+msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgstr "Maximale Höhe des Sliders in Prozent des Bildschirms."
+
+msgid "plugins.generic.slider.settings.form.maxHeight"
+msgstr "Höhe des Sliders"
+
+msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgstr "Fehler: Die Höhe sollte im Bereich 0 to 100 liegen!"
+
+msgid "plugins.generic.slider.settings.form.speed.description"
+msgstr "Dauer des Übergangs zwischen Slides (in ms)."
+
+msgid "plugins.generic.slider.settings.form.speed"
+msgstr "Geschwindigkeit des Sliders"
+
+msgid "plugins.generic.slider.settings.form.speed.error"
+msgstr "Fehler: Die Geschwindigkeit sollte eine positive Zahl sein!"
+
+msgid "plugins.generic.slider.settings.form.delay.description"
+msgstr "Verzögerung zwischen den Übergängen (in ms)."
+
+msgid "plugins.generic.slider.settings.form.delay"
+msgstr "Verzögerung des Sliders"
+
+msgid "plugins.generic.slider.settings.form.delay.error"
+msgstr "Fehler: Die Verzögerung sollte eine positive Zahl sein!"
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgstr "Slideshow nach einem Durchlauf anhalten."
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Slider Wiederholung"
+
+msgid "plugins.generic.slider.settings.form.success"
+msgstr "Die Slider-Einstellungen wurden aktualisiert. <a href=\"{$url}\" target=\"_blank\">Hier ansehen</a>"
+
+msgid "plugins.generic.slider.settings.form.groupLabel"
+msgstr "Slider Einstellungen"
+
+msgid "plugins.generic.slider.settings.form.groupDescription"
+msgstr "Bitte beachten:<br>Die Sliderhöhe wird durch die Höhe des größten angezeigten Bildes bestimmt. Nur wenn diese Höhe die vertikale Bildschirmauflösung übersteigt, kann die Sliderhöhe durch setzen der maximalen Sliderhöhe in Prozent der vertikalen Auflösung limitiert werden. Ansonsten hat diese Einstellung keinen Effekt."

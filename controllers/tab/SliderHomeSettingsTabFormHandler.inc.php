@@ -2,64 +2,60 @@
 
 /**
  * @file plugins/generic/sliderHome/controllers/tab/SliderHomeSettingsTabFormHandler.inc.php
- *fz
- * Copyright (c) 2016 Language Science Press
+ *
+ * Copyright (c) 2021 Freie Universität Berlin
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class SliderHomeGridHandler
+ * @class SliderHomeSettingsTabFormHandler
  *
  */
 
-import('controllers.tab.settings.WebsiteSettingsTabHandler');
-import('plugins.generic.sliderHome.controllers.grid.SliderHomeGridRow');
-import('plugins.generic.sliderHome.controllers.grid.SliderHomeGridCellProvider');
-import('plugins.generic.sliderHome.controllers.grid.form.SliderHomeForm');
-import('plugins.generic.sliderHome.classes.SliderContent');
-import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+import('pages/management/SettingsHandler');
+import('lib.pkp.classes.validation.ValidatorFactory');
 
-class SliderHomeSettingsTabFormHandler extends WebsiteSettingsTabHandler {
-
-	/** @var StaticPagesPlugin The static pages plugin */
-	static $plugin;
-
-	/**
-	 * Set the static pages plugin.
-	 * @param $plugin StaticPagesPlugin
-	 */
-	static function setPlugin($plugin) {
-		self::$plugin = $plugin;
-	}
+class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 
 	/**
 	 * Constructor
 	 */	
 	function __construct() {
-		parent::__construct(array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN));
+		parent::__construct();//array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN)); // TODO @RS nötig für OMP ???
+	}
 
-		$this->setPageTabs(array_merge($this->getPageTabs(),
-			['sliderHome' => 'plugins.generic.sliderHome.controllers.tab.form.SliderSettingsTabForm']
-		));
-	} 
+	function saveFormData(... $functionArgs) {
 
-	//
-	// Overridden template methods
-	//
-	/**
-	 * @copydoc GridHandler::authorize()
-	 */
-	function authorize($request, &$args, $roleAssignments) {
-		$context = $request->getContext();
-		$contextId = $context?$context->getId():CONTEXT_ID_NONE;
+		$errors = [];
 
-		import('lib.pkp.classes.security.authorization.PolicySet');
-		$rolePolicy = new PolicySet(COMBINING_PERMIT_OVERRIDES);
+		$plugin = PluginRegistry::getPlugin('generic', 'sliderhomeplugin');
+		$request = Application::getRequest();
+		$contextId = $request->getContext()->getId();
+		$args = $request->_requestVars;
+		$response =& $functionArgs[1];
 
-		import('lib.pkp.classes.security.authorization.RoleBasedHandlerOperationPolicy');
-		foreach($roleAssignments as $role => $operations) {
-			$rolePolicy->addPolicy(new RoleBasedHandlerOperationPolicy($request, $role, $operations));
+		$props = ['maxHeight' => $args['maxHeight'],
+					'speed' => $args['speed'],
+					'delay' => $args['delay']
+				];
+		$rules = ['maxHeight' => ['integer','nullable','min:0','max:100'],
+					'speed' => ['integer','min:0'],
+					'delay' => ['integer','min:0']
+				];
+
+		$validator = ValidatorFactory::make($props, $rules);
+		if ($validator->fails()) {
+			$errors = $validator->errors();
 		}
-		$this->addPolicy($rolePolicy);
-		return parent::authorize($request, $args, $roleAssignments);
+		  
+		if (!empty($errors)) {
+			return $response->withStatus(400)->withJson($errors);
+		}
+
+		$plugin->updateSetting($contextId, 'maxHeight', $args['maxHeight'], $type = null, $isLocalized = false);
+		$plugin->updateSetting($contextId, 'speed', $args['speed'], $type = null, $isLocalized = false);
+		$plugin->updateSetting($contextId, 'delay', $args['delay'], $type = null, $isLocalized = false);
+		$plugin->updateSetting($contextId, 'stopOnLastSlide', ($args['stopOnLastSlide'] === "true")?true:false, $type = null, $isLocalized = false);
+
+		return false;
 	}
 }
 

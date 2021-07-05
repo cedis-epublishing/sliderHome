@@ -1,0 +1,84 @@
+<?php
+/**
+ * @file classes/components/form/context/SliderHomeSettingsForm.inc.php
+ *
+ * Copyright (c) 2014-2020 Simon Fraser University
+ * Copyright (c) 2000-2020 John Willinsky
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ *
+ * @class PKPAppearanceSetupForm
+ * @ingroup classes_controllers_form
+ *
+ * @brief A preset form for general website appearance setup, such as uploading
+ *  a logo.
+ */
+
+use \PKP\components\forms\FormComponent;
+use \PKP\components\forms\FieldText;
+use \PKP\components\forms\FieldOptions;
+
+define('FORM_SLIDER_SETTINGS', 'sliderSettings');
+
+class SliderHomeSettingsForm extends FormComponent {
+	/** @copydoc FormComponent::$id */
+	public $id = FORM_SLIDER_SETTINGS;
+
+	/** @copydoc FormComponent::$method */
+	public $method = 'POST';
+
+	/**
+	 * Constructor
+	 *
+	 * @param $action string URL to submit the form to
+	 * @param $locales array Supported locales
+	 * @param $context Context Journal or Press to change settings for
+	 * @param $baseUrl string Site's base URL. Used for image previews.
+	 * @param $temporaryFileApiUrl string URL to upload files to
+	 * @param $imageUploadUrl string The API endpoint for images uploaded through the rich text field
+	 */
+	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl, $data) {
+		$this->action = $action;
+		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
+		$this->locales = $locales;
+
+		$this->addGroup([
+			'id' => 'slidersettings',
+			'label' => __('plugins.generic.slider.settings.form.groupLabel'),
+			'description' => __('plugins.generic.slider.settings.form.groupDescription'),
+		], [])
+		->addField(new FieldText('maxHeight', [
+			'label' => __('plugins.generic.slider.settings.form.maxHeight'),
+			'description' => __('plugins.generic.slider.settings.form.maxHeight.description'),
+			'isRequired' => false,
+			'value' => $data['maxHeight'],
+			'size' => 'small',
+			'groupId' => 'slidersettings'
+		]))
+		->addField(new FieldText('speed', [
+			'label' => __('plugins.generic.slider.settings.form.speed'),
+			'description' => __('plugins.generic.slider.settings.form.speed.description'),
+			'isRequired' => false,
+			'value' => $data['speed'],
+			'size' => 'small',
+			'groupId' => 'slidersettings'
+		]))
+		->addField(new FieldText('delay', [
+			'label' => __('plugins.generic.slider.settings.form.delay'),
+			'description' => __('plugins.generic.slider.settings.form.delay.description'),
+			'isRequired' => false,
+			'value' => $data['delay'],
+			'size' => 'small',
+			'groupId' => 'slidersettings'
+		]))
+		->addField(new FieldOptions('stopOnLastSlide', [
+			'label' => __('plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel'),
+		#	'description' => __('plugins.generic.slider.settings.form.stopOnLastSlide.description'),
+			'options' => [
+				['value' => false, 'label' => __('plugins.generic.slider.settings.form.stopOnLastSlide')]
+			],
+			'value' => (bool) $data['stopOnLastSlide'],
+			'groupId' => 'slidersettings'
+		]));
+	}
+
+}

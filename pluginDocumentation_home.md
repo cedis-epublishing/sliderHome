@@ -4,9 +4,9 @@ Key data
 - name of the plugin: Home Plugin
 - author: Carola Fanselow, Ronald Steffen
 - current version: 2.1.0.0
-- tested on OJS 3.1.2
+- tested on OJS 3.2
 - community plugin: yes
-- date: 2021/06/11
+- date: 2021/07/05
 
 Description
 ============
