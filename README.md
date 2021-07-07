@@ -8,10 +8,9 @@ This plugin creates a swiper slider on the OJS homepage. Images and image capute
 
 License
 -------
-Copyright (c) 2016 Language Science Press
 Copyright (c) 2021 Freie Universität Berlin
 
-This plugin is licensed under the GNU General Public License v2. 
+This plugin is licensed under the GNU General Public License v3. 
 
 System Requirements
 -------------------
@@ -25,7 +24,7 @@ To install the plugin:
 
 Support
 ---------------
-A documentation on this plugin can be found in pluginDocumentation_home.md
+Additional information on this plugin can be found in docs/pluginDocumentation_home.md
 
 
 

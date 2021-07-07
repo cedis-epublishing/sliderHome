@@ -3,15 +3,18 @@
 /**
  * @file plugins/generic/sliderContent/classes/SliderContentGridCellProvider.inc.php
  *
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class SliderContentGridCellProvider
- *
+ * @brief File implemeting the slider content form grid cell provider.
  */
 
 import('lib.pkp.classes.controllers.grid.GridCellProvider');
 
+/**
+* @class SliderContentGridCellProvider
+* @brief Class implemeting the slider content form grid cell provider.
+*/
 class SliderHomeGridCellProvider extends GridCellProvider {
 
 	/**

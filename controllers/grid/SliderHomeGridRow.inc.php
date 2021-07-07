@@ -3,16 +3,19 @@
 /**
  * @file plugins/generic/sliderContent/classes/SliderContentGridRow.inc.php
  *
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
- *
- * @class SliderContentGridRow
- *
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * 
+ * @brief File implemeting the slider content form grid row.
  */
 
 import('lib.pkp.classes.controllers.grid.GridRow');
 import('lib.pkp.classes.linkAction.request.RemoteActionConfirmationModal');
 
+/**
+ * @class SliderContentGridRow
+ * @brief Class implemeting the slider content form grid row.
+ */
 class SliderHomeGridRow extends GridRow {
 
 	//

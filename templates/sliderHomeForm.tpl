@@ -1,11 +1,3 @@
-{**
- * plugins/generic/sliderContent/templates/editSliderContentForm.tpl
- *
- * Copyright (c) 2015 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
- *
- *}
-
 <script type="text/javascript">
 	$(function() {ldelim}
 		// Attach the form handler.

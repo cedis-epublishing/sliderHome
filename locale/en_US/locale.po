@@ -87,4 +87,4 @@ msgid "plugins.generic.slider.settings.form.groupLabel"
 msgstr "Slider Settings"
 
 msgid "plugins.generic.slider.settings.form.groupDescription"
-msgstr "Please note:<br>The slider height is determined by the height of largest image shown. Only if this height exceeds the vertical resolution of the screen the slider height can be limited by setting the maximum slider height as percentage of the screen vertical resolution. Otherwise this setting will have no effect."
+msgstr "Please note:<br>The slider height is determined by the height of largest image shown. Only if this height exceeds the vertical resolution of the screen the slider height can be limited by setting the maximum slider height as percentage of the screen vertical resolution. Otherwise this setting will have no effect. Both, the height and the width of the images will be scaled.<br>To use the full slider width prepare the images with heights smaller than the vertical screen  resolution."
