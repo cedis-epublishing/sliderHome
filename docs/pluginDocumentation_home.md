@@ -3,7 +3,7 @@ Key data
 
 - name of the plugin: Slider Home Plugin
 - author: Carola Fanselow, Ronald Steffen
-- current version: 2.1.0.0
+- current version: 2.2.0.0
 - tested on OJS/OMP 3.2
 - community plugin: yes
 - date: 2021/07/07
