@@ -2,21 +2,24 @@
 
 /**
  * @file plugins/generic/sliderHome/classes/SliderHomeGridHandler.inc.php
- *fz
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
- * @class SliderHomeGridHandler
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
+ * @brief File implemeting the slider content form grid handler.
  */
 
 import('lib.pkp.classes.controllers.grid.GridHandler');
 import('plugins.generic.sliderHome.controllers.grid.SliderHomeGridRow');
 import('plugins.generic.sliderHome.controllers.grid.SliderHomeGridCellProvider');
-import('plugins.generic.sliderHome.controllers.grid.form.SliderHomeForm');
+import('plugins.generic.sliderHome.controllers.grid.form.SliderContentForm');
 import('plugins.generic.sliderHome.classes.SliderContent');
 import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 
+/**
+ * @class SliderHomeGridHandler
+ * @brief Class implemeting the slider content form grid handler.
+ */
 class SliderHomeGridHandler extends GridHandler {
 
 	/** @var StaticPagesPlugin The static pages plugin */
@@ -181,10 +184,10 @@ class SliderHomeGridHandler extends GridHandler {
 			$contextId = $context->getId();
 		}
 	
-		$sliderHomeForm = new SliderHomeForm(self::$plugin, $contextId, $sliderContentId);
-		$sliderHomeForm->initData();
+		$sliderContentForm = new SliderContentForm(self::$plugin, $contextId, $sliderContentId);
+		$sliderContentForm->initData();
 
-		return new JSONMessage(true, $sliderHomeForm->fetch($request));
+		return new JSONMessage(true, $sliderContentForm->fetch($request));
 	}
 
 	/**
@@ -201,12 +204,12 @@ class SliderHomeGridHandler extends GridHandler {
 			$contextId = $context->getId();
 		}		
 
-		$sliderHomeForm = new SliderHomeForm(self::$plugin, $contextId, $sliderContentId);
-		$sliderHomeForm->readInputData();		
+		$sliderContentForm = new SliderContentForm(self::$plugin, $contextId, $sliderContentId);
+		$sliderContentForm->readInputData();		
 		// Check the results
-		if ($sliderHomeForm->validate()) {			
+		if ($sliderContentForm->validate()) {			
 			// Save the results			
-			$sliderHomeForm->execute();			
+			$sliderContentForm->execute();			
  			return DAO::getDataChangedEvent($sliderContentId);
 		} else {		
 			return new JSONMessage(false);

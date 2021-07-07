@@ -5,17 +5,16 @@
 /**
  * @file plugins/generic/home/version.xml
  *
- * Copyright (c) 2016 Language Science Press
- * Copyright (c) 2020 Freie Universität Berlin
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  */
   -->
 <version>
 	<application>sliderHome</application>
 	<type>plugins.generic</type>
-	<release>2.1.0.0</release>
-	<date>2021-07-05</date>
+	<release>2.2.0.0</release>
+	<date>2021-07-07</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>0</sitewide>
 	<class>SliderHomePlugin</class>

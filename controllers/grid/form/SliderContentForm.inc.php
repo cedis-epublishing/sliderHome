@@ -3,16 +3,19 @@
 /**
  * @file plugins/generic/sliderContent/classes/SliderContentForm.inc.php
  *
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class SliderContentForm
- *
+* @brief File implemeting the slider content form.
  */
 
 import('lib.pkp.classes.form.Form');
 
-class SliderHomeForm extends Form {
+ /**
+ * @class SliderContentForm
+ * @brief Form to input slider content.
+ */
+class SliderContentForm extends Form {
 
 	var $contextId;
 
@@ -28,7 +31,7 @@ class SliderHomeForm extends Form {
 		$this->sliderContentId = $sliderContentId;
 		$this->plugin = $sliderHomePlugin;
 		
-		parent::__construct($sliderHomePlugin->getTemplateResource('sliderHomeForm.tpl'));		
+		parent::__construct($sliderHomePlugin->getTemplateResource('sliderContentForm.tpl'));		
 
 		// Add form checks
 		$this->addCheck(new FormValidator($this,'name','required', 'plugins.generic.sliderHome.nameRequired'));
@@ -85,7 +88,7 @@ class SliderHomeForm extends Form {
 	 * Save form values into the database
 	 */
 	function execute(...$functionArgs) {
-		parent::execute(...$functionParams);
+		parent::execute(...$functionArgs);
 		$sliderHomeDao = new SliderHomeDAO();
 		if ($this->sliderContentId) {
 			// Load and update an existing content

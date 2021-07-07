@@ -1,15 +1,17 @@
 <?php
-
 /**
  * @file plugins/generic/sliderContent/classes/SliderContent.inc.php
  *
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
- *
- * @class SliderContent
- * Data object representing a slider content.
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * 
+ * @brief File implemeting the slider content data object.
  */
 
+ /**
+ * @class SliderContent
+ * @brief Data object representing a slider content.
+ */
 class SliderContent extends DataObject {
 
 	/**

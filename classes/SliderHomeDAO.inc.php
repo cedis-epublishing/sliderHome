@@ -1,17 +1,20 @@
 <?php
-
 /**
  * @file plugins/generic/sliderContent/classes/SliderContentDAO.inc.php
  *
- * Copyright (c) 2016 Language Science Press
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class SliderContentDAO
+ * @brief File implemeting the slider DAO object.
  */
 
 import('lib.pkp.classes.db.DAO');
 import('plugins.generic.sliderHome.classes.SliderContent');
 
+ /**
+ * @class SliderContentDAO
+ * @brief Class implemeting the slider DAO object.
+ */
 class SliderHomeDAO extends DAO {
 
 	function __construct() {

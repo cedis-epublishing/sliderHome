@@ -1,3 +1,12 @@
+/**
+ * @file plugins/generic/sliderContent/swiper/css/sliderHome.css
+ *
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * 
+ * @brief File implemeting additional css styles.
+ */
+ 
 .swiper-container {
 	padding-bottom: 10px !important;
 }

@@ -4,26 +4,21 @@
  * @file plugins/generic/sliderHome/controllers/tab/SliderHomeSettingsTabFormHandler.inc.php
  *
  * Copyright (c) 2021 Freie Universität Berlin
- * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class SliderHomeSettingsTabFormHandler
- *
+ * @brief File implemeting the slider settings tab handler.
  */
 
 import('pages/management/SettingsHandler');
 import('lib.pkp.classes.validation.ValidatorFactory');
 
+/**
+ * @class SliderHomeSettingsTabFormHandler
+ * @brief Class implemeting the slider settings tab handler.
+ */
 class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 
-	/**
-	 * Constructor
-	 */	
-	function __construct() {
-		parent::__construct();//array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN)); // TODO @RS nötig für OMP ???
-	}
-
 	function saveFormData(... $functionArgs) {
-
 		$errors = [];
 
 		$plugin = PluginRegistry::getPlugin('generic', 'sliderhomeplugin');
