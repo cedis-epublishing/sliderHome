@@ -129,33 +129,10 @@ class SliderHomePlugin extends GenericPlugin {
 	// OJS: there's a template hook on the frontend journal index page
 	function callbackIndexJournal($hookName, $args) {	
 		$request = $this->getRequest();
-		$contextId = $request->getContext()->getId();
-
-		$speed = $this->getSetting($contextId, 'speed');
-		$delay = $this->getSetting($contextId, 'delay');
-		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
 
 		$output =& $args[2];
 		$output .= $this->getSliderContent($request);
-		$output .= 
-			"<script>
-				var swiper = new Swiper('.swiper-container', {
-					autoHeight: true, //enable auto height
-					pagination: {
-						el: '.swiper-pagination',
-						clickable: true,
-						renderBullet: function (index, className) {
-							return '<span class=\"' + className + '\">' + '</span>';
-						},
-					},
-					navigation: {
-						nextEl: '.swiper-button-next',
-    					prevEl: '.swiper-button-prev',
-					},
-					speed: ".$speed.",
-					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },
-				});
-			</script>";
+
 		return false;
 	}	
 		
@@ -208,6 +185,9 @@ class SliderHomePlugin extends GenericPlugin {
 
 		$contextId = $request->getContext()->getId();
 		$maxHeight = $this->getSetting($contextId, 'maxHeight');
+		$speed = $this->getSetting($contextId, 'speed');
+		$delay = $this->getSetting($contextId, 'delay');
+		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
@@ -222,6 +202,25 @@ class SliderHomePlugin extends GenericPlugin {
 				$sliderContent.= "</div>";
 			}
 			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";
+			$sliderContent .= 
+			"<script>
+				var swiper = new Swiper('.swiper-container', {
+					autoHeight: true, //enable auto height
+					pagination: {
+						el: '.swiper-pagination',
+						clickable: true,
+						renderBullet: function (index, className) {
+							return '<span class=\"' + className + '\">' + '</span>';
+						},
+					},
+					navigation: {
+						nextEl: '.swiper-button-next',
+    					prevEl: '.swiper-button-prev',
+					},
+					speed: ".$speed.",
+					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },
+				});
+			</script>";
 		}
 		return $sliderContent;
 	}	
