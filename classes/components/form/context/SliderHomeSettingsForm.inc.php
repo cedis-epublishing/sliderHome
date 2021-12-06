@@ -40,14 +40,15 @@ class SliderHomeSettingsForm extends FormComponent {
 	 * @param array $data settings for form initialization
 	 */
 	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl, $data) {
+
 		$this->action = $action;
 		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
 		$this->locales = $locales;
 
 		$this->addGroup([
 			'id' => 'slidersettings',
-			'label' => __('plugins.generic.slider.settings.form.groupLabel'),
-			'description' => __('plugins.generic.slider.settings.form.groupDescription'),
+			// 'label' => __('plugins.generic.slider.settings.form.groupLabel'),
+			// 'description' => __('plugins.generic.slider.settings.form.groupDescription'),
 		], [])
 		->addField(new FieldText('maxHeight', [
 			'label' => __('plugins.generic.slider.settings.form.maxHeight'),
@@ -55,7 +56,8 @@ class SliderHomeSettingsForm extends FormComponent {
 			'isRequired' => false,
 			'value' => $data['maxHeight'],
 			'size' => 'small',
-			'groupId' => 'slidersettings'
+			'groupId' => 'slidersettings',
+			'tooltip' => __('plugins.generic.slider.settings.form.groupDescription')
 		]))
 		->addField(new FieldText('speed', [
 			'label' => __('plugins.generic.slider.settings.form.speed'),

@@ -31,12 +31,8 @@ class SliderHomeDAO extends DAO {
 			$params
 		);
 
-		$returner = null;
-		if ($result->RecordCount() != 0) {
-			$returner = $this->_fromRow($result->GetRowAssoc(false));
-		}
-		$result->Close();
-		return $returner;
+		$row = $result->current();
+		return $row ? $this->_fromRow((array) $row) : null;
 	}
 
 	function getAllContent($contextId) {
@@ -44,24 +40,13 @@ class SliderHomeDAO extends DAO {
 		$result = $this->retrieve(
 			'SELECT content FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
 		);
-		$sliderContent = array();
-		if ($result->RecordCount() == 0) {
-			$result->Close();
-		} else {			
-			while (!$result->EOF) {
-				$row = $result->getRowAssoc(false);
-				$sliderContent[]= $this->convertFromDB($row['content'],null);
-				$result->MoveNext();
-			}
-			$result->Close();
-		}
-		return $sliderContent;
+		return array_column(iterator_to_array($result), 'content');
 	}
 
 	function getByContextId($contextId, $rangeInfo = null) {
 		$result = $this->retrieveRange(
 			'SELECT * FROM slider WHERE context_id = ? ORDER BY sequence',
-			(int) $contextId,
+			(array) $contextId,
 			$rangeInfo
 		);
 		return new DAOResultFactory($result, $this, '_fromRow');
@@ -73,13 +58,8 @@ class SliderHomeDAO extends DAO {
 			'SELECT MAX(sequence) as maxseq FROM slider WHERE context_id ='.$contextId
 		);
 
-		if ($result->RecordCount() == 0) {
-			$result->Close();
-			return 0;
-		} else {
-			$row = $result->getRowAssoc(false);
-			return $this->convertFromDB($row['maxseq'],null);
-		}
+		$row = $result->current();
+		return $row->maxseq;
 	}
 
 	function insertObject($sliderContent) {	
@@ -112,7 +92,7 @@ class SliderHomeDAO extends DAO {
 				$sliderContent->getName(),
 				$sliderContent->getContent(),
 				$sliderContent->getSequence(),
-				(int)$sliderContent->getShowContent(),				
+				(int) $sliderContent->getShowContent(),				
 				(int) $sliderContent->getId()
 			)
 		);
@@ -121,7 +101,7 @@ class SliderHomeDAO extends DAO {
 	function deleteById($sliderContentId) {
 		$this->update(
 			'DELETE FROM slider WHERE slider_content_id = ?',
-			(int) $sliderContentId
+			(array) $sliderContentId
 		);
 	}
 

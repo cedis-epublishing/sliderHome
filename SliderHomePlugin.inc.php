@@ -55,7 +55,7 @@ class SliderHomePlugin extends GenericPlugin {
 	function callbackAppearanceTab($hookName, $args) {		
 
 		# prepare data
-		$templateMgr = $args[1];
+		$templateMgr =& $args[1];
 		$output =& $args[2];
 		$request =& Registry::get('request');
 		$context = $request->getContext();
@@ -113,13 +113,14 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 
 		# setup template
-		$settingsData = $templateMgr->getTemplateVars('settingsData');
-		$settingsData['components'] += [FORM_SLIDER_SETTINGS  => $sliderSettingsForm->getConfig()];
-		$templateMgr->assign('settingsData', $settingsData);
-
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS',
 		]);
+
+		$state = $templateMgr->getTemplateVars('state');
+		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
+		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState diesn't seem to update template vars anymore
+
 		$output .= $templateMgr->fetch($this->getTemplateResource('appearanceTab.tpl'));
 
 		// Permit other plugins to continue interacting with this hook
@@ -252,13 +253,13 @@ class SliderHomePlugin extends GenericPlugin {
 	function getDescription() {
 		return __('plugins.generic.sliderHome.description');
 	}
-	
+
 	/**
-	 * Get the filename of the ADODB schema for this plugin.
-	 * @return string Full path and filename to schema descriptor.
+	 * @copydoc Plugin::getInstallMigration()
 	 */
-	function getInstallSchemaFile() {
-		return $this->getPluginPath() . '/schema.xml';
+	function getInstallMigration() {
+		$this->import('SliderHomeSchemaMigration');
+		return new SliderHomeSchemaMigration();
 	}
 }
 
