@@ -9,7 +9,7 @@ This plugin creates a swiper slider on the OJS/OMP homepage. Images and image ca
 
 License
 -------
-Copyright (c) 2021 Freie Universität Berlin
+Copyright (c) 2021 Universitätsbiblithek Freie Universität Berlin
 
 This plugin is licensed under the GNU General Public License v3. 
 
