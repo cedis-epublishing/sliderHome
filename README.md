@@ -1,6 +1,6 @@
 - Home Plugin
-- Version: 2.2.0.0
-- Date: 7.7.2021
+- Version: 2.3.0.0
+- Date: 8.12.2021
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -16,7 +16,7 @@ This plugin is licensed under the GNU General Public License v3.
 System Requirements
 -------------------
 This plugin is compatible with...
- - OJS/OMP 3.2
+ - OJS/OMP 3.3
 
 Installation
 ------------
