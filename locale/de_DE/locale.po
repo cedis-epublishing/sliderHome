@@ -35,6 +35,9 @@ msgstr "Name"
 msgid "plugins.generic.sliderHome.content"
 msgstr "Inhalt"
 
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Copyright Hinweis"
+
 msgid "plugins.generic.sliderHome.noneExist"
 msgstr "Kein Inhalt vorhanden."
 

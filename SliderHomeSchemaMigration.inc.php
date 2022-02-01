@@ -27,6 +27,7 @@ class SliderHomeSchemaMigration extends Migration {
 			$table->bigInteger('context_id');
 			$table->string('name', 255);
 			$table->text('content');
+			$table->text('copyright', 255);
 			$table->bigInteger('sequence');
 			$table->bigInteger('show_content');
 		});

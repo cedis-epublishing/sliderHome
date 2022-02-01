@@ -42,7 +42,6 @@ class SliderContent extends DataObject {
 		return $this->getData('name');
 	}
 
-
 	function setContent($content) {
 		return $this->setData('content', $content);
 	}
@@ -50,7 +49,15 @@ class SliderContent extends DataObject {
 	function getContent() {
 		return $this->getData('content');
 	}
-	
+
+	function setCopyright($copyright) {
+		return $this->setData('copyright', $copyright);
+	}
+
+	function getCopyright() {
+		return $this->getData('copyright');
+	}
+
 	function getShowContent() {
 		return $this->getData('showContent');
 	}

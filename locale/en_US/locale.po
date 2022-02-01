@@ -38,6 +38,9 @@ msgstr "No fields have been created yet."
 msgid "plugins.generic.sliderHome.name"
 msgstr "Field name"
 
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Copyright notice"
+
 msgid "plugins.generic.sliderHome.content"
 msgstr "Content"
 

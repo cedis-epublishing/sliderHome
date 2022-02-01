@@ -30,6 +30,9 @@
 		</field>
 		<field name="content" type="X">
 			<NOTNULL/>
+		</field>
+		<field name="copyright" type="C2" size="255">
+			<NOTNULL/>
 		</field>		
 		<field name="sequence" type="I8">
 			<NOTNULL/>

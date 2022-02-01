@@ -49,7 +49,8 @@ class SliderContentForm extends Form {
 			$sliderContent = $sliderHomeDao->getById($this->sliderContentId, $this->contextId);
 			$this->setData('name', $sliderContent->getName());
 			$this->setData('content', $sliderContent->getContent());
-			$this->setData('showContent', $sliderContent->getShowContent());			
+			$this->setData('showContent', $sliderContent->getShowContent());
+			$this->setData('copyright', $sliderContent->getCopyright());			
 		}
 	}
 
@@ -57,7 +58,7 @@ class SliderContentForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {	
-		$this->readUserVars(array('name','content','showContent'));
+		$this->readUserVars(array('name','content','showContent','copyright'));
 	}
 
 	/**
@@ -72,7 +73,7 @@ class SliderContentForm extends Form {
 				$this->setData('content',
 "<div>
 <p><img src='#'></p>
-<div class='slider-text'>
+<div id='slider-text' class='slider-text'>
 <h3>Title</h3>
 <p>Text
 <a href='#'>Read more ...</a>
@@ -100,7 +101,8 @@ class SliderContentForm extends Form {
 		}		
 		$sliderContent->setName($this->getData('name'));
 		$sliderContent->setContent($this->getData('content'));
-		$sliderContent->setShowContent(!empty($this->getData('showContent')));		
+		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
+		$sliderContent->setCopyright($this->getData('copyright'));	
 		if ($this->sliderContentId) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
 			$sliderHomeDao->updateObject($sliderContent);
@@ -116,22 +118,6 @@ class SliderContentForm extends Form {
 	 */
 	function validate($callHooks = true) {
 		return true;
-		/*
-		$navigationMenuDao = DAORegistry::getDAO('NavigationMenuDAO'); 
-
-		$navigationMenu = $navigationMenuDao->getByTitle($this->_contextId, $this->getData('title'));
-		if (isset($navigationMenu) && $navigationMenu->getId() != $this->_navigationMenuId) {
-			$this->addError('path', __('manager.navigationMenus.form.duplicateTitle'));
-		}
-
-		if ($this->getData('areaName') != '') {
-			$navigationMenusWithArea = $navigationMenuDao->getByArea($this->_contextId, $this->getData('areaName'))->toArray();
-			if (count($navigationMenusWithArea) == 1 && $navigationMenusWithArea[0]->getId() != $this->_navigationMenuId) {
-				$this->addError('areaName', __('manager.navigationMenus.form.menuAssigned'));
-			}
-		}*/
-
-		return parent::validate(false);
 	}	
 	
 }

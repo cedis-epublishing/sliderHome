@@ -41,7 +41,7 @@ If you want to add an overlay text/html use e.g.:
             <figure>
                 <img src="sample_picture.jpg" width="1200" height="1600"/>
                 <small style="display: block; text-align: right;">Copyright Information</small>
-                <div class="slider-text">
+                <div id='slider-text' class="slider-text">
                     <h3>Title</h3>
                     <p>Text <a href="#">Read more ...</a></p>
                 </div>

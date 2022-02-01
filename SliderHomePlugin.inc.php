@@ -199,7 +199,28 @@ class SliderHomePlugin extends GenericPlugin {
 			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
 			foreach ($contentArray as $value) {
 				$sliderContent.= "<div class='swiper-slide'>";
-				$sliderContent.= preg_replace("#<img#","<img style='max-height:".$maxHeight."vh'",$value);
+
+				$contentHTML = new DOMDocument();
+				$contentHTML->loadHTML($value->content);
+				$contentHTML->getElementsByTagName('img')[0]->setAttribute("style", "max-height:".$maxHeight."vh");
+
+				if ($value->copyright) {
+					$imgParent = $contentHTML->getElementsByTagName('img')[0]->parentNode;
+					$imgParent->appendChild($contentHTML->createElement("figure"));
+					$imgTag = $imgParent->removeChild($contentHTML->getElementsByTagName('img')[0]);
+					$contentHTML->getElementsByTagName('figure')[0]->appendChild($imgTag);
+					$sliderTextTag = $contentHTML->getElementById('slider-text');
+					$smallTag = $contentHTML->createElement("small", $value->copyright);
+					$smallTag->setAttribute('class',"slider-copyright");
+					$contentHTML->getElementsByTagName('figure')[0]->appendChild($smallTag);
+					if ($sliderTextTag) {
+						$contentHTML->getElementsByTagName('figure')[0]->appendChild($contentHTML->getElementsByTagName('body')[0]->removeChild($sliderTextTag));
+					} 
+				}
+
+				$sliderContent.= $contentHTML->saveHTML($contentHTML->getElementsByTagName('body')[0]);
+				$sliderContent = str_replace("<body>","",$sliderContent);
+				$sliderContent = str_replace("</body>","",$sliderContent);
 				$sliderContent.= "</div>";
 			}
 			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";

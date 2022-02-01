@@ -24,6 +24,10 @@
 			{fbvElement type="textarea" rich=true label="plugins.generic.sliderHome.content" id="content" value=$content inline=true multilingual=false size=$fbvStyles.size.MEDIUM}
 		{/fbvFormSection}
 
+		{fbvFormSection}
+			{fbvElement type="text" label="plugins.generic.sliderHome.copyright" id="copyright" value=$copyright maxlength="50" inline=true multilingual=false size=$fbvStyles.size.MEDIUM}
+		{/fbvFormSection}
+
 		{fbvFormSection list=true}
 					{fbvElement type="checkbox" id="showContent" name="showContent" checked=$showContent label="plugins.generic.sliderHome.showSliderContent"}				
 		{/fbvFormSection}
