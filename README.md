@@ -26,21 +26,11 @@ To install the plugin:
 Usage
 ------------
 
-To insert a picture with copyright information into the slider use e.g.:
-
-        <div>
-            <figure>
-                <img src="sample_picture.jpg" alt="" width="1200" height="1600" />
-                <small style="display: block; text-align: right;">Copyright Information</small>
-            </figure>
-        </div>
-
 If you want to add an overlay text/html use e.g.:
 
         <div>
             <figure>
                 <img src="sample_picture.jpg" width="1200" height="1600"/>
-                <small style="display: block; text-align: right;">Copyright Information</small>
                 <div id='slider-text' class="slider-text">
                     <h3>Title</h3>
                     <p>Text <a href="#">Read more ...</a></p>
