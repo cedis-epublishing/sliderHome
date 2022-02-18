@@ -21,16 +21,10 @@ class SliderHomeSchemaMigration extends Migration {
          * @return void
          */
         public function up() {
-		// Content for slider
-		Capsule::schema()->create('slider', function (Blueprint $table) {
-			$table->bigInteger('slider_content_id')->autoIncrement();
-			$table->bigInteger('context_id');
-			$table->string('name', 255);
-			$table->text('content');
-			$table->text('copyright', 255);
-			$table->bigInteger('sequence');
-			$table->bigInteger('show_content');
-		});
 
+		// add column copyright
+		Capsule::schema()->table('slider', function($table) {
+			$table->text('copyright', 255);
+		});
 	}
 }
