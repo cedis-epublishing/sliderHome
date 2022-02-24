@@ -33,6 +33,12 @@
 		</field>
 		<field name="copyright" type="C2" size="255">
 			<NOTNULL/>
+		</field>
+		<field name="sliderImage" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="sliderIamgeAltText" type="C2" size="255">
+			<NOTNULL/>
 		</field>		
 		<field name="sequence" type="I8">
 			<NOTNULL/>
