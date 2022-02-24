@@ -17,6 +17,8 @@ import('lib.pkp.classes.form.Form');
  */
 class SliderContentForm extends Form {
 
+	var $request;
+	
 	var $contextId;
 
 	var $sliderContentId;
@@ -26,7 +28,8 @@ class SliderContentForm extends Form {
 	/**
 	 * Constructor
 	 */
-	function __construct($sliderHomePlugin,$contextId, $sliderContentId = null) {
+	function __construct($request, $sliderHomePlugin, $contextId, $sliderContentId = null) {
+		$this->_request = $request;
 		$this->contextId = $contextId;
 		$this->sliderContentId = $sliderContentId;
 		$this->plugin = $sliderHomePlugin;
@@ -50,7 +53,12 @@ class SliderContentForm extends Form {
 			$this->setData('name', $sliderContent->getName());
 			$this->setData('content', $sliderContent->getContent());
 			$this->setData('showContent', $sliderContent->getShowContent());
-			$this->setData('copyright', $sliderContent->getCopyright());			
+			$this->setData('copyright', $sliderContent->getCopyright());
+			
+			$locale = AppLocale::getLocale();
+
+			$this->setData('sliderImage', $sliderContent->getSliderImage()?:"");
+			$this->setData('sliderImageAltText', $sliderContent->getSliderImageAltText($locale)?:"");	
 		}
 	}
 
@@ -58,7 +66,8 @@ class SliderContentForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {	
-		$this->readUserVars(array('name','content','showContent','copyright'));
+		$this->readUserVars(array('name','content','showContent','copyright','temporaryFileId','sliderImage',
+		'sliderImageAltText',));
 	}
 
 	/**
@@ -68,18 +77,40 @@ class SliderContentForm extends Form {
 
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('sliderContentId', $this->sliderContentId);
+		$templateMgr->registerPlugin('function', 'plugin_url', array($this->plugin, 'smartyPluginUrl'));
 		
 		if (!$this->sliderContentId) {
-				$this->setData('content',
-"<div>
-<p><img src='#'></p>
-<div id='slider-text' class='slider-text'>
+			$this->setData('content',
+"<div id='slider-text' class='slider-text'>
 <h3>Title</h3>
 <p>Text
 <a href='#'>Read more ...</a>
 </p>
-</div>
 </div>");	
+		} else {
+
+			$sliderHomeDao = new SliderHomeDAO();
+			$sliderContent = $sliderHomeDao->getById($this->sliderContentId, $this->contextId);
+
+			// Slider image delete link action
+			if ($sliderImage = $sliderContent->getSliderImage()) $templateMgr->assign(
+				'deleteSliderImageLinkAction',
+				new LinkAction(
+					'deleteSliderImage',
+					new RemoteActionConfirmationModal(
+						$request->getSession(),
+						__('common.confirmDelete'), null,
+						$request->getRouter()->url(
+							$request, null, null, 'deleteSliderImage', null, array(
+								'sliderImage' => $sliderImage,
+							)
+						),
+						'modal_delete'
+					),
+					__('common.delete'),
+					null
+				)
+			);
 		}
 
 		return parent::fetch($request,$template,$display);
@@ -90,6 +121,9 @@ class SliderContentForm extends Form {
 	 */
 	function execute(...$functionArgs) {
 		parent::execute(...$functionArgs);
+
+		$request = Application::get()->getRequest();
+
 		$sliderHomeDao = new SliderHomeDAO();
 		if ($this->sliderContentId) {
 			// Load and update an existing content
@@ -103,6 +137,24 @@ class SliderContentForm extends Form {
 		$sliderContent->setContent($this->getData('content'));
 		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
 		$sliderContent->setCopyright($this->getData('copyright'));	
+
+		$locale = AppLocale::getLocale();
+		// Copy an uploaded slider file
+		if ($temporaryFileId = $this->getData('temporaryFileId')?:"") {
+			$user = $request->getUser();
+			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
+			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
+
+			import('classes.file.PublicFileManager');
+			$publicFileManager = new PublicFileManager();
+			$newFileName = 'slider_image_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
+			$journal = $request->getJournal();
+			$publicFileManager->copyContextFile($journal->getId(), $temporaryFile->getFilePath(), $newFileName);
+			$sliderContent->setSliderImage($newFileName);
+		}
+
+		$sliderContent->setSliderImageAltText($this->getData('sliderImageAltText')?:"");
+
 		if ($this->sliderContentId) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
 			$sliderHomeDao->updateObject($sliderContent);
@@ -117,9 +169,20 @@ class SliderContentForm extends Form {
 	 * @copydoc Form::validate
 	 */
 	function validate($callHooks = true) {
-		return true;
-	}	
-	
+		if ($temporaryFileId = $this->getData('temporaryFileId')) {
+			$request = Application::get()->getRequest();
+			$user = $request->getUser();
+			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
+			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
+
+			import('classes.file.PublicFileManager');
+			$publicFileManager = new PublicFileManager();
+			if (!$publicFileManager->getImageExtension($temporaryFile->getFileType())) {
+				$this->addError('sliderImage', __('invalidSliderImageFormat'));
+			}
+		}
+		return parent::validate($callHooks);
+	}
 }
 
 ?>

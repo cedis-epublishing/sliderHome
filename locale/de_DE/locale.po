@@ -32,11 +32,20 @@ msgstr "Sliderinhalt bearbeiten"
 msgid "plugins.generic.sliderHome.name"
 msgstr "Name"
 
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Slidername"
+
 msgid "plugins.generic.sliderHome.content"
-msgstr "Inhalt"
+msgstr "Hier sollten keine Bilder eingefügt werden."
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "HTML-Inhalt für Überlagerung"
 
 msgid "plugins.generic.sliderHome.copyright"
 msgstr "Copyright Hinweis"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Sliderbild"
 
 msgid "plugins.generic.sliderHome.noneExist"
 msgstr "Kein Inhalt vorhanden."

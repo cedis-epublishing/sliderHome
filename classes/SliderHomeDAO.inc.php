@@ -38,7 +38,7 @@ class SliderHomeDAO extends DAO {
 	function getAllContent($contextId) {
 
 		$result = $this->retrieve(
-			'SELECT content, copyright FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
+			'SELECT content, copyright, sliderImage, sliderImageAltText FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
 		);
 		return iterator_to_array($result);
 	}
@@ -64,15 +64,17 @@ class SliderHomeDAO extends DAO {
 
 	function insertObject($sliderContent) {	
 		$this->update(
-			'INSERT INTO slider (context_id, name, content, sequence, show_content, copyright)
-			VALUES (?,?,?,?,?,?)',
+			'INSERT INTO slider (context_id, name, content, sequence, show_content, copyright, sliderImage, sliderImageAltText)
+			VALUES (?,?,?,?,?,?,?,?)',
 			array(
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
 				$sliderContent->getContent(),
 				$sliderContent->getSequence(),
 				$sliderContent->getShowContent(),
-				$sliderContent->getCopyright()				
+				$sliderContent->getCopyright(),
+				$sliderContent->getSliderImage(),
+				$sliderContent->getSliderImageAltText()	
 			)
 		);
 		$sliderContent->setId($this->getInsertId());
@@ -87,7 +89,9 @@ class SliderHomeDAO extends DAO {
 				content = ?,
 				sequence = ?,
 				show_content = ?,
-				copyright = ?
+				copyright = ?,
+				sliderImage = ?,
+				sliderImageAltText = ?
 			WHERE slider_content_id = ?',
 			array(
 				(int) $sliderContent->getContextId(),
@@ -95,7 +99,9 @@ class SliderHomeDAO extends DAO {
 				$sliderContent->getContent(),
 				$sliderContent->getSequence(),
 				(int) $sliderContent->getShowContent(),	
-				$sliderContent->getCopyright(),			
+				$sliderContent->getCopyright(),
+				$sliderContent->getSliderImage(),
+				$sliderContent->getSliderImageAltText(),			
 				(int) $sliderContent->getId()
 			)
 		);
@@ -124,7 +130,9 @@ class SliderHomeDAO extends DAO {
 		$sliderContent->setCopyright($row['copyright']);
 		$sliderContent->setContextId($row['context_id']);
 		$sliderContent->setSequence($row['sequence']);
-		$sliderContent->setShowContent($row['show_content']);		
+		$sliderContent->setShowContent($row['show_content']);
+		$sliderContent->setSliderImage($row['sliderImage']);
+		$sliderContent->setSliderImageAltText($row['sliderImageAltText']);
 		return $sliderContent;
 	}
 

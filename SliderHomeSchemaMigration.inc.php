@@ -25,6 +25,9 @@ class SliderHomeSchemaMigration extends Migration {
 		// add column copyright
 		Capsule::schema()->table('slider', function($table) {
 			$table->text('copyright', 255);
+            $table->text('sliderImage', 255);
+            $table->text('sliderImageAltText', 255);
+
 		});
 	}
 }

@@ -74,6 +74,22 @@ class SliderContent extends DataObject {
 		$this->setData('sequence', $sequence);
 	}
 
+	function getSliderImage() {
+		return $this->getData('sliderImage');
+	}
+
+	function setSliderImage($filename) {
+		$this->setData('sliderImage', $filename);
+	}
+	
+	function getSliderImageAltText() {
+		return $this->getData('sliderImageAltText');
+	}
+
+	function setSliderImageAltText($altText) {
+		$this->setData('sliderImageAltText', $altText);
+	}
+
 }
 
 ?>

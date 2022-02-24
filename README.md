@@ -1,6 +1,6 @@
 - Home Plugin
-- Version: 2.3.0.0
-- Date: 8.12.2021
+- Version: 2.3.1.0
+- Date: 24.2.2022
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -26,17 +26,7 @@ To install the plugin:
 Usage
 ------------
 
-If you want to add an overlay text/html use e.g.:
-
-        <div>
-            <figure>
-                <img src="sample_picture.jpg" width="1200" height="1600"/>
-                <div id='slider-text' class="slider-text">
-                    <h3>Title</h3>
-                    <p>Text <a href="#">Read more ...</a></p>
-                </div>
-            </figure>
-        </div>
+Go to "Website -> Appearance -> Slider" and create new slider entries. You can add a slider image and HTML content to overlay onto the slider image separately.
 
 Support
 ---------------
