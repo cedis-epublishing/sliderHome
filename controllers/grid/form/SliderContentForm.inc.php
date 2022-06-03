@@ -148,8 +148,8 @@ class SliderContentForm extends Form {
 			import('classes.file.PublicFileManager');
 			$publicFileManager = new PublicFileManager();
 			$newFileName = 'slider_image_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
-			$journal = $request->getJournal();
-			$publicFileManager->copyContextFile($journal->getId(), $temporaryFile->getFilePath(), $newFileName);
+			$context = $request->getContext();
+			$publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
 			$sliderContent->setSliderImage($newFileName);
 		}
 

@@ -11,7 +11,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 /**
  * @class SliderHomePlugin
  * 
- * @brief Enables display of image slider on the journal home page.
+ * @brief Enables display of image slider on the journal/press home page.
  */
 class SliderHomePlugin extends GenericPlugin {
 	/**
@@ -184,7 +184,9 @@ class SliderHomePlugin extends GenericPlugin {
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
 
-		$contextId = $request->getContext()->getId();
+		$context = $request->getContext();
+		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
+		$contextId = $context->getId();
 		$maxHeight = $this->getSetting($contextId, 'maxHeight');
 		$speed = $this->getSetting($contextId, 'speed');
 		$delay = $this->getSetting($contextId, 'delay');
@@ -215,7 +217,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$publicFilesDir = Config::getVar('files', 'public_files_dir');
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.'/journals/'.$contextId.'/'.$value->sliderImage);
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
 				$sliderImg->setAttribute("alt", $value->sliderImageAltText); 
 
 				$sliderFigure->appendChild($sliderImg);
