@@ -82,3 +82,10 @@
 .swiper-button-prev, .swiper-button-next {
 	--swiper-theme-color: rgba(102, 102, 102, 0.548) !important ;	
 }
+
+.slider-copyright {
+	display: block;
+	text-align: right;
+	font-size: xx-small;
+	line-height: 0px;
+}

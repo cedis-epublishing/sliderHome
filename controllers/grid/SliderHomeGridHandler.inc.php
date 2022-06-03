@@ -40,7 +40,9 @@ class SliderHomeGridHandler extends GridHandler {
 		parent::__construct();	
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN),
-			array('index', 'fetchGrid', 'fetchRow','addSliderContent', 'editSliderContent', 'updateSliderContent', 'delete','saveSequence')
+			array('index', 'fetchGrid', 'fetchRow','addSliderContent',
+				'editSliderContent', 'updateSliderContent', 'delete','saveSequence',
+				'uploadFile', 'deleteCoverImage')
 		);
 	} 
 
@@ -184,7 +186,7 @@ class SliderHomeGridHandler extends GridHandler {
 			$contextId = $context->getId();
 		}
 	
-		$sliderContentForm = new SliderContentForm(self::$plugin, $contextId, $sliderContentId);
+		$sliderContentForm = new SliderContentForm($request, self::$plugin, $contextId, $sliderContentId);
 		$sliderContentForm->initData();
 
 		return new JSONMessage(true, $sliderContentForm->fetch($request));
@@ -204,7 +206,7 @@ class SliderHomeGridHandler extends GridHandler {
 			$contextId = $context->getId();
 		}		
 
-		$sliderContentForm = new SliderContentForm(self::$plugin, $contextId, $sliderContentId);
+		$sliderContentForm = new SliderContentForm($request, self::$plugin, $contextId, $sliderContentId);
 		$sliderContentForm->readInputData();		
 		// Check the results
 		if ($sliderContentForm->validate()) {			
@@ -259,6 +261,60 @@ class SliderHomeGridHandler extends GridHandler {
 		$sliderContent = $sliderHomeDao->getById($rowId, $contextId);
 		$sliderContent->setSequence($newSequence);
 		$sliderHomeDao->updateObject($sliderContent);
+	}
+
+	function uploadFile($args, $request) {
+		$user = $request->getUser();
+
+		import('lib.pkp.classes.file.TemporaryFileManager');
+		$temporaryFileManager = new TemporaryFileManager();
+		$temporaryFile = $temporaryFileManager->handleUpload('uploadedFile', $user->getId());
+		if ($temporaryFile) {
+			$json = new JSONMessage(true);
+			$json->setAdditionalAttributes(array(
+				'temporaryFileId' => $temporaryFile->getId()
+			));
+			return $json;
+		} else {
+			return new JSONMessage(false, __('common.uploadFailed'));
+		}
+	}
+
+	function deleteSliderImage($args, $request) {
+		assert(!empty($args['sliderImage']));
+
+		$sliderContentId = $request->getUserVar('sliderContentId');
+		$context = $request->getContext();
+		$contextId = CONTEXT_ID_NONE;
+		if ($context) {
+			$contextId = $context->getId();
+		}		
+
+		$sliderHomeDao = new SliderHomeDAO();
+		$sliderContent = $sliderHomeDao->getById($sliderContentId, $contextId);
+
+
+		// Check if the passed filename matches the filename for this slider image
+		if ($args['sliderImage'] != $sliderContent->getCoverImage()) {
+			return new JSONMessage(false, __('editor.issues.removeCoverImageFileNameMismatch'));
+		}
+
+		$file = $args['sliderImage'];
+
+		// Remove slider image and alt text from issue settings
+		$sliderContent->setSliderImage('');
+		$sliderContent->setSliderImageAltText('');
+		$sliderHomeDao->updateObject($sliderContent);
+
+		// Remove the file
+		$publicFileManager = new PublicFileManager();
+		if ($publicFileManager->removeContextFile($issue->getJournalId(), $file)) {
+			$json = new JSONMessage(true);
+			$json->setEvent('fileDeleted');
+			return $json;
+		} else {
+			return new JSONMessage(false, __('editor.issues.removeCoverImageFileNotFound'));
+		}
 	}
 }
 

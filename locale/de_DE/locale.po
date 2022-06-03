@@ -18,7 +18,7 @@ msgid "plugins.generic.sliderHome.description"
 msgstr "Zeigt auf der Startseite einen Slider an."
 
 msgid "plugins.generic.sliderHome.tabname"
-msgstr "Slider"
+msgstr "Slider Plugin"
 
 msgid "plugins.generic.sliderHome.gridTitle"
 msgstr "Sliderinhalte"
@@ -30,10 +30,22 @@ msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
 msgstr "Sliderinhalt bearbeiten"
 
 msgid "plugins.generic.sliderHome.name"
-msgstr "Name"
+msgstr "Name des Sliderbildes"
+
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Sliderbild Name"
 
 msgid "plugins.generic.sliderHome.content"
-msgstr "Inhalt"
+msgstr "Hier sollten keine Bilder eingefügt werden."
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "HTML-Inhalt für Überlagerung"
+
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Copyright Hinweis"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Sliderbild"
 
 msgid "plugins.generic.sliderHome.noneExist"
 msgstr "Kein Inhalt vorhanden."

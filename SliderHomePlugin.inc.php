@@ -198,10 +198,45 @@ class SliderHomePlugin extends GenericPlugin {
 		if (!empty($contentArray)) {
 			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
 			foreach ($contentArray as $value) {
-				$sliderContent.= "<div class='swiper-slide'>";
-				$sliderContent.= preg_replace("#<img#","<img style='max-height:".$maxHeight."vh'",$value);
-				$sliderContent.= "</div>";
+
+				$contentHTML = new DOMDocument();
+
+				// get text content of slide
+				$contentHTML->loadHTML($value->content);
+
+				// create slide tag
+				$slide = $contentHTML->createElement('div');
+				$slide->setAttribute("class", "swiper-slide");
+
+				// create slider fiure and image tag
+				$sliderFigure = $contentHTML->createElement("figure");
+				
+				$baseUrl = Config::getVar('general', 'base_url');
+				$publicFilesDir = Config::getVar('files', 'public_files_dir');
+				$sliderImg = $contentHTML->createElement('img');
+				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.'/journals/'.$contextId.'/'.$value->sliderImage);
+				$sliderImg->setAttribute("alt", $value->sliderImageAltText); 
+
+				$sliderFigure->appendChild($sliderImg);
+
+				if ($value->copyright) {
+					$smallTag = $contentHTML->createElement("small", $value->copyright);
+					$smallTag->setAttribute('class',"slider-copyright");
+					$sliderFigure->appendChild($smallTag);
+				}
+
+				// append slider image and text content to slide tag
+				foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
+					$sliderFigure->appendChild($node);
+				}
+				$slide->appendChild($sliderFigure);
+
+				// generate output HTML
+				$sliderContent.= $contentHTML->saveHTML($slide);
+
 			}
+			// add slider navigation 
 			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";
 			$sliderContent .= 
 			"<script>
@@ -238,7 +273,7 @@ class SliderHomePlugin extends GenericPlugin {
 			return true;
 		}	
 		return false;
-	}	
+	}
 
 	/**
 	 * @copydoc PKPPlugin::getDisplayName()
