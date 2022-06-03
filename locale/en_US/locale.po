@@ -18,7 +18,7 @@ msgid "plugins.generic.sliderHome.description"
 msgstr "Displays a slider on the start page."
 
 msgid "plugins.generic.sliderHome.tabname"
-msgstr "Slider"
+msgstr "Slider Plugin"
 
 msgid "plugins.generic.sliderHome.gridTitle"
 msgstr "Slider Content"
@@ -36,10 +36,10 @@ msgid "plugins.generic.sliderHome.noneCreated"
 msgstr "No fields have been created yet."
 
 msgid "plugins.generic.sliderHome.name"
-msgstr "Field name"
+msgstr "Name of this slider image"
 
 msgid "plugins.generic.sliderHome.sliderName"
-msgstr "Slider name"
+msgstr "Slider image name"
 
 msgid "plugins.generic.sliderHome.copyright"
 msgstr "Copyright notice"

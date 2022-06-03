@@ -1,6 +1,6 @@
-- Home Plugin
+- Slider Home Plugin
 - Version: 2.3.1.0
-- Date: 24.2.2022
+- Date: 3.6.2022
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -26,7 +26,7 @@ To install the plugin:
 Usage
 ------------
 
-Go to "Website -> Appearance -> Slider" and create new slider entries. You can add a slider image and HTML content to overlay onto the slider image separately.
+Go to "Website -> Appearance -> Slider Plugin" and create new slider entries. You can add a slider image and HTML content to overlay onto the slider image separately.
 
 Support
 ---------------
