@@ -16,18 +16,33 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 class SliderHomeSchemaMigration extends Migration {
-        /**
-         * Run the migrations.
-         * @return void
-         */
-        public function up() {
+    /**
+     * Run the migrations.
+     * @return void
+     */
+    public function up() {
 
-		// add column copyright
-		Capsule::schema()->table('slider', function($table) {
-			$table->text('copyright', 255);
-            $table->text('sliderImage', 255);
-            $table->text('sliderImageAltText', 255);
+        if (Capsule::schema()->hasTable('slider')) {
+            // add new columns to existing slider table
+            Capsule::schema()->table('slider', function($table) {
+                $table->text('copyright', 255);
+                $table->text('sliderImage', 255);
+                $table->text('sliderImageAltText', 255);
 
-		});
-	}
+            });
+        } else {
+            // create new slider table
+            Capsule::schema()->create('slider', function (Blueprint $table) {
+                $table->increments('slider_content_id');
+                $table->smallInteger('context_id');
+                $table->text('name', 255);
+                $table->text('content', 255);
+                $table->text('copyright', 255);
+                $table->text('sliderImage', 255);
+                $table->text('sliderImageAltText', 255);
+                $table->smallInteger('sequence');
+                $table->smallInteger('show_content');		
+            });
+        }
+    }
 }
