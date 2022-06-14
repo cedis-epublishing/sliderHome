@@ -204,7 +204,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				$contentHTML->loadHTML($value->content);
+				$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value->content);
 
 				// create slide tag
 				$slide = $contentHTML->createElement('div');
