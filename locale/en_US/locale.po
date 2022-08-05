@@ -32,6 +32,9 @@ msgstr "Edit Slider Content"
 msgid "plugins.generic.sliderHome.grid.title"
 msgstr "Slider fields"
 
+msgid "plugins.generic.sliderHome.grid.visible"
+msgstr "Visible"
+
 msgid "plugins.generic.sliderHome.noneCreated"
 msgstr "No fields have been created yet."
 

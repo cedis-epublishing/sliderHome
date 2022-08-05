@@ -78,15 +78,18 @@ class SliderContentForm extends Form {
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('sliderContentId', $this->sliderContentId);
 		$templateMgr->registerPlugin('function', 'plugin_url', array($this->plugin, 'smartyPluginUrl'));
+		$locale = $templateMgr->getTemplateVars('primaryLocale');
 		
 		if (!$this->sliderContentId) {
 			$this->setData('content',
+			[ $locale =>
 "<div id='slider-text' class='slider-text'>
 <h3>Title</h3>
 <p>Text
 <a href='#'>Read more ...</a>
 </p>
-</div>");	
+</div>"
+		]);	
 		} else {
 
 			$sliderHomeDao = new SliderHomeDAO();

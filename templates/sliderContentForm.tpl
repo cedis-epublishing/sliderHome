@@ -51,7 +51,7 @@
 							{translate key="common.altText"}
 						</span>
 						<span class="value">
-							{fbvElement type="text" id="sliderImageAltText" label="common.altTextInstructions" value=$sliderImageAltText}
+							{fbvElement type="text" id="sliderImageAltText" label="common.altTextInstructions" multilingual=true value=$sliderImageAltText}
 						</span>
 
 						<div id="{$deleteSliderImageLinkAction->getId()}" class="actions">
@@ -66,11 +66,11 @@
 	{fbvFormArea id="sliderContentFormArea" class="border"}
 
 		{fbvFormSection label="plugins.generic.sliderHome.sliderTextContentLabel"}
-			{fbvElement type="textarea" rich=true label="plugins.generic.sliderHome.content" id="content" value=$content inline=true multilingual=false size=$fbvStyles.size.MEDIUM}
+			{fbvElement type="textarea" rich=true label="plugins.generic.sliderHome.content" id="content" value=$content inline=true multilingual=true size=$fbvStyles.size.MEDIUM}
 		{/fbvFormSection}
 
 		{fbvFormSection}
-			{fbvElement type="text" label="plugins.generic.sliderHome.copyright" id="copyright" value=$copyright maxlength="50" inline=true multilingual=false size=$fbvStyles.size.MEDIUM}
+			{fbvElement type="text" label="plugins.generic.sliderHome.copyright" id="copyright" value=$copyright maxlength="50" inline=true multilingual=true size=$fbvStyles.size.MEDIUM}
 		{/fbvFormSection}
 
 		{fbvFormSection list=true}

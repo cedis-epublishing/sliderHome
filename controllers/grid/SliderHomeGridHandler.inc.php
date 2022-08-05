@@ -86,12 +86,22 @@ class SliderHomeGridHandler extends GridHandler {
 		$this->addColumn(
 			new GridColumn(
 				'name',
-				'common.title',
+				'common.name',
 				null,
 				'controllers/grid/gridCell.tpl',
 				$sliderHomeGridCellProvider
 			)
-		);		
+			);
+		$this->addColumn(
+			new GridColumn(
+				'show_content',
+				'plugins.generic.sliderHome.grid.visible',
+				null,
+				self::$plugin->getTemplateResource('showContentGridCell.tpl'),
+				$sliderHomeGridCellProvider
+			)
+		);
+
 
 		// Load language components
 		AppLocale::requireComponents(LOCALE_COMPONENT_PKP_MANAGER);

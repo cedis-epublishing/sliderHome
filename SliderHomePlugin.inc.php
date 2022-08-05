@@ -117,9 +117,40 @@ class SliderHomePlugin extends GenericPlugin {
 			'FORM_SLIDER_SETTINGS',
 		]);
 
+		// // add ListPanel
+		$this->import('classes.components.form.context.SliderContentListPanel');
+		$sliderContentListPanel = new SliderContentListPanel(
+			'selectSliderContent',
+			__('editor.submission.findAndSelectSliderContent'),
+			[
+				'apiUrl' => $contextApiUrl,
+				// 'apiUrl' => $request->getDispatcher()->url(
+				// 	$request,
+				// 	ROUTE_API,
+				// 	$submissionContext->getPath(),
+				// 	'users/reviewers'
+				// ),
+				'currentlyAssigned' => $currentlyAssigned,
+				'getParams' => [
+					// 'contextId' => $submissionContext->getId(),
+					// 'reviewStage' => $reviewRound->getStageId(),
+				],
+				'selectorName' => 'reviewerId',
+				'warnOnAssignment' => $warnOnAssignment,
+			]
+		);
+		$sliderContentListPanel->set([
+			'items' => $sliderContentListPanel->getItems($contextId),
+			'itemsMax' => $sliderContentListPanel->getItemsMax($contextId),
+		]);
+
+		$LPState = $sliderContentListPanel->getConfig();
+
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState diesn't seem to update template vars anymore
+		$state['components']['contentList'] = $sliderContentListPanel->getConfig();
+
+		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState doesn't seem to update template vars anymore
 
 		$output .= $templateMgr->fetch($this->getTemplateResource('appearanceTab.tpl'));
 
@@ -184,6 +215,8 @@ class SliderHomePlugin extends GenericPlugin {
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
 
+		$templateMgr = TemplateManager::getManager($request);
+		$locale = $templateMgr->getTemplateVars('currentLocale');
 		$context = $request->getContext();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
@@ -194,7 +227,7 @@ class SliderHomePlugin extends GenericPlugin {
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($contextId);
+		$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
 		$sliderContent = "";
 
 		if (!empty($contentArray)) {
@@ -204,7 +237,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value->content);
+				$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value['content']);
 
 				// create slide tag
 				$slide = $contentHTML->createElement('div');
@@ -217,13 +250,13 @@ class SliderHomePlugin extends GenericPlugin {
 				$publicFilesDir = Config::getVar('files', 'public_files_dir');
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
-				$sliderImg->setAttribute("alt", $value->sliderImageAltText); 
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
+				$sliderImg->setAttribute("alt", $value['sliderImageAltText']); 
 
 				$sliderFigure->appendChild($sliderImg);
 
-				if ($value->copyright) {
-					$smallTag = $contentHTML->createElement("small", $value->copyright);
+				if ($value['copyright']) {
+					$smallTag = $contentHTML->createElement("small", $value['copyright']);
 					$smallTag->setAttribute('class',"slider-copyright");
 					$sliderFigure->appendChild($smallTag);
 				}

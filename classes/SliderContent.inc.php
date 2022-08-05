@@ -90,6 +90,10 @@ class SliderContent extends DataObject {
 		$this->setData('sliderImageAltText', $altText);
 	}
 
+	function getLocale() {
+		$request = Application::getRequest();
+		return $request->getContext()->getPrimaryLocale();
+	}
 }
 
 ?>
