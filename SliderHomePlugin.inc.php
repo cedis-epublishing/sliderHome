@@ -117,38 +117,8 @@ class SliderHomePlugin extends GenericPlugin {
 			'FORM_SLIDER_SETTINGS',
 		]);
 
-		// // add ListPanel
-		$this->import('classes.components.form.context.SliderContentListPanel');
-		$sliderContentListPanel = new SliderContentListPanel(
-			'selectSliderContent',
-			__('editor.submission.findAndSelectSliderContent'),
-			[
-				'apiUrl' => $contextApiUrl,
-				// 'apiUrl' => $request->getDispatcher()->url(
-				// 	$request,
-				// 	ROUTE_API,
-				// 	$submissionContext->getPath(),
-				// 	'users/reviewers'
-				// ),
-				'currentlyAssigned' => $currentlyAssigned,
-				'getParams' => [
-					// 'contextId' => $submissionContext->getId(),
-					// 'reviewStage' => $reviewRound->getStageId(),
-				],
-				'selectorName' => 'reviewerId',
-				'warnOnAssignment' => $warnOnAssignment,
-			]
-		);
-		$sliderContentListPanel->set([
-			'items' => $sliderContentListPanel->getItems($contextId),
-			'itemsMax' => $sliderContentListPanel->getItemsMax($contextId),
-		]);
-
-		$LPState = $sliderContentListPanel->getConfig();
-
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$state['components']['contentList'] = $sliderContentListPanel->getConfig();
 
 		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState doesn't seem to update template vars anymore
 
