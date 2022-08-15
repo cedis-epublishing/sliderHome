@@ -1,11 +1,19 @@
 <style>
 
 	.isVisible {
-		border-color: #00B24E;
+		border-color: #ddd;
 		color: #00B24E;
-}
+	}
+
+	.pkpBadge--button:hover {
+		background: none!important;
+		border-color: #ddd!important;
+		color: #00B24E;
+		cursor: auto!important;
+	}
 
 </style>
+
 {fbvFormSection  class="formButtons form_buttons"}
 		{if $showContent == 1}
 			<badge class="pkpBadge pkpBadge--button isVisible"
