@@ -83,12 +83,10 @@ class SliderContentForm extends Form {
 		if (!$this->sliderContentId) {
 			$this->setData('content',
 			[ $locale =>
-"<div id='slider-text' class='slider-text'>
-<h3>Title</h3>
+"<h3>Title</h3>
 <p>Text
 <a href='#'>Read more ...</a>
-</p>
-</div>"
+</p>"
 		]);	
 		} else {
 
@@ -137,7 +135,12 @@ class SliderContentForm extends Form {
 			$sliderContent->setContextId($this->contextId);
 		}		
 		$sliderContent->setName($this->getData('name'));
-		$sliderContent->setContent($this->getData('content'));
+		$sliderContent->setContent(array_map(
+			function($value){
+				return "<div id='slider-text' class='slider-text'>".$value."</div>";
+			},
+			$this->getData('content'))
+		);
 		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
 		$sliderContent->setCopyright($this->getData('copyright'));	
 
