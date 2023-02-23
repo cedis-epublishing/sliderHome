@@ -23,13 +23,14 @@ class SliderHomeSchemaMigration extends Migration {
     public function up() {
 
         if (Capsule::schema()->hasTable('slider')) {
-            // add new columns to existing slider table
-            Capsule::schema()->table('slider', function($table) {
-                $table->text('copyright', 255);
-                $table->text('sliderImage', 255);
-                $table->text('sliderImageAltText', 255);
-
-            });
+            $columns = ['copyright', 'sliderImage', 'sliderImageLink', 'sliderImageAltText'];
+            foreach ($columns as $column) {
+                if (!Capsule::schema()->hasColumn('slider', $column)) {
+                    Capsule::schema()->table('slider', function (Blueprint $table) use($column) {
+                        $table->text($column, 255);
+                    });
+                }
+            }
         } else {
             // create new slider table
             Capsule::schema()->create('slider', function (Blueprint $table) {
@@ -39,6 +40,7 @@ class SliderHomeSchemaMigration extends Migration {
                 $table->text('content', 255);
                 $table->text('copyright', 255);
                 $table->text('sliderImage', 255);
+                $table->text('sliderImageLink', 255);
                 $table->text('sliderImageAltText', 255);
                 $table->smallInteger('sequence');
                 $table->smallInteger('show_content');		

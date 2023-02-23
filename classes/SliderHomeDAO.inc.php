@@ -38,7 +38,7 @@ class SliderHomeDAO extends DAO {
 	function getAllContent($contextId) {
 
 		$result = $this->retrieve(
-			'SELECT content, copyright, sliderImage, sliderImageAltText FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
+			'SELECT content, copyright, sliderImage, sliderImageLink, sliderImageAltText FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
 		);
 		return iterator_to_array($result);
 	}
@@ -64,8 +64,8 @@ class SliderHomeDAO extends DAO {
 
 	function insertObject($sliderContent) {	
 		$this->update(
-			'INSERT INTO slider (context_id, name, content, sequence, show_content, copyright, sliderImage, sliderImageAltText)
-			VALUES (?,?,?,?,?,?,?,?)',
+			'INSERT INTO slider (context_id, name, content, sequence, show_content, copyright, sliderImage, sliderImageLink, sliderImageAltText)
+			VALUES (?,?,?,?,?,?,?,?,?)',
 			array(
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
@@ -74,6 +74,7 @@ class SliderHomeDAO extends DAO {
 				$sliderContent->getShowContent(),
 				$sliderContent->getCopyright(),
 				$sliderContent->getSliderImage(),
+				$sliderContent->getSliderImageLink(),
 				$sliderContent->getSliderImageAltText()	
 			)
 		);
@@ -91,6 +92,7 @@ class SliderHomeDAO extends DAO {
 				show_content = ?,
 				copyright = ?,
 				sliderImage = ?,
+				sliderImageLink = ?,
 				sliderImageAltText = ?
 			WHERE slider_content_id = ?',
 			array(
@@ -101,6 +103,7 @@ class SliderHomeDAO extends DAO {
 				(int) $sliderContent->getShowContent(),	
 				$sliderContent->getCopyright(),
 				$sliderContent->getSliderImage(),
+				$sliderContent->getSliderImageLink(),
 				$sliderContent->getSliderImageAltText(),			
 				(int) $sliderContent->getId()
 			)
@@ -132,6 +135,7 @@ class SliderHomeDAO extends DAO {
 		$sliderContent->setSequence($row['sequence']);
 		$sliderContent->setShowContent($row['show_content']);
 		$sliderContent->setSliderImage($row['sliderImage']);
+		$sliderContent->setSliderImageLink($row['sliderImageLink']);
 		$sliderContent->setSliderImageAltText($row['sliderImageAltText']);
 		return $sliderContent;
 	}

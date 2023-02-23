@@ -47,6 +47,12 @@ msgstr "Copyright notice"
 msgid "plugins.generic.sliderHome.sliderImage"
 msgstr "Slider image"
 
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "If you want to put a link on the slider image you can provide an URL here."
+
+msgid "plugins.generic.sliderHome.imageDetailsHint"
+msgstr "If you want to put a link on the slider image or want to add an alternative text please first upload and save the slider image and then edit the saved slider entry again."
+
 msgid "plugins.generic.sliderHome.content"
 msgstr "You should not include images here."
 

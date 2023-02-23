@@ -1,6 +1,6 @@
 - Slider Home Plugin
-- Version: 2.3.1.0
-- Date: 3.6.2022
+- Version: 2.3.2.0
+- Date: 23.2.2023
 - Author: Carola Fanselow, Ronald Steffen
 
 About

@@ -211,14 +211,17 @@ class SliderHomePlugin extends GenericPlugin {
 				$slide->setAttribute("class", "swiper-slide");
 
 				// create slider fiure and image tag
+				// figure
 				$sliderFigure = $contentHTML->createElement("figure");
 				
 				$baseUrl = Config::getVar('general', 'base_url');
 				$publicFilesDir = Config::getVar('files', 'public_files_dir');
+
+				// image
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
 				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
-				$sliderImg->setAttribute("alt", $value->sliderImageAltText); 
+				$sliderImg->setAttribute("alt", $value->sliderImageAltText);
 
 				$sliderFigure->appendChild($sliderImg);
 
@@ -232,7 +235,16 @@ class SliderHomePlugin extends GenericPlugin {
 				foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
 					$sliderFigure->appendChild($node);
 				}
-				$slide->appendChild($sliderFigure);
+
+				// image link
+				if ($value->sliderImageLink) {
+					$sliderImgLink = $contentHTML->createElement('a');
+					$sliderImgLink->setAttribute("href", $value->sliderImageLink);
+					$sliderImgLink->appendChild($sliderFigure);
+					$slide->appendChild($sliderImgLink);
+				} else {
+					$slide->appendChild($sliderFigure);
+				}
 
 				// generate output HTML
 				$sliderContent.= $contentHTML->saveHTML($slide);

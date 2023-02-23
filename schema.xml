@@ -37,6 +37,9 @@
 		<field name="sliderImage" type="C2" size="255">
 			<NOTNULL/>
 		</field>
+		<field name="sliderImageLink" type="C2" size="255">
+			<NOTNULL/>
+		</field>
 		<field name="sliderIamgeAltText" type="C2" size="255">
 			<NOTNULL/>
 		</field>		

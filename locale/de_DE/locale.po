@@ -47,6 +47,12 @@ msgstr "Copyright Hinweis"
 msgid "plugins.generic.sliderHome.sliderImage"
 msgstr "Sliderbild"
 
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "Wenn Sie das Sliderbild verlinken möchten können Sie hier eine URL angeben."
+
+msgid "plugins.generic.sliderHome.imageDetailsHint"
+msgstr "Wenn Sie das Sliderbild verlinken wollen oder einen Alternativtext eingeben wollen laden Sie bitte erst ein Sliderbild hoch und editieren Sie den gespeicherten Slidereintrag."
+
 msgid "plugins.generic.sliderHome.noneExist"
 msgstr "Kein Inhalt vorhanden."
 
