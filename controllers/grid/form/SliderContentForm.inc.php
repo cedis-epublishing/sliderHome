@@ -82,13 +82,13 @@ class SliderContentForm extends Form {
 		$templateMgr->registerPlugin('function', 'plugin_url', array($this->plugin, 'smartyPluginUrl'));
 		
 		if (!$this->sliderContentId) {
-			$this->setData('content',
-"<div id='slider-text' class='slider-text'>
-<h3>Title</h3>
-<p>Text
-<a href='#'>Read more ...</a>
-</p>
-</div>");	
+			$this->setData('content', '');
+// "<div id='slider-text' class='slider-text'>
+// <h3>Title</h3>
+// <p>Text
+// <a href='#'>Read more ...</a>
+// </p>
+// </div>");	
 		} else {
 
 			$sliderHomeDao = new SliderHomeDAO();
