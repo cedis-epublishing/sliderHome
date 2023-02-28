@@ -38,6 +38,7 @@ class SliderContentForm extends Form {
 
 		// Add form checks
 		$this->addCheck(new FormValidator($this,'name','required', 'plugins.generic.sliderHome.nameRequired'));
+		$this->addCheck(new FormValidatorUrl($this, 'sliderImageLink', 'optional', 'user.profile.form.urlInvalid'));
 		$this->addCheck(new FormValidatorPost($this));
 		$this->addCheck(new FormValidatorCSRF($this));
 	}
@@ -58,6 +59,7 @@ class SliderContentForm extends Form {
 			$locale = AppLocale::getLocale();
 
 			$this->setData('sliderImage', $sliderContent->getSliderImage()?:"");
+			$this->setData('sliderImageLink', $sliderContent->getSliderImageLink()?:"");
 			$this->setData('sliderImageAltText', $sliderContent->getSliderImageAltText($locale)?:"");	
 		}
 	}
@@ -67,7 +69,7 @@ class SliderContentForm extends Form {
 	 */
 	function readInputData() {	
 		$this->readUserVars(array('name','content','showContent','copyright','temporaryFileId','sliderImage',
-		'sliderImageAltText',));
+		'sliderImageAltText','sliderImageLink'));
 	}
 
 	/**
@@ -81,13 +83,13 @@ class SliderContentForm extends Form {
 		$locale = $templateMgr->getTemplateVars('primaryLocale');
 		
 		if (!$this->sliderContentId) {
-			$this->setData('content',
-			[ $locale =>
-"<h3>Title</h3>
-<p>Text
-<a href='#'>Read more ...</a>
-</p>"
-		]);	
+			$this->setData('content', '');
+// "<div id='slider-text' class='slider-text'>
+// <h3>Title</h3>
+// <p>Text
+// <a href='#'>Read more ...</a>
+// </p>
+// </div>");	
 		} else {
 
 			$sliderHomeDao = new SliderHomeDAO();
@@ -159,6 +161,7 @@ class SliderContentForm extends Form {
 			$sliderContent->setSliderImage($newFileName);
 		}
 
+		$sliderContent->setSliderImageLink($this->getData('sliderImageLink')?:"");
 		$sliderContent->setSliderImageAltText($this->getData('sliderImageAltText')?:"");
 
 		if ($this->sliderContentId) {

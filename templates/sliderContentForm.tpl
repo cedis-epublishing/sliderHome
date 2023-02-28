@@ -38,6 +38,9 @@
 		{fbvFormSection label="plugins.generic.sliderHome.sliderImage"}
 			{include file="controllers/fileUploadContainer.tpl" id="sliderImageUploader"}
 			<input type="hidden" name="temporaryFileId" id="temporaryFileId" value="" />
+			{if !$sliderContentId}
+				{translate key="plugins.generic.sliderHome.imageDetailsHint"}
+			{/if}
 		{/fbvFormSection}
 		{fbvFormSection id="sliderImagePreview"}
 			{if $sliderImage != ''}
@@ -52,6 +55,9 @@
 						</span>
 						<span class="value">
 							{fbvElement type="text" id="sliderImageAltText" label="common.altTextInstructions" multilingual=true value=$sliderImageAltText}
+						</span>
+						<span class="value">
+							{fbvElement type="text" id="sliderImageLink" label="plugins.generic.sliderHome.sliderImageLink" value=$sliderImageLink}
 						</span>
 
 						<div id="{$deleteSliderImageLinkAction->getId()}" class="actions">
