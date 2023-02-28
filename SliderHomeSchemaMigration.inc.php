@@ -30,7 +30,7 @@ class SliderHomeSchemaMigration extends Migration {
 
             import('classes.file.PublicFileManager');
             $publicFileManager = new PublicFileManager();
-            foreach ($slider->items as $file) {               
+            foreach ($slider as $slide) {               
                 // $publicFileManager->removeContextFile(
                     // TODO @RS
                 // );
