@@ -165,17 +165,9 @@ class SliderHomePlugin extends GenericPlugin {
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/sliderHome.css'>"
 		);
 		$templateMgr->addHeader(
-			'swiper',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.css'>"
-		);
-		$templateMgr->addHeader(
 			'swiper-min',
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
 		);		
-		$templateMgr->addHeader(
-			'swiper-js',
-			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.js'></script>"
-		);
 		$templateMgr->addHeader(
 			'swiper-min-js',
 			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
