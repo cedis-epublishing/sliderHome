@@ -223,7 +223,7 @@ class SliderHomePlugin extends GenericPlugin {
 				// image
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
 				$sliderImg->setAttribute("alt", $value->sliderImageAltText);
 
 				$sliderFigure->appendChild($sliderImg);
