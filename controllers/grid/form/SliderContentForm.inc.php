@@ -137,12 +137,7 @@ class SliderContentForm extends Form {
 			$sliderContent->setContextId($this->contextId);
 		}		
 		$sliderContent->setName($this->getData('name'));
-		$sliderContent->setContent(array_map(
-			function($value){
-				return "<div id='slider-text' class='slider-text'>".$value."</div>";
-			},
-			$this->getData('content'))
-		);
+		$sliderContent->setContent($this->getData('content'));
 		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
 		$sliderContent->setCopyright($this->getData('copyright'));	
 

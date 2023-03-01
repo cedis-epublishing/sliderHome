@@ -206,7 +206,7 @@ class SliderHomePlugin extends GenericPlugin {
 
 				$contentHTML = new DOMDocument();
 
-				// get text content of slide
+				// get text content of slide as DOMElements
 				$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value['content']);
 
 				// create slide tag
@@ -224,30 +224,45 @@ class SliderHomePlugin extends GenericPlugin {
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
 				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
-				$sliderImg->setAttribute("alt", $value->sliderImageAltText);
+				$sliderImg->setAttribute("alt", $value['sliderImageAltText']);
 
-				$sliderFigure->appendChild($sliderImg);
-
+				// image link
+				if ($value['sliderImageLink']) {
+					$sliderImgLink = $contentHTML->createElement('a');
+					$sliderImgLink->setAttribute("href", $value['sliderImageLink']);
+					$sliderImgLink->setAttribute("class", 'slider-link');
+					$sliderImgLink->appendChild($sliderImg);
+					$sliderFigure->appendChild($sliderImgLink);
+				} else {
+					$sliderFigure->appendChild($sliderImg);
+				}				
+				
 				if ($value['copyright']) {
 					$smallTag = $contentHTML->createElement("small", $value['copyright']);
 					$smallTag->setAttribute('class',"slider-copyright");
 					$sliderFigure->appendChild($smallTag);
 				}
 
-				// append slider image and text content to slide tag
-				foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
-					$sliderFigure->appendChild($node);
+				// append overlay content to figure tag
+				if ($value['content']) {
+
+					if (str_contains($value['content'], 'href')) {
+						$noclick = '';
+					} else {
+						$nocklick = ' noclick';
+					}
+
+					$overlayContent = $contentHTML->createElement("div");
+					// copy all content tags
+					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
+						$overlayContent->appendChild($node);
+					}
+					$overlayContent->setAttribute('class',"slider-text".$noclick);
+					$sliderFigure->appendChild($overlayContent);
 				}
 
-				// image link
-				if ($value->sliderImageLink) {
-					$sliderImgLink = $contentHTML->createElement('a');
-					$sliderImgLink->setAttribute("href", $value->sliderImageLink);
-					$sliderImgLink->appendChild($sliderFigure);
-					$slide->appendChild($sliderImgLink);
-				} else {
-					$slide->appendChild($sliderFigure);
-				}
+				// append slider image to slide tag
+				$slide->appendChild($sliderFigure);
 
 				// generate output HTML
 				$sliderContent.= $contentHTML->saveHTML($slide);

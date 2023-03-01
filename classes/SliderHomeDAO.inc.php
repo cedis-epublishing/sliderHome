@@ -156,7 +156,7 @@ class SliderHomeDAO extends DAO {
 	 * @copydoc DAO::getAdditionalFieldNames()
 	 */
 	function getAdditionalFieldNames() {
-		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImage']);
+		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImage','sliderImageLink']);
 	}
 
 }
