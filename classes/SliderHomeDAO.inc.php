@@ -11,6 +11,8 @@
 import('lib.pkp.classes.db.DAO');
 import('plugins.generic.sliderHome.classes.SliderContent');
 
+use PKP\db\DAOResultFactory;
+
  /**
  * @class SliderContentDAO
  * @brief Class implemeting the slider DAO object.
@@ -70,8 +72,8 @@ class SliderHomeDAO extends DAO {
 				(int) $sliderContent->getContextId(),
 				$sliderContent->getName(),
 				$sliderContent->getContent(),
-				$sliderContent->getSequence(),
-				$sliderContent->getShowContent(),
+				(int) $sliderContent->getSequence(),
+				(int) $sliderContent->getShowContent(),
 				$sliderContent->getCopyright(),
 				$sliderContent->getSliderImage(),
 				$sliderContent->getSliderImageLink(),
@@ -139,11 +141,6 @@ class SliderHomeDAO extends DAO {
 		$sliderContent->setSliderImageAltText($row['sliderImageAltText']);
 		return $sliderContent;
 	}
-
-	function getInsertId() {
-		return $this->_getInsertId('slider', 'slider_content_id');
-	}
-
 }
 
 ?>

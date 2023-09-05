@@ -22,7 +22,7 @@ class SliderHomePlugin extends GenericPlugin {
 	/**
 	 * @copydoc Plugin::register()
 	 */
-	function register($category, $path, $mainContextId = null) {			
+	function register($category, $path, $mainContextId = null) {
 		if (parent::register($category, $path, $mainContextId)) {
 			if ($this->getEnabled($mainContextId)) {
 				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
@@ -63,7 +63,7 @@ class SliderHomePlugin extends GenericPlugin {
 		$dispatcher = $request->getDispatcher();
 
 		$supportedFormLocales = $context->getSupportedFormLocales();
-		$localeNames = AppLocale::getAllLocales();
+		$localeNames = \PKP\facades\Locale::getLocales();
 		$locales = array_map(function($localeKey) use ($localeNames) {
 			return ['key' => $localeKey, 'label' => $localeNames[$localeKey]];
 		}, $supportedFormLocales);
@@ -204,7 +204,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value->content);
+				$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text">'.$value->content.'</div>');
 
 				// create slide tag
 				$slide = $contentHTML->createElement('div');

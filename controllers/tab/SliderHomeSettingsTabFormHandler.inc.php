@@ -9,7 +9,8 @@
  * @brief File implemeting the slider settings tab handler.
  */
 
-import('pages/management/SettingsHandler');
+// import('pages/management/SettingsHandler');
+use APP\pages\management\SettingsHandler;
 import('lib.pkp.classes.validation.ValidatorFactory');
 
 /**
@@ -22,7 +23,7 @@ class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 		$errors = [];
 
 		$plugin = PluginRegistry::getPlugin('generic', 'sliderhomeplugin');
-		$request = Application::getRequest();
+		$request = Application::get()->getRequest();
 		$contextId = $request->getContext()->getId();
 		$args = $request->_requestVars;
 		$response =& $functionArgs[1];

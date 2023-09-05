@@ -37,10 +37,10 @@ class SliderContentForm extends Form {
 		parent::__construct($sliderHomePlugin->getTemplateResource('sliderContentForm.tpl'));		
 
 		// Add form checks
-		$this->addCheck(new FormValidator($this,'name','required', 'plugins.generic.sliderHome.nameRequired'));
-		$this->addCheck(new FormValidatorUrl($this, 'sliderImageLink', 'optional', 'user.profile.form.urlInvalid'));
-		$this->addCheck(new FormValidatorPost($this));
-		$this->addCheck(new FormValidatorCSRF($this));
+		$this->addCheck(new \PKP\form\validation\FormValidator($this,'name','required', 'plugins.generic.sliderHome.nameRequired'));
+		$this->addCheck(new \PKP\form\validation\FormValidatorUrl($this, 'sliderImageLink', 'optional', 'user.profile.form.urlInvalid'));
+		$this->addCheck(new \PKP\form\validation\FormValidatorPost($this));
+		$this->addCheck(new \PKP\form\validation\FormValidatorCSRF($this));
 	}
 
 	/**
@@ -56,7 +56,7 @@ class SliderContentForm extends Form {
 			$this->setData('showContent', $sliderContent->getShowContent());
 			$this->setData('copyright', $sliderContent->getCopyright());
 			
-			$locale = AppLocale::getLocale();
+			$locale = \PKP\facades\Locale::getLocale();
 
 			$this->setData('sliderImage', $sliderContent->getSliderImage()?:"");
 			$this->setData('sliderImageLink', $sliderContent->getSliderImageLink()?:"");
@@ -105,6 +105,7 @@ class SliderContentForm extends Form {
 						$request->getRouter()->url(
 							$request, null, null, 'deleteSliderImage', null, array(
 								'sliderImage' => $sliderImage,
+								'sliderContentId' => $this->sliderContentId,
 							)
 						),
 						'modal_delete'
@@ -138,9 +139,10 @@ class SliderContentForm extends Form {
 		$sliderContent->setName($this->getData('name'));
 		$sliderContent->setContent($this->getData('content'));
 		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
-		$sliderContent->setCopyright($this->getData('copyright'));	
+		$sliderContent->setCopyright($this->getData('copyright'));
+		$sliderContent->setSliderImage($this->getData('sliderImage')?:"");
 
-		$locale = AppLocale::getLocale();
+		$locale = \PKP\facades\Locale::getLocale();
 		// Copy an uploaded slider file
 		if ($temporaryFileId = $this->getData('temporaryFileId')?:"") {
 			$user = $request->getUser();

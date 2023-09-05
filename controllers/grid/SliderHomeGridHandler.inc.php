@@ -16,6 +16,9 @@ import('plugins.generic.sliderHome.controllers.grid.form.SliderContentForm');
 import('plugins.generic.sliderHome.classes.SliderContent');
 import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 
+use PKP\security\Role;
+use PKP\controllers\grid\GridColumn;
+
 /**
  * @class SliderHomeGridHandler
  * @brief Class implemeting the slider content form grid handler.
@@ -39,10 +42,10 @@ class SliderHomeGridHandler extends GridHandler {
 	function __construct() {
 		parent::__construct();	
 		$this->addRoleAssignment(
-			array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN),
+			array(Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN),
 			array('index', 'fetchGrid', 'fetchRow','addSliderContent',
 				'editSliderContent', 'updateSliderContent', 'delete','saveSequence',
-				'uploadFile', 'deleteCoverImage')
+				'uploadFile', 'deleteSliderImage')
 		);
 	} 
 
@@ -93,8 +96,8 @@ class SliderHomeGridHandler extends GridHandler {
 			)
 		);		
 
-		// Load language components
-		AppLocale::requireComponents(LOCALE_COMPONENT_PKP_MANAGER);
+		// // Load language components
+		// AppLocale::requireComponents(LOCALE_COMPONENT_PKP_MANAGER);
 
 		// Add grid action.
 		$router = $request->getRouter();
@@ -189,7 +192,7 @@ class SliderHomeGridHandler extends GridHandler {
 		$sliderContentForm = new SliderContentForm($request, self::$plugin, $contextId, $sliderContentId);
 		$sliderContentForm->initData();
 
-		return new JSONMessage(true, $sliderContentForm->fetch($request));
+		return new PKP\core\JSONMessage(true, $sliderContentForm->fetch($request));
 	}
 
 	/**
@@ -270,18 +273,19 @@ class SliderHomeGridHandler extends GridHandler {
 		$temporaryFileManager = new TemporaryFileManager();
 		$temporaryFile = $temporaryFileManager->handleUpload('uploadedFile', $user->getId());
 		if ($temporaryFile) {
-			$json = new JSONMessage(true);
+			$json = new PKP\core\JSONMessage(true);
 			$json->setAdditionalAttributes(array(
 				'temporaryFileId' => $temporaryFile->getId()
 			));
 			return $json;
 		} else {
-			return new JSONMessage(false, __('common.uploadFailed'));
+			return new PKP\core\JSONMessage(false, __('common.uploadFailed'));
 		}
 	}
 
 	function deleteSliderImage($args, $request) {
 		assert(!empty($args['sliderImage']));
+		assert(!empty($args['sliderContentId']));
 
 		$sliderContentId = $request->getUserVar('sliderContentId');
 		$context = $request->getContext();
@@ -295,8 +299,8 @@ class SliderHomeGridHandler extends GridHandler {
 
 
 		// Check if the passed filename matches the filename for this slider image
-		if ($args['sliderImage'] != $sliderContent->getCoverImage()) {
-			return new JSONMessage(false, __('editor.issues.removeCoverImageFileNameMismatch'));
+		if ($args['sliderImage'] != $sliderContent->getSliderImage()) {
+			return new PKP\core\JSONMessage(false, __('editor.issues.removeCoverImageFileNameMismatch'));
 		}
 
 		$file = $args['sliderImage'];
@@ -308,12 +312,12 @@ class SliderHomeGridHandler extends GridHandler {
 
 		// Remove the file
 		$publicFileManager = new PublicFileManager();
-		if ($publicFileManager->removeContextFile($issue->getJournalId(), $file)) {
-			$json = new JSONMessage(true);
+		if ($publicFileManager->removeContextFile($contextId, $file)) {
+			$json = new PKP\core\JSONMessage(true);
 			$json->setEvent('fileDeleted');
 			return $json;
 		} else {
-			return new JSONMessage(false, __('editor.issues.removeCoverImageFileNotFound'));
+			return new PKP\core\JSONMessage(false, __('editor.issues.removeCoverImageFileNotFound'));
 		}
 	}
 }

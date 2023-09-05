@@ -13,7 +13,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Support\Facades\Schema as Schema;
 
 class SliderHomeSchemaMigration extends Migration {
     /**
@@ -22,18 +22,18 @@ class SliderHomeSchemaMigration extends Migration {
      */
     public function up() {
 
-        if (Capsule::schema()->hasTable('slider')) {
+        if (Schema::hasTable('slider')) {
             $columns = ['copyright', 'sliderImage', 'sliderImageLink', 'sliderImageAltText'];
             foreach ($columns as $column) {
-                if (!Capsule::schema()->hasColumn('slider', $column)) {
-                    Capsule::schema()->table('slider', function (Blueprint $table) use($column) {
+                if (!Schema::hasColumn('slider', $column)) {
+                    Schema::table('slider', function (Blueprint $table) use($column) {
                         $table->text($column, 255);
                     });
                 }
             }
         } else {
             // create new slider table
-            Capsule::schema()->create('slider', function (Blueprint $table) {
+            Schema::create('slider', function (Blueprint $table) {
                 $table->increments('slider_content_id');
                 $table->smallInteger('context_id');
                 $table->text('name', 255);
