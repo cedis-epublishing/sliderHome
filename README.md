@@ -1,6 +1,6 @@
 - Slider Home Plugin
-- Version: 2.3.2.0
-- Date: 23.2.2023
+- Version: 2.4.0.0
+- Date: 5.9.2023
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -16,7 +16,7 @@ This plugin is licensed under the GNU General Public License v3.
 System Requirements
 -------------------
 This plugin is compatible with...
- - OJS/OMP 3.3
+ - OJS/OMP 3.4
 
 Installation
 ------------
