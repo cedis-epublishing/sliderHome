@@ -22,7 +22,8 @@ class SliderHomePlugin extends GenericPlugin {
 	/**
 	 * @copydoc Plugin::register()
 	 */
-	function register($category, $path, $mainContextId = null) {			
+	function register($category, $path, $mainContextId = null) {	
+	
 		if (parent::register($category, $path, $mainContextId)) {
 			if ($this->getEnabled($mainContextId)) {
 				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
@@ -52,8 +53,7 @@ class SliderHomePlugin extends GenericPlugin {
 	}
 	
 	// OMP/OJS 3.2: Add tab for slider content grid in website settings appearance
-	function callbackAppearanceTab($hookName, $args) {		
-
+	function callbackAppearanceTab($hookName, $args) {
 		# prepare data
 		$templateMgr =& $args[1];
 		$output =& $args[2];
@@ -116,7 +116,6 @@ class SliderHomePlugin extends GenericPlugin {
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS',
 		]);
-
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
 		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState diesn't seem to update template vars anymore
