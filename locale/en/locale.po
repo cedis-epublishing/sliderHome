@@ -54,7 +54,7 @@ msgid "plugins.generic.sliderHome.imageDetailsHint"
 msgstr "If you want to put a link on the slider image or want to add an alternative text please first upload and save the slider image and then edit the saved slider entry again."
 
 msgid "plugins.generic.sliderHome.content"
-msgstr "You should not include images here."
+msgstr "Note: The HTML provided here will be wrapped in a &lt;div id=\"slider-text\" class=\"slider-text\"&gt;&lt;/div&gt; providing a transparent background. You can modify the style from your journal stylesheet. You should not include images here."
 
 msgid "plugins.generic.sliderHome.sliderTextContentLabel"
 msgstr "Slider overlay HTML content"

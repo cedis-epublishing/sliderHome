@@ -204,8 +204,10 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text">'.$value->content.'</div>');
-
+				if ($value->content) {
+					$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text">'.$value->content.'</div>');
+				}
+				
 				// create slide tag
 				$slide = $contentHTML->createElement('div');
 				$slide->setAttribute("class", "swiper-slide");

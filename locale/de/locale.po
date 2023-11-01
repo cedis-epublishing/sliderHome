@@ -36,7 +36,7 @@ msgid "plugins.generic.sliderHome.sliderName"
 msgstr "Sliderbild Name"
 
 msgid "plugins.generic.sliderHome.content"
-msgstr "Hier sollten keine Bilder eingefügt werden."
+msgstr "Hinweis: Das hier eingegebene HTML wird in ein &lt;div id=\"slider-text\" class=\"slider-text\"&gt;&lt;/div&gt; eingefügt welches einen transparenten Hintergrund erzeugt. Sie können diesen im Stylesheet der Zeitschrift modifizieren. Hier sollten keine Bilder eingefügt werden."
 
 msgid "plugins.generic.sliderHome.sliderTextContentLabel"
 msgstr "HTML-Inhalt für Überlagerung"

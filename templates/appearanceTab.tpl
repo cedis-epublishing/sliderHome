@@ -3,7 +3,7 @@
 	{capture assign=sliderHomeGridUrl}{url router=$smarty.const.ROUTE_COMPONENT component="plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler" op="fetchGrid" escape=false}{/capture}
 	{load_url_in_div id="sliderHomeGridContainer" url=$sliderHomeGridUrl}
 	
-	<list-panel :items="items" title="List Panel"> </list-panel>
+	{* <list-panel :items="items" title="List Panel"> </list-panel>
 
 	<submissions-list-panel
 		v-bind="components.submissions"
@@ -38,7 +38,7 @@
 	<doi-list-panel
 		v-bind="components.submissionDoiListPanel"
 		@set="set"
-	/>
+	/> *}
 
 	<pkp-form
 		v-bind="components.{$smarty.const.FORM_SLIDER_SETTINGS}"
