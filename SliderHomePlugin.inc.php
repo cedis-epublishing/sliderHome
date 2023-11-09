@@ -6,7 +6,15 @@
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  */
 
-import('lib.pkp.classes.plugins.GenericPlugin');
+// TODO @ RS namespace APP\plugins\generic\sliderHome;
+
+// import('lib.pkp.classes.plugins.GenericPlugin');
+import('plugins.generic.sliderHome.controllers.grid.form.SliderContentForm');
+import('plugins.generic.sliderHome.classes.components.form.SliderContentForm');
+import('plugins.generic.sliderHome.classes.components.SliderHomeListPanel');
+import('plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler');
+import('plugins.generic.sliderHome.controllers.components.SliderHomeFormHandler');
+use PKP\plugins\GenericPlugin;
 
 /**
  * @class SliderHomePlugin
@@ -14,6 +22,8 @@ import('lib.pkp.classes.plugins.GenericPlugin');
  * @brief Enables display of image slider on the journal/press home page.
  */
 class SliderHomePlugin extends GenericPlugin {
+
+	protected $_endpointsSetup = false;
 	/**
 	 * Register the plugin.
 	 * @param $category string
@@ -39,7 +49,6 @@ class SliderHomePlugin extends GenericPlugin {
 	function callbackSetupEndpoints($hook, $args) {
 		$endpoints =& $args[0];
 
-		import('plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler');
 		$handler = new SliderHomeSettingsTabFormHandler();
 
 		// add the new endpoint
@@ -49,6 +58,10 @@ class SliderHomePlugin extends GenericPlugin {
 				'handler' => [$handler, 'saveFormData'],
 				'roles' => array(ROLE_ID_SITE_ADMIN, ROLE_ID_MANAGER)
 			];
+
+		// regsiter new FormComponent endpoints
+		$handler = new SliderHomeFormHandler();
+		$endpoints = array_merge($endpoints, $handler->setupEndpoints());
 	}
 	
 	// OMP/OJS 3.2: Add tab for slider content grid in website settings appearance
@@ -112,15 +125,81 @@ class SliderHomePlugin extends GenericPlugin {
 			]
 		);
 
-		# setup template
-		$templateMgr->setConstants([
-			'FORM_SLIDER_SETTINGS',
-		]);
+		// get slider data
+		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+		$sliderHomeDao = new SliderHomeDao();
+		$sliderImages = array_map(
+			function ($item) {
+				return [
+					'id' => $item->getData('id'),
+					'name' => $item->getData('name'),
+					'show_content' => $item->getData('showContent')
+				];
+			},
+			$sliderHomeDao->getByContextId($contextId)->toArray()
+		);
 
+		// get slider content form
+		$sliderContentForm = new SliderContentForm_NEW($contextApiUrl, $locales, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl,
+			['maxHeight' => $maxHeight,
+				'speed' => $speed,
+				'delay' => $delay,
+				'stopOnLastSlide' => $stopOnLastSlide
+			]
+		);
+
+		// get SliderHomeListPanel
+		//http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
+		$apiUrl = $dispatcher->url(
+			$request,
+			PKPApplication::ROUTE_COMPONENT,
+			null,
+			'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler',
+			null,
+			null,
+			null
+		);
+		$apiUrl = $dispatcher->url(
+			$request,
+			ROUTE_API,
+			$context->getPath(),
+			"contexts/" . $contextId . "/sliderHome"
+		);
+		$sliderHomeListPanel = new SliderHomeListPanel(
+            FORM_SLIDER_LIST_PANEL,
+            __('plugins.generic.sliderHome.gridTitle'),
+            [
+                'apiUrl' => $apiUrl,
+                'form' => $sliderContentForm,
+                'items' => $sliderImages,
+            ]
+        );
+
+		# setup template, this allows us to use the constants in the tpl-file
+		$templateMgr->setConstants([
+			'FORM_SLIDER_SETTINGS' => FORM_SLIDER_SETTINGS,
+			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT,
+			'FORM_SLIDER_LIST_PANEL' => FORM_SLIDER_LIST_PANEL
+		]); 
+		
+		// In OJS 3.3 $templateMgr->setState doesn't seem to update template vars anymore
+		// The $templateMgr Object provided by $args differs from the one provided by TemplateManager::getManager($request)
+		// $templateMgr->setState([
+        //     'components' => [
+        //         	FORM_SLIDER_SETTINGS => $sliderSettingsForm->getConfig(),
+		// 			FORM_SLIDER_CONTENT => $sliderContentForm->getConfig(),
+		// 			FORM_SLIDER_LIST_PANEL => $sliderHomeListPanel->getConfig()
+        //     ],
+        // ]);
+
+		// set state
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState diesn't seem to update template vars anymore
+		$state['components'][FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
+		$state['components'][FORM_SLIDER_LIST_PANEL] = $sliderHomeListPanel->getConfig();
+		$templateMgr->assign('state', $state);
 
+		// render template
 		$output .= $templateMgr->fetch($this->getTemplateResource('appearanceTab.tpl'));
 
 		// Permit other plugins to continue interacting with this hook
@@ -154,6 +233,19 @@ class SliderHomePlugin extends GenericPlugin {
 				}
 			case 'frontend/pages/indexJournal.tpl':
 				$this->addHeader($templateMgr,$request->getBaseUrl());
+			case 'management/website.tpl':
+				$templateMgr->addJavaScript(
+					'sliderHomeJS',
+					"{$request->getBaseUrl()}/{$this->getPluginPath()}/public/build/build.iife.js",
+					[
+						'inline' => false,
+						'contexts' => ['backend'],
+						'priority' => STYLE_SEQUENCE_LAST
+					]
+				);
+				$templateMgr->addStyleSheet('sliderHomeListPanelStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/public/build/style.css", [
+					'contexts' => ['backend']
+				] );		
 		}
 		return false;
 	}
@@ -278,7 +370,7 @@ class SliderHomePlugin extends GenericPlugin {
 	}	
 	
 	/**
-	 * Set up handler
+	 * Set up handler TODO @RS rename
 	 */
 	function setupGridHandler($hookName, $params) {
 		

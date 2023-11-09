@@ -221,7 +221,7 @@ class SliderHomeGridHandler extends GridHandler {
 		}
 	}
 
-	/**                               
+	/**
 	 * @param $args array
 	 * Delete a user
 	 * @param $request PKPRequest
