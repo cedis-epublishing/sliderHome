@@ -256,17 +256,9 @@ class SliderHomePlugin extends GenericPlugin {
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/sliderHome.css'>"
 		);
 		$templateMgr->addHeader(
-			'swiper',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.css'>"
-		);
-		$templateMgr->addHeader(
 			'swiper-min',
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
 		);		
-		$templateMgr->addHeader(
-			'swiper-js',
-			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.js'></script>"
-		);
 		$templateMgr->addHeader(
 			'swiper-min-js',
 			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
@@ -276,6 +268,8 @@ class SliderHomePlugin extends GenericPlugin {
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
 
+		$templateMgr = TemplateManager::getManager($request);
+		$locale = $templateMgr->getTemplateVars('currentLocale');
 		$context = $request->getContext();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
@@ -286,7 +280,7 @@ class SliderHomePlugin extends GenericPlugin {
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($contextId);
+		$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
 		$sliderContent = "";
 
 		if (!empty($contentArray)) {
@@ -314,31 +308,46 @@ class SliderHomePlugin extends GenericPlugin {
 				// image
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
-				$sliderImg->setAttribute("alt", $value->sliderImageAltText);
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
+				$sliderImg->setAttribute("alt", $value['sliderImageAltText']);
 
-				$sliderFigure->appendChild($sliderImg);
-
-				if ($value->copyright) {
-					$smallTag = $contentHTML->createElement("small", $value->copyright);
+				// image link
+				if ($value['sliderImageLink']) {
+					$sliderImgLink = $contentHTML->createElement('a');
+					$sliderImgLink->setAttribute("href", $value['sliderImageLink']);
+					$sliderImgLink->setAttribute("class", 'slider-link');
+					$sliderImgLink->appendChild($sliderImg);
+					$sliderFigure->appendChild($sliderImgLink);
+				} else {
+					$sliderFigure->appendChild($sliderImg);
+				}				
+				
+				if ($value['copyright']) {
+					$smallTag = $contentHTML->createElement("small", $value['copyright']);
 					$smallTag->setAttribute('class',"slider-copyright");
 					$sliderFigure->appendChild($smallTag);
 				}
 
-				// append slider image and text content to slide tag
-				foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
-					$sliderFigure->appendChild($node);
+				// append overlay content to figure tag
+				if ($value['content']) {
+
+					if (str_contains($value['content'], 'href')) {
+						$noclick = '';
+					} else {
+						$nocklick = ' noclick';
+					}
+
+					$overlayContent = $contentHTML->createElement("div");
+					// copy all content tags
+					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
+						$overlayContent->appendChild($node);
+					}
+					$overlayContent->setAttribute('class',"slider-text".$noclick);
+					$sliderFigure->appendChild($overlayContent);
 				}
 
-				// image link
-				if ($value->sliderImageLink) {
-					$sliderImgLink = $contentHTML->createElement('a');
-					$sliderImgLink->setAttribute("href", $value->sliderImageLink);
-					$sliderImgLink->appendChild($sliderFigure);
-					$slide->appendChild($sliderImgLink);
-				} else {
-					$slide->appendChild($sliderFigure);
-				}
+				// append slider image to slide tag
+				$slide->appendChild($sliderFigure);
 
 				// generate output HTML
 				$sliderContent.= $contentHTML->saveHTML($slide);

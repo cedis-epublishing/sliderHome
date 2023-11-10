@@ -7,6 +7,8 @@ About
 -----
 This plugin creates a swiper slider on the OJS/OMP homepage. Images and image caputes can be added in the OJS backend (website settings). Data is stored in table "slider". 
 
+This plugin is based on [Swiper](https://swiperjs.com) version 6.3.2 by Vladimir Kharlampidi (License MIT)
+
 License
 -------
 Copyright (c) 2021 Universitätsbiblithek Freie Universität Berlin

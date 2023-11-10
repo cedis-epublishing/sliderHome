@@ -32,6 +32,10 @@
 	position: relative;
 }
 
+.noclick {
+	pointer-events:none;
+}
+
 @media only screen and (max-width: 1200px) {
 .slider-text {
 	margin-top: -130px  !important ;
@@ -88,4 +92,8 @@
 	text-align: right;
 	font-size: xx-small;
 	line-height: 0px;
+}
+
+.slider-link {
+	display: block;
 }

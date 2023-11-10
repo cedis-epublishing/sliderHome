@@ -29,6 +29,9 @@ msgstr "Sliderinhalt hinzufügen"
 msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
 msgstr "Sliderinhalt bearbeiten"
 
+msgid "plugins.generic.sliderHome.grid.visible"
+msgstr "Sichtbar"
+
 msgid "plugins.generic.sliderHome.name"
 msgstr "Name des Sliderbildes"
 
