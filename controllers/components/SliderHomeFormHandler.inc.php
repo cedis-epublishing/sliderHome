@@ -53,7 +53,8 @@ class SliderHomeFormHandler extends APIHandler
 
     // Example APIHandler from the core setup endpoints in the constructor
     // doing this as a plugin results in an infinite loop since parant::__construct
-    // also calls 'APIHandler::endpoints'.
+    // also calls 'APIHandler::endpoints'. Also we need to merge our endpoints with
+    // the ones provided by 'APIHandler::endpoints' in SliderHomePlugin::callbackSetupEndpoints()
     public function setupEndpoints() {
         $this->_endpoints = [
             'GET' => [
