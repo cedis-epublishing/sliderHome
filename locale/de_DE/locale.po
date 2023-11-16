@@ -103,3 +103,12 @@ msgstr "Slider Einstellungen"
 
 msgid "plugins.generic.slider.settings.form.groupDescription"
 msgstr "Bitte beachten:<br>Die Sliderhöhe wird durch die Höhe des größten angezeigten Bildes bestimmt. Nur wenn diese Höhe die vertikale Bildschirmauflösung übersteigt, kann die Sliderhöhe durch setzen der maximalen Sliderhöhe in Prozent der vertikalen Auflösung limitiert werden. Ansonsten hat diese Einstellung keinen Effekt. Dabei wird sowohl die Höhe als auch die Breite der Bilder skaliert.<br>Um die volle Sliderbreite zu nutzen sollte die Höhe der Bilder kleiner als die vertikale Bildschirmauflösung sein."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgstr "Diese Option bestimmt, ob für lokalisierte Felder (Copyright, HTML-Inhalt, Image Alt Text) falls diese leer sind, die primäre Sprache übernommen werden soll oder nicht."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgstr "Lokalisierungseinstellung"
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgstr "Aktuelle {$label}"

@@ -8,16 +8,17 @@
  * @brief File implemeting the slider DAO object.
  */
 
-import('lib.pkp.classes.db.DAO');
+import('lib.pkp.classes.db.SchemaDAO');
 import('plugins.generic.sliderHome.classes.SliderContent');
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+
 
  /**
  * @class SliderContentDAO
  * @brief Class implemeting the slider DAO object.
  */
-class SliderHomeDAO extends DAO {
+class SliderHomeDAO extends SchemaDAO {
 
 	function __construct() {
 		parent::__construct();
@@ -37,7 +38,7 @@ class SliderHomeDAO extends DAO {
 		$rows = Capsule::table('slider')
 		->where('context_id', $contextId)
 		->where('show_content', true)
-		->join('slider_settings', 'slider_settings.slider_content_id', '=', 'slider.slider_content_id')
+		->leftjoin('slider_settings', 'slider_settings.slider_content_id', '=', 'slider.slider_content_id')
 		->whereIn('locale', [$locale,''])
 		->orderBy('sequence')
 		->get()

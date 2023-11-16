@@ -100,7 +100,6 @@ class SliderHomePlugin extends GenericPlugin {
 			$delay = 2000;
 			$this->updateSetting($contextId, 'delay', $delay, $type = null, $isLocalized = false);
 		}
-		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide');
 
 		// instantinate settings form
 		$this->import('classes.components.form.context.SliderHomeSettingsForm');
@@ -108,7 +107,8 @@ class SliderHomePlugin extends GenericPlugin {
 			['maxHeight' => $maxHeight,
 				'speed' => $speed,
 				'delay' => $delay,
-				'stopOnLastSlide' => $stopOnLastSlide
+				'stopOnLastSlide' => $this->getSetting($contextId, 'stopOnLastSlide'),
+				'fallbackLocale' => $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary"
 			]
 		);
 
@@ -178,18 +178,39 @@ class SliderHomePlugin extends GenericPlugin {
 	private function getSliderContent($request) {
 
 		$templateMgr = TemplateManager::getManager($request);
-		$locale = $templateMgr->getTemplateVars('currentLocale');
+		$locale = $templateMgr->getTemplateVars('currentLocale'); 
 		$context = $request->getContext();
+		$primaryLocale = $context->getPrimaryLocale();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
 		$maxHeight = $this->getSetting($contextId, 'maxHeight');
 		$speed = $this->getSetting($contextId, 'speed');
 		$delay = $this->getSetting($contextId, 'delay');
 		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
+		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
+
+		# get slider content based on locale to show
+		if ($fallbackLocale =='usePrimary') {
+			$contentArrayCurrentLocale = $sliderHomeDao->getAllContent($contextId, $locale);
+			$contentArrayPrimaryLocale = $sliderHomeDao->getAllContent($contextId, $primaryLocale);
+			$localizedFields = $sliderHomeDao->getLocaleFieldNames();
+			$contentArray = array_map(
+				function ($current, $primary) use ($localizedFields) {
+					foreach ($localizedFields as $field) {
+						$current[$field] = $current[$field]==""?$primary[$field]:$current[$field];
+					}
+					return $current;
+				},
+				$contentArrayCurrentLocale,
+				$contentArrayPrimaryLocale
+			);
+		} else {
+			$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
+		};
+		
 		$sliderContent = "";
 
 		if (!empty($contentArray)) {
