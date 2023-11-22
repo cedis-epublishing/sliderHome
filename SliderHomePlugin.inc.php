@@ -100,7 +100,6 @@ class SliderHomePlugin extends GenericPlugin {
 			$delay = 2000;
 			$this->updateSetting($contextId, 'delay', $delay, $type = null, $isLocalized = false);
 		}
-		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide');
 
 		// instantinate settings form
 		$this->import('classes.components.form.context.SliderHomeSettingsForm');
@@ -108,7 +107,8 @@ class SliderHomePlugin extends GenericPlugin {
 			['maxHeight' => $maxHeight,
 				'speed' => $speed,
 				'delay' => $delay,
-				'stopOnLastSlide' => $stopOnLastSlide
+				'stopOnLastSlide' => $this->getSetting($contextId, 'stopOnLastSlide'),
+				'fallbackLocale' => $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary"
 			]
 		);
 
@@ -118,7 +118,8 @@ class SliderHomePlugin extends GenericPlugin {
 		]);
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState diesn't seem to update template vars anymore
+
+		$templateMgr->assign('state', $state); // In OJS 3.3 $templateMgr->setState doesn't seem to update template vars anymore
 
 		$output .= $templateMgr->fetch($this->getTemplateResource('appearanceTab.tpl'));
 
@@ -163,17 +164,9 @@ class SliderHomePlugin extends GenericPlugin {
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/sliderHome.css'>"
 		);
 		$templateMgr->addHeader(
-			'swiper',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.css'>"
-		);
-		$templateMgr->addHeader(
 			'swiper-min',
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
 		);		
-		$templateMgr->addHeader(
-			'swiper-js',
-			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.js'></script>"
-		);
 		$templateMgr->addHeader(
 			'swiper-min-js',
 			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
@@ -183,17 +176,40 @@ class SliderHomePlugin extends GenericPlugin {
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
 
+		$templateMgr = TemplateManager::getManager($request);
+		$locale = $templateMgr->getTemplateVars('currentLocale'); 
 		$context = $request->getContext();
+		$primaryLocale = $context->getPrimaryLocale();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
 		$maxHeight = $this->getSetting($contextId, 'maxHeight');
 		$speed = $this->getSetting($contextId, 'speed');
 		$delay = $this->getSetting($contextId, 'delay');
 		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
+		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
-		$contentArray = $sliderHomeDao->getAllContent($contextId);
+
+		# get slider content based on locale to show
+		if ($fallbackLocale =='usePrimary') {
+			$contentArrayCurrentLocale = $sliderHomeDao->getAllContent($contextId, $locale);
+			$contentArrayPrimaryLocale = $sliderHomeDao->getAllContent($contextId, $primaryLocale);
+			$localizedFields = $sliderHomeDao->getLocaleFieldNames();
+			$contentArray = array_map(
+				function ($current, $primary) use ($localizedFields) {
+					foreach ($localizedFields as $field) {
+						$current[$field] = $current[$field]==""?$primary[$field]:$current[$field];
+					}
+					return $current;
+				},
+				$contentArrayCurrentLocale,
+				$contentArrayPrimaryLocale
+			);
+		} else {
+			$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
+		};
+		
 		$sliderContent = "";
 
 		if (!empty($contentArray)) {
@@ -203,8 +219,8 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				if ($value->content) {
-					$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text">'.$value->content.'</div>');
+				if ($value['content']) {
+					$contentHTML->loadHTML('<?xml encoding="utf-8" ?>' . $value['content']);
 				}
 
 				// create slide tag
@@ -221,31 +237,46 @@ class SliderHomePlugin extends GenericPlugin {
 				// image
 				$sliderImg = $contentHTML->createElement('img');
 				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value->sliderImage);
-				$sliderImg->setAttribute("alt", $value->sliderImageAltText);
+				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
+				$sliderImg->setAttribute("alt", $value['sliderImageAltText']);
 
-				$sliderFigure->appendChild($sliderImg);
-
-				if ($value->copyright) {
-					$smallTag = $contentHTML->createElement("small", $value->copyright);
+				// image link
+				if ($value['sliderImageLink']) {
+					$sliderImgLink = $contentHTML->createElement('a');
+					$sliderImgLink->setAttribute("href", $value['sliderImageLink']);
+					$sliderImgLink->setAttribute("class", 'slider-link');
+					$sliderImgLink->appendChild($sliderImg);
+					$sliderFigure->appendChild($sliderImgLink);
+				} else {
+					$sliderFigure->appendChild($sliderImg);
+				}				
+				
+				if ($value['copyright']) {
+					$smallTag = $contentHTML->createElement("small", $value['copyright']);
 					$smallTag->setAttribute('class',"slider-copyright");
 					$sliderFigure->appendChild($smallTag);
 				}
 
-				// append slider image and text content to slide tag
-				foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
-					$sliderFigure->appendChild($node);
+				// append overlay content to figure tag
+				if ($value['content']) {
+
+					if (str_contains($value['content'], 'href')) {
+						$noclick = '';
+					} else {
+						$nocklick = ' noclick';
+					}
+
+					$overlayContent = $contentHTML->createElement("div");
+					// copy all content tags
+					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
+						$overlayContent->appendChild($node);
+					}
+					$overlayContent->setAttribute('class',"slider-text".$noclick);
+					$sliderFigure->appendChild($overlayContent);
 				}
 
-				// image link
-				if ($value->sliderImageLink) {
-					$sliderImgLink = $contentHTML->createElement('a');
-					$sliderImgLink->setAttribute("href", $value->sliderImageLink);
-					$sliderImgLink->appendChild($sliderFigure);
-					$slide->appendChild($sliderImgLink);
-				} else {
-					$slide->appendChild($sliderFigure);
-				}
+				// append slider image to slide tag
+				$slide->appendChild($sliderFigure);
 
 				// generate output HTML
 				$sliderContent.= $contentHTML->saveHTML($slide);

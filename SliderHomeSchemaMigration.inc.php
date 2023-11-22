@@ -22,29 +22,45 @@ class SliderHomeSchemaMigration extends Migration {
      */
     public function up() {
 
+        // remove old slider data and tables
         if (Capsule::schema()->hasTable('slider')) {
-            $columns = ['copyright', 'sliderImage', 'sliderImageLink', 'sliderImageAltText'];
-            foreach ($columns as $column) {
-                if (!Capsule::schema()->hasColumn('slider', $column)) {
-                    Capsule::schema()->table('slider', function (Blueprint $table) use($column) {
-                        $table->text($column, 255);
-                    });
-                }
+
+            // remove slider images
+            $slider = Capsule::table('slider')->get();
+
+            import('classes.file.PublicFileManager');
+            $publicFileManager = new PublicFileManager();
+            foreach ($slider as $slide) {               
+                // $publicFileManager->removeContextFile(
+                    // TODO @RS
+                // );
             }
-        } else {
-            // create new slider table
-            Capsule::schema()->create('slider', function (Blueprint $table) {
-                $table->increments('slider_content_id');
-                $table->smallInteger('context_id');
-                $table->text('name', 255);
-                $table->text('content', 255);
-                $table->text('copyright', 255);
-                $table->text('sliderImage', 255);
-                $table->text('sliderImageLink', 255);
-                $table->text('sliderImageAltText', 255);
-                $table->smallInteger('sequence');
-                $table->smallInteger('show_content');		
-            });
+            
+            // remove slider table
+            Capsule::schema()->drop('slider');
         }
+        if (Capsule::schema()->hasTable('slider_settings')) {
+            Capsule::schema()->drop('slider_settings');
+        }
+
+        // main slider table
+		Capsule::schema()->create('slider', function (Blueprint $table) {
+            $table->increments('slider_content_id');
+            $table->smallInteger('context_id');
+            $table->smallInteger('sequence');
+            $table->smallInteger('show_content');
+		});
+
+		// slider content settings
+		Capsule::schema()->create('slider_settings', function (Blueprint $table) {
+			$table->bigInteger('slider_content_id');
+			$table->string('locale', 14)->default('');
+			$table->string('setting_name', 255);
+			$table->longText('setting_value')->nullable();
+			$table->string('setting_type', 6)->comment('(bool|int|float|string|object)');
+			$table->index(['slider_content_id'], 'slider_settings_slider_id');
+			$table->unique(['slider_content_id', 'locale', 'setting_name'], 'slider_settings_pkey');
+		});
+
     }
 }

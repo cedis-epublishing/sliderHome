@@ -80,6 +80,7 @@ class SliderContentForm extends Form {
 		$templateMgr = TemplateManager::getManager();
 		$templateMgr->assign('sliderContentId', $this->sliderContentId);
 		$templateMgr->registerPlugin('function', 'plugin_url', array($this->plugin, 'smartyPluginUrl'));
+		$locale = $templateMgr->getTemplateVars('primaryLocale');
 		
 		if (!$this->sliderContentId) {
 			$this->setData('content', '');

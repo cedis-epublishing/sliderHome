@@ -8,113 +8,107 @@
  * @brief File implemeting the slider DAO object.
  */
 
-import('lib.pkp.classes.db.DAO');
+import('lib.pkp.classes.db.SchemaDAO');
 import('plugins.generic.sliderHome.classes.SliderContent');
+
+use Illuminate\Database\Capsule\Manager as Capsule;
+
 
  /**
  * @class SliderContentDAO
  * @brief Class implemeting the slider DAO object.
  */
-class SliderHomeDAO extends DAO {
+class SliderHomeDAO extends SchemaDAO {
 
 	function __construct() {
 		parent::__construct();
 	}
 
 	function getById($sliderContentId, $contextId = null) {
-		$params = array((int) $sliderContentId);
-		if ($contextId) $params[] = $contextId;
+		$row = Capsule::table('slider')
+		->where('slider_content_id', $sliderContentId)
+		->where('context_id', $contextId)
+		->get()[0];
 
-		$result = $this->retrieve(
-			'SELECT * FROM slider WHERE slider_content_id = ?'
-			. ($contextId?' AND context_id = ?':''),
-			$params
-		);
-
-		$row = $result->current();
 		return $row ? $this->_fromRow((array) $row) : null;
 	}
 
-	function getAllContent($contextId) {
+	function getAllContent($contextId, $locale) {
 
-		$result = $this->retrieve(
-			'SELECT content, copyright, sliderImage, sliderImageLink, sliderImageAltText FROM slider WHERE context_id ='.$contextId . ' and show_content=1 ORDER BY sequence'
-		);
-		return iterator_to_array($result);
+		$rows = Capsule::table('slider')
+		->where('context_id', $contextId)
+		->where('show_content', true)
+		->leftjoin('slider_settings', 'slider_settings.slider_content_id', '=', 'slider.slider_content_id')
+		->whereIn('locale', [$locale,''])
+		->orderBy('sequence')
+		->get()
+		->groupby('slider_content_id');
+
+		$result = [];
+		foreach ($rows as $group) {
+			$data = [];
+			foreach ($group as $row) {
+				$data = array_merge($data, [
+					$row->setting_name => $row->setting_value,
+				]);
+			}
+			$result[] = $data;
+		}
+		
+		return $result;
 	}
 
 	function getByContextId($contextId, $rangeInfo = null) {
-		$result = $this->retrieveRange(
-			'SELECT * FROM slider WHERE context_id = ? ORDER BY sequence',
-			(array) $contextId,
-			$rangeInfo
-		);
+		$result = Capsule::table('slider')
+		->where('context_id', $contextId)
+		->orderBy('sequence')	
+		->get();
 		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
 	function getMaxSequence($contextId) {
-
-		$result = $this->retrieve(
-			'SELECT MAX(sequence) as maxseq FROM slider WHERE context_id ='.$contextId
-		);
-
-		$row = $result->current();
-		return $row->maxseq;
+		return Capsule::table('slider')
+		->where('context_id', $contextId)
+		->max('sequence');
 	}
 
 	function insertObject($sliderContent) {	
-		$this->update(
-			'INSERT INTO slider (context_id, name, content, sequence, show_content, copyright, sliderImage, sliderImageLink, sliderImageAltText)
-			VALUES (?,?,?,?,?,?,?,?,?)',
-			array(
-				(int) $sliderContent->getContextId(),
-				$sliderContent->getName(),
-				$sliderContent->getContent(),
-				$sliderContent->getSequence(),
-				$sliderContent->getShowContent(),
-				$sliderContent->getCopyright(),
-				$sliderContent->getSliderImage(),
-				$sliderContent->getSliderImageLink(),
-				$sliderContent->getSliderImageAltText()	
-			)
-		);
+		Capsule::table('slider')->insert([
+			'context_id' => (int) $sliderContent->getContextId(),
+			'sequence' => $sliderContent->getSequence(),
+			'show_content' => $sliderContent->getShowContent()
+		]);
+
 		$sliderContent->setId($this->getInsertId());
+
+		$this->updateDataObjectSettings('slider_settings', $sliderContent, [
+			'slider_content_id' => $sliderContent->getId()
+		]);		
+
 		return $sliderContent->getId();
 	}
 
 	function updateObject($sliderContent) {
-		$this->update(
-			'UPDATE	slider
-			SET	context_id = ?,
-				name = ?,
-				content = ?,
-				sequence = ?,
-				show_content = ?,
-				copyright = ?,
-				sliderImage = ?,
-				sliderImageLink = ?,
-				sliderImageAltText = ?
-			WHERE slider_content_id = ?',
-			array(
-				(int) $sliderContent->getContextId(),
-				$sliderContent->getName(),
-				$sliderContent->getContent(),
-				$sliderContent->getSequence(),
-				(int) $sliderContent->getShowContent(),	
-				$sliderContent->getCopyright(),
-				$sliderContent->getSliderImage(),
-				$sliderContent->getSliderImageLink(),
-				$sliderContent->getSliderImageAltText(),			
-				(int) $sliderContent->getId()
-			)
-		);
+		Capsule::table('slider')
+		->where('slider_content_id', $sliderContent->getId())
+		->update([
+			'context_id' => (int) $sliderContent->getContextId(),
+			'sequence' => $sliderContent->getSequence(),
+			'show_content' => $sliderContent->getShowContent()
+		]);
+
+		$this->updateDataObjectSettings('slider_settings', $sliderContent, [
+			'slider_content_id' => $sliderContent->getId()
+		]);
 	}
 	
 	function deleteById($sliderContentId) {
-		$this->update(
-			'DELETE FROM slider WHERE slider_content_id = ?',
-			(array) $sliderContentId
-		);
+		Capsule::table('slider')
+		->where('slider_content_id', $sliderContentId)
+		->delete();
+		Capsule::table('slider_settings')
+		->where('slider_content_id', $sliderContentId)
+		->delete();
 	}
 
 	function deleteObject($sliderContent) {
@@ -128,20 +122,42 @@ class SliderHomeDAO extends DAO {
 	function _fromRow($row) {
 		$sliderContent = $this->newDataObject();
 		$sliderContent->setId($row['slider_content_id']);
-		$sliderContent->setName($row['name']);
-		$sliderContent->setContent($row['content']);
-		$sliderContent->setCopyright($row['copyright']);
 		$sliderContent->setContextId($row['context_id']);
 		$sliderContent->setSequence($row['sequence']);
 		$sliderContent->setShowContent($row['show_content']);
-		$sliderContent->setSliderImage($row['sliderImage']);
-		$sliderContent->setSliderImageLink($row['sliderImageLink']);
-		$sliderContent->setSliderImageAltText($row['sliderImageAltText']);
+
+		$this->getDataObjectSettings('slider_settings', 'slider_content_id', $row['slider_content_id'], $sliderContent);
+
 		return $sliderContent;
+	}
+
+	function getSliderSettings($sliderContent) {
+		return [
+			'name' =>  $sliderContent->getName(),
+			'content' => $sliderContent->getContent(),
+			'copyright' => $sliderContent->getCopyright(),
+			'sliderImage' => $sliderContent->getSliderImage(),
+			'sliderImageAltText' =>  $sliderContent->getSliderImageAltText()
+		];
 	}
 
 	function getInsertId() {
 		return $this->_getInsertId('slider', 'slider_content_id');
+	}
+
+	/**
+	 * Get field names for which data is localized.
+	 * @return array
+	 */
+	function getLocaleFieldNames() {
+		return ['copyright','content','sliderImageAltText'];
+	}
+
+	/**
+	 * @copydoc DAO::getAdditionalFieldNames()
+	 */
+	function getAdditionalFieldNames() {
+		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImage','sliderImageLink']);
 	}
 
 }

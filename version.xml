@@ -13,8 +13,8 @@
 <version>
 	<application>sliderHome</application>
 	<type>plugins.generic</type>
-	<release>2.3.2.1</release>
-	<date>2023-10-30</date>
+	<release>2.4.0.0</release>
+	<date>2023-11-22</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>0</sitewide>
 	<class>SliderHomePlugin</class>

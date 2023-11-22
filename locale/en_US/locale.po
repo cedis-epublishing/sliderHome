@@ -32,6 +32,9 @@ msgstr "Edit Slider Content"
 msgid "plugins.generic.sliderHome.grid.title"
 msgstr "Slider fields"
 
+msgid "plugins.generic.sliderHome.grid.visible"
+msgstr "Visible"
+
 msgid "plugins.generic.sliderHome.noneCreated"
 msgstr "No fields have been created yet."
 
@@ -106,3 +109,12 @@ msgstr "Slider Settings"
 
 msgid "plugins.generic.slider.settings.form.groupDescription"
 msgstr "Please note:<br>The slider height is determined by the height of largest image shown. Only if this height exceeds the vertical resolution of the screen the slider height can be limited by setting the maximum slider height as percentage of the screen vertical resolution. Otherwise this setting will have no effect. Both, the height and the width of the images will be scaled.<br>To use the full slider width prepare the images with heights smaller than the vertical screen  resolution."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgstr "This option determines whether or not to apply the primary language for localized fields (Copyright, HTML Content, Image Alt Text) if they are empty."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgstr "Lokalisierungseinstellung"
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgstr "Aktuelle {$label}"

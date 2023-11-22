@@ -25,11 +25,7 @@ class SliderHomeGridRow extends GridRow {
 	 * @copydoc GridRow::initialize()
 	 */
 	function initialize($request, $template = null) {
-		parent::initialize($request, $template);
-		
-		
-		//$element = $this->getData();
-		//assert(is_a($element, 'NavigationMenu'));		
+		parent::initialize($request, $template);	
 
 		$sliderContentId = $this->getId();
 		if (!empty($sliderContentId) && is_numeric($sliderContentId)) {

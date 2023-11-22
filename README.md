@@ -1,11 +1,13 @@
 - Slider Home Plugin
-- Version: 2.3.2.1
-- Date: 30.10.2023
+- Version: 2.4.0.0
+- Date: 22.11.2023
 - Author: Carola Fanselow, Ronald Steffen
 
 About
 -----
 This plugin creates a swiper slider on the OJS/OMP homepage. Images and image caputes can be added in the OJS backend (website settings). Data is stored in table "slider". 
+
+This plugin is based on [Swiper](https://swiperjs.com) version 6.3.2 by Vladimir Kharlampidi (License MIT)
 
 License
 -------
