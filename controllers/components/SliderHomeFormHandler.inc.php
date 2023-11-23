@@ -18,7 +18,6 @@
 
 use APP\core\Application;
 use APP\facades\Repo;
-use Exception;
 use Illuminate\Support\Facades\Bus;
 use PKP\db\DAORegistry;
 use PKP\facades\Locale;

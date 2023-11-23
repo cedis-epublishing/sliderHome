@@ -55,7 +55,6 @@ class SliderHomeListPanel extends ListPanel
             'deleteLabel' => __('plugins.generic.sliderHome.deleteSliderContent'),
             'editLabel' => __('plugins.generic.sliderHome.edit'),
             'form' => $this->form->getConfig(),
-            'itemsMax' => $this->itemsMax,
             'urlBase' => $dispatcher->url(
                 $request,
                 Application::ROUTE_PAGE,
