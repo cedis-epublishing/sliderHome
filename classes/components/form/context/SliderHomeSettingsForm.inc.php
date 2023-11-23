@@ -82,7 +82,17 @@ class SliderHomeSettingsForm extends FormComponent {
 			],
 			'value' => (bool) $data['stopOnLastSlide'],
 			'groupId' => 'slidersettings'
+		]))
+		->addField(new FieldOptions('fallbackLocale', [
+			'label' => __('grid.columns.locale'),
+			'description' => __('plugins.generic.slider.settings.form.fallbackLocale.description'),
+			'type' => 'radio',
+			'options' => [
+				['value' => "usePrimary", 'label' => __('locale.primary')],
+				['value' => "useNone", 'label' => __('plugins.generic.slider.settings.form.fallbackLocale.useNone', ['label' => __('grid.columns.locale')])],
+			],
+			'value' => $data['fallbackLocale'],
+			'groupId' => 'slidersettings'
 		]));
 	}
-
 }

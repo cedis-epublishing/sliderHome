@@ -1,0 +1,117 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Slider Home Plugin"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Muestra un slider en la página de inicio."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Contenido del slider"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Agregar contenido del slider"
+
+msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
+msgstr "Editar contenido del slider"
+
+msgid "plugins.generic.sliderHome.grid.title"
+msgstr "Campos del slider"
+
+msgid "plugins.generic.sliderHome.noneCreated"
+msgstr "No se han creado campos del slider aún."
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Nombre de este slider"
+
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Nombre de esta imagen"
+
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Aviso de derechos de autor"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Imagen del slider"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "No deberían colocarse imágenes aquí."
+
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "Si desea colocar un enlace en la imagen del control deslizante, puede proporcionar una URL aquí."
+
+msgid "plugins.generic.sliderHome.imageDetailsHint"
+msgstr "Si desea colocar un enlace en la imagen del control deslizante o desea agregar un texto alternativo, primero cargue y guarde la imagen del control deslizante y luego edite la entrada guardada del control deslizante nuevamente."
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "Contenido HTML superpuesto del slider"
+
+msgid "plugins.generic.sliderHome.noneExist"
+msgstr "No hay contenido aún."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Mostrar este slider en la página de inicio."
+
+msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgstr "Máxima altura del slider como porcentaje de la altura de pantalla."
+
+msgid "plugins.generic.slider.settings.form.maxHeight"
+msgstr "Altura del slider"
+
+msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgstr "Error: la altura del slider debe estar entre 1 y 100!"
+
+msgid "plugins.generic.slider.settings.form.speed.description"
+msgstr "Duración de la transición entre imágenes (en ms)."
+
+msgid "plugins.generic.slider.settings.form.speed"
+msgstr "Velocidad del slider"
+
+msgid "plugins.generic.slider.settings.form.speed.error"
+msgstr "Error: la velocidad del slider debe ser un número positivo!"
+
+msgid "plugins.generic.slider.settings.form.delay.description"
+msgstr "Demora entre transiciones (en ms)."
+
+msgid "plugins.generic.slider.settings.form.delay"
+msgstr "Demora del slider"
+
+msgid "plugins.generic.slider.settings.form.delay.error"
+msgstr "Error: la demora del slider debe ser un número positivo!"
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgstr "Detener la presentación después de la última imagen."
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Repetición del slider"
+
+msgid "plugins.generic.slider.settings.form.success"
+msgstr "La configuración del slider ha sido actualizada. <a href=\"{$url}\" target=\"_blank\">Ver ahora</a>"
+
+msgid "plugins.generic.slider.settings.form.groupLabel"
+msgstr "Configuración del slider"
+
+msgid "plugins.generic.slider.settings.form.groupDescription"
+msgstr "Atención:<br> La altura del slider está determinada por la altura de la mayor imagen mostrada. Sólo si esta altura excede la resolución vertical de la pantalla se puede limitar la altura del slider estableciendo la altura máxima del slider como porcentaje de la resolución vertical de la pantalla. De lo contrario, este ajuste no tendrá ningún efecto; se escalarán tanto la altura como la anchura de las imágenes.<br>Para utilizar todo el ancho del slider prepare las imágenes con alturas inferiores a la resolución vertical de la pantalla."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgstr "Esta opción determina si se aplica o no el idioma principal para los campos localizados (Derechos de autor, Contenido HTML, Texto alternativo de imagen) si están vacíos."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgstr "Lokalisierungseinstellung"
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgstr "Aktuelle {$label}"
