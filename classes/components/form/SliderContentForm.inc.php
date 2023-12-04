@@ -8,11 +8,15 @@
  * @brief File implemnting SliderContentForm
  */
 
-use \PKP\components\forms\FormComponent;
-use \PKP\components\forms\FieldText;
-use \PKP\components\forms\FieldOptions;
+use APP\core\Application;
+use PKP\components\forms\FieldRichTextarea;
+use PKP\components\forms\FieldText;
+use PKP\components\forms\FieldOptions;
+use PKP\components\forms\FieldUploadImage;
+use PKP\components\forms\FormComponent;
+use PKP\context\Context;
 
-define('FORM_SLIDER_CONTENT', 'sliderContent');
+define('FORM_SLIDER_CONTENT_NEW', 'sliderContent');
 
 /**
  * A form for implementing a slider content dialog.
@@ -22,10 +26,12 @@ define('FORM_SLIDER_CONTENT', 'sliderContent');
  */
 class SliderContentForm_NEW extends FormComponent {
 	/** @copydoc FormComponent::$id */
-	public $id = FORM_SLIDER_CONTENT;
+	public $id = FORM_SLIDER_CONTENT_NEW;
 
 	/** @copydoc FormComponent::$method */
 	public $method = 'POST';
+
+	public $title;
 
 	/**
 	 * Constructor
@@ -39,26 +45,60 @@ class SliderContentForm_NEW extends FormComponent {
 	 * @param string $publicUrl url to the frontend page
 	 * @param array $data settings for form initialization
 	 */
-	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl, $data) {
+	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl) {
 
 		$this->action = $action;
+		$this->context = $context;
 		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
-		$this->locales = $locales;
+		$this->locales = $this->getLocales();//locales;
+		$this->title = 'dasd';
 
-		$this->addGroup([
-			'id' => 'slidercontent',
-			// 'label' => __('plugins.generic.slider.settings.form.groupLabel'),
-			// 'description' => __('plugins.generic.slider.settings.form.groupDescription'),
-		], [])
-		->addField(new FieldText('maxHeight', [
-			'label' => __('plugins.generic.slider.settings.form.maxHeight'),
-			'description' => __('plugins.generic.slider.settings.form.maxHeight.description'),
-			'isRequired' => false,
-			'value' => $data['maxHeight'],
+		$this
+		->addField(new FieldText('name', [
+			'label' => __('plugins.generic.sliderHome.name'),
+			'isRequired' => true,
+			// 'value' => $data['name'],
 			'size' => 'small',
-			'groupId' => 'slidersettings',
-			'tooltip' => __('plugins.generic.slider.settings.form.groupDescription')
+        ]))
+		->addField(new FieldRichTextarea('content', [
+			'label' => __('plugins.generic.sliderHome.sliderTextContentLabel'),
+			'description' => __('plugins.generic.sliderHome.content'),
+			'isMultilingual' => true,
+			'size' => 'small',
+			'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist',
+			'plugins' => 'paste,link,lists',
+		]))
+		->addField(new FieldText('copyright', [
+			'label' => __('plugins.generic.sliderHome.copyright'),
+			'isRequired' => false,
+			'isMultilingual' => true,
+			// 'value' => $data['copyright'],
+			'size' => 'small',
+        ]))
+		->addField(new FieldOptions('showContent', [
+            'label' => __('plugins.generic.sliderHome.showSliderContent'),
+            'description' => $description,
+            'options' => [
+                [
+                    'value' => true,
+                    'label' => __('plugins.generic.sliderHome.showSliderContent'),
+                ],
+            ],
+            // 'value' => (bool) $data['show_content'],
         ]));
+		// image
 	}
 
+	/**
+     * Get the locales formatted for display in the form
+     */
+    protected function getLocales(?Context $context = null): array
+    {
+        $localeNames = $this?->context?->getSupportedFormLocaleNames()
+            ?? Application::get()->getRequest()->getSite()->getSupportedLocaleNames();
+
+        return array_map(fn (string $locale, string $name) => ['key' => $locale, 'label' => $name], array_keys($localeNames), $localeNames);
+    }
 }
+
+?>

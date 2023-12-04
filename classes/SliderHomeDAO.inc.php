@@ -142,9 +142,9 @@ class SliderHomeDAO extends SchemaDAO {
 		];
 	}
 
-	function getInsertId():int {
-		return $this->_getInsertId('slider', 'slider_content_id');
-	}
+	// function getInsertId():int {
+	// 	return $this->_getInsertId('slider', 'slider_content_id');
+	// }
 
 	/**
 	 * Get field names for which data is localized.

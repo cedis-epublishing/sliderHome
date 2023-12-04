@@ -111,7 +111,7 @@ msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
 msgstr "Esta opción determina si se aplica o no el idioma principal para los campos localizados (Derechos de autor, Contenido HTML, Texto alternativo de imagen) si están vacíos."
 
 msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
-msgstr "Lokalisierungseinstellung"
+msgstr "Configuración de localización"
 
 msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
-msgstr "Aktuelle {$label}"
+msgstr "Actual {$label}"

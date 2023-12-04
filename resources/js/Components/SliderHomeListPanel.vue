@@ -5,7 +5,7 @@
                 <h2>{{ title }}</h2>
                 <spinner v-if="isLoading"></spinner>
                 <pkp-button ref="addSliderButton" @click="openAddModal" style="float: right;">
-                    {{ addLabel }}
+                    {{ addSliderLabel }}
                 </pkp-button>
             </pkp-header>{{ items.length }}
             <template v-slot:item-title="{item}">
@@ -30,16 +30,17 @@
             </template>
         </pkp-list-panel>
         <pkp-modal
-            :closeLabel="__('common.close')"
-            name="form"
-            :title="gdsfdf"
-            @closed="formModalClosed">
-            <pkp-form
-                    v-bind="activeForm"
-                    @set="updateForm"
-                    @success="formSuccess"
-            />
-        </pkp-modal>
+			:closeLabel="__('common.close')"
+			name="form"
+			:title="activeFormTitle"
+			@closed="formModalClosed"
+		>
+			<pkp-form
+				v-bind="activeForm"
+				@set="updateForm"
+				@success="formSuccess"
+			/>
+		</pkp-modal>
     </div>
 </template>
 
@@ -61,12 +62,11 @@ function arraymove(arr, fromIndex, toIndex) {
 
 export default {
     name: 'sliderHomeListPanelComponent',
-	mixins: [pkp.vueMixins.dialog],
     props: {
         items: {
 			type: Array,
 			default() {
-				return []; // sliderImages
+				return [];
 			},
 		},
         title: {
@@ -77,7 +77,7 @@ export default {
 			type: Object,
 			required: true,
 		},
-        addLabel: {
+        addSliderLabel: {
 			type: String,
 			required: true,
 		},
@@ -126,13 +126,13 @@ export default {
 			if (this.activeForm.method === 'POST') {
 				this.offset = 0;
 				this.get();
-				pkp.eventBus.$emit('add:highlight', item);
+				pkp.eventBus.$emit('add:sliderContent', item);
 			} else {
 				this.setItems(
 					this.items.map((i) => (i.id === item.id ? item : i)),
 					this.itemsMax
 				);
-				pkp.eventBus.$emit('update:highlight', item);
+				pkp.eventBus.$emit('update:sliderContent', item);
 			}
 			this.$modal.hide('form');
 		},
@@ -142,6 +142,7 @@ export default {
 		 */
 		toggleVisibility(id) {
 			const item = this.getItem(id);
+			this.resetFocusTo = document.activeElement;
 			if (!item) return;
 			item.show_content = !item.show_content;
 			$.ajax({
@@ -158,7 +159,7 @@ export default {
 						this.itemsMax
 					);
 					this.$modal.hide('delete');
-					this.setFocusIn(this.$el);
+					this.setFocusIn(this.resetFocusTo);
 				},
 			});
 		},
@@ -181,7 +182,7 @@ export default {
 			activeForm.action = this.apiUrl;
 			activeForm.method = 'POST';
 			this.activeForm = activeForm;
-			this.activeFormTitle = this.i18nAdd;
+			this.activeFormTitle = this.addSliderLabel;
 			this.$modal.show('form');
 		},
 

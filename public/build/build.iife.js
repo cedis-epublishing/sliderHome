@@ -267,7 +267,7 @@
   }
   var cloneDeep_1 = cloneDeep;
   const cloneDeep$1 = /* @__PURE__ */ getDefaultExportFromCjs(cloneDeep_1);
-  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_4bf90e9b_lang = "";
+  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_d4bfe2fe_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -326,7 +326,6 @@
   }
   const _sfc_main = {
     name: "sliderHomeListPanelComponent",
-    mixins: [pkp.vueMixins.dialog],
     props: {
       items: {
         type: Array,
@@ -342,7 +341,7 @@
         type: Object,
         required: true
       },
-      addLabel: {
+      addSliderLabel: {
         type: String,
         required: true
       },
@@ -389,13 +388,13 @@
         if (this.activeForm.method === "POST") {
           this.offset = 0;
           this.get();
-          pkp.eventBus.$emit("add:highlight", item);
+          pkp.eventBus.$emit("add:sliderContent", item);
         } else {
           this.setItems(
             this.items.map((i) => i.id === item.id ? item : i),
             this.itemsMax
           );
-          pkp.eventBus.$emit("update:highlight", item);
+          pkp.eventBus.$emit("update:sliderContent", item);
         }
         this.$modal.hide("form");
       },
@@ -404,6 +403,7 @@
        */
       toggleVisibility(id) {
         const item = this.getItem(id);
+        this.resetFocusTo = document.activeElement;
         if (!item)
           return;
         item.show_content = !item.show_content;
@@ -421,7 +421,7 @@
               this.itemsMax
             );
             this.$modal.hide("delete");
-            this.setFocusIn(this.$el);
+            this.setFocusIn(this.resetFocusTo);
           }
         });
       },
@@ -442,7 +442,7 @@
         activeForm.action = this.apiUrl;
         activeForm.method = "POST";
         this.activeForm = activeForm;
-        this.activeFormTitle = this.i18nAdd;
+        this.activeFormTitle = this.addSliderLabel;
         this.$modal.show("form");
       },
       /**
@@ -620,7 +620,7 @@
       } } }, [_vm._v(" " + _vm._s(_vm.__("common.edit")) + " ")]), _c("pkp-button", { attrs: { "isWarnable": true }, on: { "click": function($event) {
         return _vm.openDeleteModal(item.id);
       } } }, [_vm._v(" " + _vm._s(_vm.__("common.delete")) + " ")])];
-    } }]) }, [_c("pkp-header", { attrs: { "slot": "header" }, slot: "header" }, [_c("h2", [_vm._v(_vm._s(_vm.title))]), _vm.isLoading ? _c("spinner") : _vm._e(), _c("pkp-button", { ref: "addSliderButton", staticStyle: { "float": "right" }, on: { "click": _vm.openAddModal } }, [_vm._v(" " + _vm._s(_vm.addLabel) + " ")])], 1), _vm._v(_vm._s(_vm.items.length) + " ")], 1), _c("pkp-modal", { attrs: { "closeLabel": _vm.__("common.close"), "name": "form", "title": _vm.gdsfdf }, on: { "closed": _vm.formModalClosed } }, [_c("pkp-form", _vm._b({ on: { "set": _vm.updateForm, "success": _vm.formSuccess } }, "pkp-form", _vm.activeForm, false))], 1)], 1);
+    } }]) }, [_c("pkp-header", { attrs: { "slot": "header" }, slot: "header" }, [_c("h2", [_vm._v(_vm._s(_vm.title))]), _vm.isLoading ? _c("spinner") : _vm._e(), _c("pkp-button", { ref: "addSliderButton", staticStyle: { "float": "right" }, on: { "click": _vm.openAddModal } }, [_vm._v(" " + _vm._s(_vm.addSliderLabel) + " ")])], 1), _vm._v(_vm._s(_vm.items.length) + " ")], 1), _c("pkp-modal", { attrs: { "closeLabel": _vm.__("common.close"), "name": "form", "title": _vm.activeFormTitle }, on: { "closed": _vm.formModalClosed } }, [_c("pkp-form", _vm._b({ on: { "set": _vm.updateForm, "success": _vm.formSuccess } }, "pkp-form", _vm.activeForm, false))], 1)], 1);
   };
   var _sfc_staticRenderFns = [];
   var __component__ = /* @__PURE__ */ normalizeComponent(
@@ -629,7 +629,7 @@
     _sfc_staticRenderFns,
     false,
     null,
-    "4bf90e9b",
+    "d4bfe2fe",
     null,
     null
   );

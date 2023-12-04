@@ -33,6 +33,8 @@ use PKP\security\authorization\UserRolesRequiredPolicy;
 use PKP\security\Role;
 use PKP\services\PKPSchemaService;
 
+import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+
 class SliderHomeFormHandler extends APIHandler
 {
     /** @var int The default number of enties to return in one request */
@@ -63,7 +65,7 @@ class SliderHomeFormHandler extends APIHandler
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
                 [
-                    'pattern' => $this->getEndpointPattern() . '/{announcementId:\d+}',
+                    'pattern' => $this->getEndpointPattern() . '{itemId:\d+}',
                     'handler' => [$this, 'get'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
@@ -89,7 +91,7 @@ class SliderHomeFormHandler extends APIHandler
             ],
             'DELETE' => [
                 [
-                    'pattern' => $this->getEndpointPattern() . '/{announcementId:\d+}',
+                    'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
                     'handler' => [$this, 'delete'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
@@ -121,7 +123,13 @@ class SliderHomeFormHandler extends APIHandler
     }
 
     function toggleShow($slimRequest, $response, $args) {
-        $test = $args;
+        $sliderContentId = $args['itemId'];
+        $contextId = $args['contextId'];
+
+        $sliderHomeDao = new SliderHomeDAO();
+		$sliderContent = $sliderHomeDao->getById($sliderContentId, $contextId);
+		$sliderContent->setShowContent(!$sliderContent->getShowContent());
+        $sliderHomeDao->updateObject($sliderContent);
     }
 
     /**
@@ -208,75 +216,63 @@ class SliderHomeFormHandler extends APIHandler
     {
         $request = $this->getRequest();
         $context = $request->getContext();
-
-        if (!$context) {
-            throw new Exception('You can not add an announcement without sending a request to the API endpoint of a particular context.');
-        }
-
-        $params = $this->convertStringsToSchema(PKPSchemaService::SCHEMA_ANNOUNCEMENT, $slimRequest->getParsedBody());
-        $params['assocType'] = Application::get()->getContextAssocType();
-        $params['assocId'] = $request->getContext()->getId();
-
-        $primaryLocale = $context->getPrimaryLocale();
-        $allowedLocales = $context->getSupportedFormLocales();
-        $errors = Repo::announcement()->validate(null, $params, $allowedLocales, $primaryLocale);
-
-        if (!empty($errors)) {
-            return $response->withStatus(400)->withJson($errors);
-        }
-
-        $announcement = Repo::announcement()->newDataObject($params);
-        $announcementId = Repo::announcement()->add($announcement);
-        $sendEmail = (bool) filter_var($params['sendEmail'], FILTER_VALIDATE_BOOLEAN);
-        $contextId = $context->getId();
-
-        /** @var NotificationSubscriptionSettingsDAO $notificationSubscriptionSettingsDao */
-        $notificationSubscriptionSettingsDao = DAORegistry::getDAO('NotificationSubscriptionSettingsDAO');
-
-        // Notify users
-        $userIdsToNotify = $notificationSubscriptionSettingsDao->getSubscribedUserIds(
-            [NotificationSubscriptionSettingsDAO::BLOCKED_NOTIFICATION_KEY],
-            [PKPNotification::NOTIFICATION_TYPE_NEW_ANNOUNCEMENT],
-            [$contextId]
+        $data = array_merge(
+            [
+                'name' => "",
+                'content' => [],
+                'showContent' => false,
+                'copyright' => [],
+                'sliderImage' => ""
+            ],
+             $slimRequest->getParsedBody()
         );
 
-        if ($sendEmail) {
-            $userIdsToMail = $notificationSubscriptionSettingsDao->getSubscribedUserIds(
-                [NotificationSubscriptionSettingsDAO::BLOCKED_NOTIFICATION_KEY, NotificationSubscriptionSettingsDAO::BLOCKED_EMAIL_NOTIFICATION_KEY],
-                [PKPNotification::NOTIFICATION_TYPE_NEW_ANNOUNCEMENT],
-                [$contextId]
-            );
-
-            $userIdsToNotifyAndMail = $userIdsToNotify->intersect($userIdsToMail);
-            $userIdsToNotify = $userIdsToNotify->diff($userIdsToMail);
+        if (!$context) {
+            throw new Exception('You can not add a slide without sending a request to the API endpoint of a particular context.');
         }
 
-        $sender = $request->getUser();
-        $jobs = [];
-        foreach ($userIdsToNotify->chunk(PKPNotification::NOTIFICATION_CHUNK_SIZE_LIMIT) as $notifyUserIds) {
-            $jobs[] = new NewAnnouncementNotifyUsers(
-                $notifyUserIds,
-                $contextId,
-                $announcementId,
-                Locale::getPrimaryLocale()
-            );
-        }
+		$sliderHomeDao = new SliderHomeDAO();
+		if (isset($args['sliderContentId'])) {
+			// Load and update an existing content
+			$sliderContent = $sliderHomeDao->getById($args['sliderContentId'], $context->getId());
+		} else {
+			// Create a new item
+			$sliderContent = $sliderHomeDao->newDataObject();
+			$sliderContent->setContextId($context->getId());
+		}		
+		$sliderContent->setName($data['name']);
+		$sliderContent->setContent($data['content']);
+		$sliderContent->setShowContent(!empty($data['showContent']));	
+		$sliderContent->setCopyright($data['copyright']);
+		$sliderContent->setSliderImage($data['sliderImage']?:"");
 
-        if (isset($userIdsToNotifyAndMail)) {
-            foreach ($userIdsToNotifyAndMail->chunk(Mailer::BULK_EMAIL_SIZE_LIMIT) as $notifyAndMailUserIds) {
-                $jobs[] = new NewAnnouncementNotifyUsers(
-                    $notifyAndMailUserIds,
-                    $contextId,
-                    $announcementId,
-                    Locale::getPrimaryLocale(),
-                    $sender
-                );
-            }
-        }
+		$locale = \PKP\facades\Locale::getLocale();
+		// Copy an uploaded slider file
+		if (isset($data['temporaryFileId']) && $temporaryFileId = $data['temporaryFileId']?:"") {
+			$user = $request->getUser();
+			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
+			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
 
-        Bus::batch($jobs)->dispatch();
+			import('classes.file.PublicFileManager');
+			$publicFileManager = new PublicFileManager();
+			$newFileName = 'slider_image_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
+			$context = $request->getContext();
+			$publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
+			$sliderContent->setSliderImage($newFileName);
+		}
 
-        return $response->withJson(Repo::announcement()->getSchemaMap()->map($announcement), 200);
+		$sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?:"");
+		$sliderContent->setSliderImageAltText(isset($data['sliderImageAltText'])?:"");
+
+		if (isset($args['sliderContentId'])) {
+			$sliderContent->setSequence($sliderContent->getData('sequence'));
+			$sliderHomeDao->updateObject($sliderContent);
+		} else {
+			$sliderContent->setSequence($sliderHomeDao->getMaxSequence($context->getId())+1);
+			$sliderHomeDao->insertObject($sliderContent);
+		}
+
+        return $response->withJson(['dummy' => ""], 200); // TODO @RS
     }
 
     /**
@@ -328,7 +324,7 @@ class SliderHomeFormHandler extends APIHandler
     }
 
     /**
-     * Delete an announcement
+     * Delete a slider entry
      *
      * @param \Slim\Http\Request $slimRequest Slim request object
      * @param \PKP\core\APIResponse $response object
@@ -338,27 +334,12 @@ class SliderHomeFormHandler extends APIHandler
      */
     public function delete($slimRequest, $response, $args)
     {
-        $request = $this->getRequest();
+        $sliderContentId = $args['itemId'];
+        $contextId = $args['contextId'];
 
-        $announcement = Repo::announcement()->get((int) $args['announcementId']);
+        $sliderHomeDao = new SliderHomeDAO();
+        $sliderHomeDao->deleteById($sliderContentId);
 
-        if (!$announcement) {
-            return $response->withStatus(404)->withJsonError('api.announcements.404.announcementNotFound');
-        }
-
-        if ($announcement->getData('assocType') !== Application::get()->getContextAssocType()) {
-            throw new Exception('Announcement has an assocType that did not match the context.');
-        }
-
-        // Don't allow to delete an announcement from one context from a different context's endpoint
-        if ($request->getContext()->getId() !== $announcement->getData('assocId')) {
-            return $response->withStatus(403)->withJsonError('api.announcements.400.contextsNotMatched');
-        }
-
-        $announcementProps = Repo::announcement()->getSchemaMap()->map($announcement);
-
-        Repo::announcement()->delete($announcement);
-
-        return $response->withJson($announcementProps, 200);
+        return $response->withJson($sliderContentId, 200);
     }
 }

@@ -78,8 +78,9 @@ class SliderHomePlugin extends GenericPlugin {
 		$supportedFormLocales = $context->getSupportedFormLocales();
 		$localeNames = \PKP\facades\Locale::getLocales();
 		$locales = array_map(function($localeKey) use ($localeNames) {
-			return ['key' => $localeKey, 'label' => $localeNames[$localeKey]];
+			return ['key' => $localeKey, 'label' => $localeNames[$localeKey]->locale];
 		}, $supportedFormLocales);
+		$formLocaleNames = $context->getSupportedFormLocaleNames(); // TODO @RS
 
 		import('classes.file.PublicFileManager');
 		$publicFileManager = new PublicFileManager();
@@ -140,13 +141,7 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 
 		// get slider content form
-		$sliderContentForm = new SliderContentForm_NEW($contextApiUrl, $locales, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl,
-			['maxHeight' => $maxHeight,
-				'speed' => $speed,
-				'delay' => $delay,
-				'stopOnLastSlide' => $stopOnLastSlide
-			]
-		);
+		$sliderContentForm = new SliderContentForm_NEW($contextApiUrl, $formLocaleNames, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
 
 		// get SliderHomeListPanel
 		//http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
@@ -178,7 +173,7 @@ class SliderHomePlugin extends GenericPlugin {
 		# setup template, this allows us to use the constants in the tpl-file
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS' => FORM_SLIDER_SETTINGS,
-			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT,
+			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT_NEW,
 			'FORM_SLIDER_LIST_PANEL' => FORM_SLIDER_LIST_PANEL
 		]); 
 		
@@ -195,7 +190,7 @@ class SliderHomePlugin extends GenericPlugin {
 		// set state
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$state['components'][FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
+		$state['components'][FORM_SLIDER_CONTENT_NEW] = $sliderContentForm->getConfig();
 		$state['components'][FORM_SLIDER_LIST_PANEL] = $sliderHomeListPanel->getConfig();
 		$templateMgr->assign('state', $state);
 

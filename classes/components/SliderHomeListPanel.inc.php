@@ -47,7 +47,7 @@ class SliderHomeListPanel extends ListPanel
         $request = Application::get()->getRequest();
         $dispatcher = $request->getDispatcher();
         return parent::getConfig() + [
-            'addLabel' => __('plugins.generic.sliderHome.addSliderContent'),
+            'addSliderLabel' => __('plugins.generic.sliderHome.addSliderContent'),
             'title' => __('plugins.generic.sliderHome.gridTitle'),
             'apiUrl' => $this->apiUrl,
             'confirmDeleteMessage' => __('plugins.generic.sliderHome.confirmDelete'),
