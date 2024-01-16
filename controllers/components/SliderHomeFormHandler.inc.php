@@ -84,14 +84,14 @@ class SliderHomeFormHandler extends APIHandler
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
                 [
-                    'pattern' => $this->getEndpointPattern() . '/toggleShow/{itemId:\d+}',
-                    'handler' => [$this, 'toggleShow'],
+                    'pattern' => $this->getEndpointPattern() . '/toggleVisibility/{itemId:\d+}',
+                    'handler' => [$this, 'toggleVisibility'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
             ],
             'DELETE' => [
                 [
-                    'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
+                    'pattern' => $this->getEndpointPattern() . '/delete/{itemId:\d+}',
                     'handler' => [$this, 'delete'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
@@ -122,7 +122,7 @@ class SliderHomeFormHandler extends APIHandler
         return parent::authorize($request, $args, $roleAssignments);
     }
 
-    function toggleShow($slimRequest, $response, $args) {
+    function toggleVisibility($slimRequest, $response, $args) {
         $sliderContentId = $args['itemId'];
         $contextId = $args['contextId'];
 

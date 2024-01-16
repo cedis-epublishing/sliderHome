@@ -118,3 +118,6 @@ msgstr "Localization settings"
 
 msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
 msgstr "Current {$label}"
+
+msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
+msgstr "Do you really want to delete this silder content?"

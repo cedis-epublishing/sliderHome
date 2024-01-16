@@ -115,3 +115,6 @@ msgstr "Configuración de localización"
 
 msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
 msgstr "Actual {$label}"
+
+msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
+msgstr "¿Realmente deseas eliminar el contenido de este control deslizante?"

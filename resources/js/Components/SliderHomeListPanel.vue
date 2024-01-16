@@ -52,6 +52,7 @@
 }
 </style>
 <script>
+
 import cloneDeep from 'clone-deep';
 
 function arraymove(arr, fromIndex, toIndex) {
@@ -61,12 +62,23 @@ function arraymove(arr, fromIndex, toIndex) {
 }
 
 export default {
+	mixins: [pkp.vueMixins.dialog],
     name: 'sliderHomeListPanelComponent',
     props: {
+		id: {
+			type: String,
+			required: true,
+		},
         items: {
 			type: Array,
 			default() {
 				return [];
+			},
+		},
+		itemsMax: {
+			type: Number,
+			default() {
+				return 0;
 			},
 		},
         title: {
@@ -144,9 +156,8 @@ export default {
 			const item = this.getItem(id);
 			this.resetFocusTo = document.activeElement;
 			if (!item) return;
-			item.show_content = !item.show_content;
 			$.ajax({
-				url: this.apiUrl + '/toggleShow/' + id,
+				url: this.apiUrl + '/toggleVisibility/' + id,
 				type: 'POST',
 				headers: {
 					'X-Csrf-Token': pkp.currentUser.csrfToken,
@@ -154,11 +165,7 @@ export default {
 				},
 				error: this.ajaxErrorCallback,
 				success: (r) => {
-					this.setItems(
-						this.items.filter((i) => i.id !== id),
-						this.itemsMax
-					);
-					this.$modal.hide('delete');
+					item.show_content = !item.show_content;
 					this.setFocusIn(this.resetFocusTo);
 				},
 			});
@@ -207,7 +214,7 @@ export default {
 						isPrimary: true,
 						callback: () => {
 							$.ajax({
-								url: this.apiUrl + '/' + id,
+								url: this.apiUrl + '/delete/' + id,
 								type: 'POST',
 								headers: {
 									'X-Csrf-Token': pkp.currentUser.csrfToken,

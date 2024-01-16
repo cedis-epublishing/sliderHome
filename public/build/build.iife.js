@@ -267,7 +267,7 @@
   }
   var cloneDeep_1 = cloneDeep;
   const cloneDeep$1 = /* @__PURE__ */ getDefaultExportFromCjs(cloneDeep_1);
-  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_d4bfe2fe_lang = "";
+  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_665bc0c3_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -325,12 +325,23 @@
     };
   }
   const _sfc_main = {
+    mixins: [pkp.vueMixins.dialog],
     name: "sliderHomeListPanelComponent",
     props: {
+      id: {
+        type: String,
+        required: true
+      },
       items: {
         type: Array,
         default() {
           return [];
+        }
+      },
+      itemsMax: {
+        type: Number,
+        default() {
+          return 0;
         }
       },
       title: {
@@ -406,9 +417,8 @@
         this.resetFocusTo = document.activeElement;
         if (!item)
           return;
-        item.show_content = !item.show_content;
         $.ajax({
-          url: this.apiUrl + "/toggleShow/" + id,
+          url: this.apiUrl + "/toggleVisibility/" + id,
           type: "POST",
           headers: {
             "X-Csrf-Token": pkp.currentUser.csrfToken,
@@ -416,11 +426,7 @@
           },
           error: this.ajaxErrorCallback,
           success: (r) => {
-            this.setItems(
-              this.items.filter((i) => i.id !== id),
-              this.itemsMax
-            );
-            this.$modal.hide("delete");
+            item.show_content = !item.show_content;
             this.setFocusIn(this.resetFocusTo);
           }
         });
@@ -466,7 +472,7 @@
               isPrimary: true,
               callback: () => {
                 $.ajax({
-                  url: this.apiUrl + "/" + id,
+                  url: this.apiUrl + "/delete/" + id,
                   type: "POST",
                   headers: {
                     "X-Csrf-Token": pkp.currentUser.csrfToken,
@@ -629,7 +635,7 @@
     _sfc_staticRenderFns,
     false,
     null,
-    "d4bfe2fe",
+    "665bc0c3",
     null,
     null
   );
