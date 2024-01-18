@@ -272,7 +272,11 @@ class SliderHomeFormHandler extends APIHandler
 			$sliderHomeDao->insertObject($sliderContent);
 		}
 
-        return $response->withJson(['dummy' => ""], 200); // TODO @RS
+        return $response->withJson([
+                'id' => $sliderContent->getData('id'),
+                'name' => $sliderContent->getData('name'),
+                'show_content' => $sliderContent->getData('showContent')
+            ], 200); // TODO @RS
     }
 
     /**

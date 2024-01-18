@@ -47,7 +47,6 @@ class SliderHomeListPanel extends ListPanel
         $request = Application::get()->getRequest();
         $dispatcher = $request->getDispatcher();
         return parent::getConfig() + [
-            'id' => FORM_SLIDER_LIST_PANEL,
             'addSliderLabel' => __('plugins.generic.sliderHome.addSliderContent'),
             'title' => __('plugins.generic.sliderHome.gridTitle'),
             'apiUrl' => $this->apiUrl,
