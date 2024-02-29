@@ -14,7 +14,7 @@
 	<application>sliderHome</application>
 	<type>plugins.generic</type>
 	<release>2.4.0.0</release>
-	<date>2023-11-22</date>
+	<date>2024-02-29</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>0</sitewide>
 	<class>SliderHomePlugin</class>
