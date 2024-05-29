@@ -41,7 +41,7 @@ class SliderHomeGridCellProvider extends GridCellProvider {
 				// The action has the label
 				return ['label' => $sliderContent->getName()];
 			case 'show_content':
-				return array('showContent' => $sliderContent->getShowContent());
+				return array('show_content' => $sliderContent->getShowContent());
 		}
 	}
 }

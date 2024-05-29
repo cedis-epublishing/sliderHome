@@ -267,7 +267,7 @@
   }
   var cloneDeep_1 = cloneDeep;
   const cloneDeep$1 = /* @__PURE__ */ getDefaultExportFromCjs(cloneDeep_1);
-  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_665bc0c3_lang = "";
+  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_66d5c44f_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -398,7 +398,6 @@
       formSuccess(item) {
         if (this.activeForm.method === "POST") {
           this.offset = 0;
-          this.get();
           pkp.eventBus.$emit("add:sliderContent", item);
         } else {
           this.setItems(
@@ -505,8 +504,8 @@
        */
       openEditModal(id) {
         this.resetFocusTo = document.activeElement;
-        const highlight = this.items.find((highlight2) => highlight2.id === id);
-        if (!highlight) {
+        const item = this.getItem(id);
+        if (!item) {
           this.ajaxErrorCallback({});
           return;
         }
@@ -514,8 +513,8 @@
         activeForm.action = this.apiUrl + "/" + id;
         activeForm.method = "PUT";
         activeForm.fields = activeForm.fields.map((field) => {
-          if (Object.keys(highlight).includes(field.name)) {
-            field.value = highlight[field.name];
+          if (Object.keys(item).includes(field.name)) {
+            field.value = item[field.name];
           }
           return field;
         });
@@ -616,17 +615,25 @@
   };
   var _sfc_render = function render() {
     var _vm = this, _c = _vm._self._c;
-    return _c("div", [_c("pkp-list-panel", { attrs: { "items": _vm.items, "title": "title" }, scopedSlots: _vm._u([{ key: "item-title", fn: function({ item }) {
-      return [item.show_content ? _c("pkp-badge", { attrs: { "isSuccess": true } }, [_c("pkp-icon", { attrs: { "icon": "fa-light fa-eye", "inline": true } }), _vm._v(" " + _vm._s(item.name) + " ")], 1) : _vm._e(), !item.show_content ? _c("pkp-badge", [_vm._v(" " + _vm._s(item.name) + " ")]) : _vm._e()];
+    return _c("div", { staticClass: "sliderHomeListPanel", class: { "-isOrdering": _vm.isOrdering } }, [_c("pkp-list-panel", { attrs: { "items": _vm.items, "title": "title" }, scopedSlots: _vm._u([{ key: "item-title", fn: function({ item }) {
+      return [_c("pkp-badge", { attrs: { "isSuccess": item.show_content } }, [item.show_content ? _c("pkp-icon", { attrs: { "icon": "fa-light fa-eye", "inline": true } }) : _vm._e(), _vm._v(" " + _vm._s(item.name) + " ")], 1)];
     } }, { key: "item-actions", fn: function({ item }) {
-      return [_c("pkp-button", { on: { "click": function($event) {
+      return [_vm.isOrdering ? _c("pkp-orderer", { attrs: { "itemId": item.id, "itemTitle": _vm.localize(item.title), "isDraggable": false }, on: { "up": function($event) {
+        return _vm.orderUp(item);
+      }, "down": function($event) {
+        return _vm.orderDown(item);
+      } } }) : _vm._e(), !_vm.isOrdering ? _c("pkp-button", { on: { "click": function($event) {
         return _vm.toggleVisibility(item.id);
-      } } }, [_vm._v(" Enable/Disable ")]), _c("pkp-button", { on: { "click": function($event) {
+      } } }, [_vm._v(" Enable/Disable ")]) : _vm._e(), !_vm.isOrdering ? _c("pkp-button", { on: { "click": function($event) {
         return _vm.openEditModal(item.id);
-      } } }, [_vm._v(" " + _vm._s(_vm.__("common.edit")) + " ")]), _c("pkp-button", { attrs: { "isWarnable": true }, on: { "click": function($event) {
+      } } }, [_vm._v(" " + _vm._s(_vm.__("common.edit")) + " ")]) : _vm._e(), !_vm.isOrdering ? _c("pkp-button", { attrs: { "isWarnable": true }, on: { "click": function($event) {
         return _vm.openDeleteModal(item.id);
-      } } }, [_vm._v(" " + _vm._s(_vm.__("common.delete")) + " ")])];
-    } }]) }, [_c("pkp-header", { attrs: { "slot": "header" }, slot: "header" }, [_c("h2", [_vm._v(_vm._s(_vm.title))]), _vm.isLoading ? _c("spinner") : _vm._e(), _c("pkp-button", { ref: "addSliderButton", staticStyle: { "float": "right" }, on: { "click": _vm.openAddModal } }, [_vm._v(" " + _vm._s(_vm.addSliderLabel) + " ")])], 1), _vm._v(_vm._s(_vm.items.length) + " ")], 1), _c("pkp-modal", { attrs: { "closeLabel": _vm.__("common.close"), "name": "form", "title": _vm.activeFormTitle }, on: { "closed": _vm.formModalClosed } }, [_c("pkp-form", _vm._b({ on: { "set": _vm.updateForm, "success": _vm.formSuccess } }, "pkp-form", _vm.activeForm, false))], 1)], 1);
+      } } }, [_vm._v(" " + _vm._s(_vm.__("common.delete")) + " ")]) : _vm._e()];
+    } }]) }, [_c("pkp-header", { attrs: { "slot": "header" }, slot: "header" }, [_c("h2", [_vm._v(_vm._s(_vm.title))]), _vm.isLoading ? _c("spinner") : _vm._e(), _c("template", { slot: "actions" }, [!_vm.isOrdering ? _c("pkp-button", { attrs: { "icon": "sort", "isActive": _vm.isOrdering, "disabled": _vm.isLoading }, on: { "click": function($event) {
+      _vm.isOrdering = true;
+    } } }, [_vm._v(" " + _vm._s(_vm.__("common.order")) + " ")]) : [_c("pkp-button", { attrs: { "icon": "sort", "isActive": true, "disabled": _vm.isLoading }, on: { "click": _vm.saveOrder } }, [_vm._v(" " + _vm._s(_vm.__("common.save")) + " ")]), _c("pkp-button", { attrs: { "isWarnable": true, "disabled": _vm.isLoading }, on: { "click": function($event) {
+      _vm.isOrdering = false;
+    } } }, [_vm._v(" " + _vm._s(_vm.__("common.cancel")) + " ")])], _c("pkp-button", { ref: "addSliderButton", staticStyle: { "float": "right" }, attrs: { "disabled": _vm.isOrdering }, on: { "click": _vm.openAddModal } }, [_vm._v(" " + _vm._s(_vm.addSliderLabel) + " ")])], 2)], 2), _vm._v(_vm._s(_vm.items.length) + " ")], 1), _c("pkp-modal", { attrs: { "closeLabel": _vm.__("common.close"), "name": "form", "title": _vm.activeFormTitle }, on: { "closed": _vm.formModalClosed } }, [_c("pkp-form", _vm._b({ on: { "set": _vm.updateForm, "success": _vm.formSuccess } }, "pkp-form", _vm.activeForm, false))], 1)], 1);
   };
   var _sfc_staticRenderFns = [];
   var __component__ = /* @__PURE__ */ normalizeComponent(
@@ -635,7 +642,7 @@
     _sfc_staticRenderFns,
     false,
     null,
-    "665bc0c3",
+    "66d5c44f",
     null,
     null
   );

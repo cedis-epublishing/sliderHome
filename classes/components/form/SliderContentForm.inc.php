@@ -75,7 +75,7 @@ class SliderContentForm_NEW extends FormComponent {
 			// 'value' => $data['copyright'],
 			'size' => 'small',
         ]))
-		->addField(new FieldOptions('showContent', [
+		->addField(new FieldOptions('show_content', [
             'label' => __('plugins.generic.sliderHome.showSliderContent'),
             'description' => $description,
             'options' => [
@@ -84,7 +84,7 @@ class SliderContentForm_NEW extends FormComponent {
                     'label' => __('plugins.generic.sliderHome.showSliderContent'),
                 ],
             ],
-            // 'value' => (bool) $data['show_content'],
+            // 'value' => True,#(bool) $data['show_content'],
         ]));
 		// image
 	}

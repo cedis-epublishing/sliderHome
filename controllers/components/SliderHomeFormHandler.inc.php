@@ -58,34 +58,39 @@ class SliderHomeFormHandler extends APIHandler
     // the ones provided by 'APIHandler::endpoints' in SliderHomePlugin::callbackSetupEndpoints()
     public function setupEndpoints() {
         $this->_endpoints = [
-            'GET' => [
-                [
-                    'pattern' => $this->getEndpointPattern(),
-                    'handler' => [$this, 'getMany'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-                [
-                    'pattern' => $this->getEndpointPattern() . '{itemId:\d+}',
-                    'handler' => [$this, 'get'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-            ],
+            // 'GET' => [
+            //     [
+            //         'pattern' => $this->getEndpointPattern(),
+            //         'handler' => [$this, 'getMany'],
+            //         'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
+            //     ],
+            //     [
+            //         'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
+            //         'handler' => [$this, 'get'],
+            //         'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
+            //     ],
+            // ],
             'POST' => [
                 [
                     'pattern' => $this->getEndpointPattern(),
-                    'handler' => [$this, 'add'],
+                    'handler' => [$this, 'edit'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
             ],
             'PUT' => [
                 [
-                    'pattern' => $this->getEndpointPattern() . '/{announcementId:\d+}',
+                    'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
                     'handler' => [$this, 'edit'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
                 [
                     'pattern' => $this->getEndpointPattern() . '/toggleVisibility/{itemId:\d+}',
                     'handler' => [$this, 'toggleVisibility'],
+                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
+                ],
+                [
+                    'pattern' => $this->getEndpointPattern() . '/order',
+                    'handler' => [$this, 'saveOrder'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
             ],
@@ -132,8 +137,79 @@ class SliderHomeFormHandler extends APIHandler
         $sliderHomeDao->updateObject($sliderContent);
     }
 
+    // /**
+    //  * Get a single submission
+    //  *
+    //  * @param \Slim\Http\Request $slimRequest Slim request object
+    //  * @param \PKP\core\APIResponse $response object
+    //  * @param array $args arguments
+    //  *
+    //  * @return \PKP\core\APIResponse
+    //  */
+    // public function get($slimRequest, $response, $args)
+    // {
+    //     $announcement = Repo::announcement()->get((int) $args['announcementId']);
+
+    //     if (!$announcement) {
+    //         return $response->withStatus(404)->withJsonError('api.announcements.404.announcementNotFound');
+    //     }
+
+    //     // The assocId in announcements should always point to the contextId
+    //     if ($announcement->getData('assocId') !== $this->getRequest()->getContext()->getId()) {
+    //         return $response->withStatus(404)->withJsonError('api.announcements.400.contextsNotMatched');
+    //     }
+
+    //     return $response->withJson(Repo::announcement()->getSchemaMap()->map($announcement), 200);
+    // }
+
+    // /**
+    //  * Get a collection of announcements
+    //  *
+    //  * @param \Slim\Http\Request $slimRequest Slim request object
+    //  * @param \PKP\core\APIResponse $response object
+    //  * @param array $args arguments
+    //  *
+    //  * @return \PKP\core\APIResponse
+    //  */
+    // public function getMany($slimRequest, $response, $args)
+    // {
+    //     $collector = Repo::announcement()->getCollector()
+    //         ->limit(self::DEFAULT_COUNT)
+    //         ->offset(0);
+
+    //     foreach ($slimRequest->getQueryParams() as $param => $val) {
+    //         switch ($param) {
+    //             case 'typeIds':
+    //                 $collector->filterByTypeIds(
+    //                     array_map('intval', $this->paramToArray($val))
+    //                 );
+    //                 break;
+    //             case 'count':
+    //                 $collector->limit(min((int) $val, self::MAX_COUNT));
+    //                 break;
+    //             case 'offset':
+    //                 $collector->offset((int) $val);
+    //                 break;
+    //             case 'searchPhrase':
+    //                 $collector->searchPhrase($val);
+    //                 break;
+    //         }
+    //     }
+
+    //     $collector->filterByContextIds([$this->getRequest()->getContext()->getId()]);
+
+    //     Hook::call('API::submissions::params', [$collector, $slimRequest]);
+
+    //     $announcements = $collector->getMany();
+
+    //     return $response->withJson([
+    //         'itemsMax' => $collector->limit(null)->offset(null)->getCount(),
+    //         'items' => Repo::announcement()->getSchemaMap()->summarizeMany($announcements)->values(),
+    //     ], 200);
+    // }
+
     /**
-     * Get a single submission
+     * Edit or add new slider content
      *
      * @param \Slim\Http\Request $slimRequest Slim request object
      * @param \PKP\core\APIResponse $response object
@@ -141,78 +217,7 @@ class SliderHomeFormHandler extends APIHandler
      *
      * @return \PKP\core\APIResponse
      */
-    public function get($slimRequest, $response, $args)
-    {
-        $announcement = Repo::announcement()->get((int) $args['announcementId']);
-
-        if (!$announcement) {
-            return $response->withStatus(404)->withJsonError('api.announcements.404.announcementNotFound');
-        }
-
-        // The assocId in announcements should always point to the contextId
-        if ($announcement->getData('assocId') !== $this->getRequest()->getContext()->getId()) {
-            return $response->withStatus(404)->withJsonError('api.announcements.400.contextsNotMatched');
-        }
-
-        return $response->withJson(Repo::announcement()->getSchemaMap()->map($announcement), 200);
-    }
-
-    /**
-     * Get a collection of announcements
-     *
-     * @param \Slim\Http\Request $slimRequest Slim request object
-     * @param \PKP\core\APIResponse $response object
-     * @param array $args arguments
-     *
-     * @return \PKP\core\APIResponse
-     */
-    public function getMany($slimRequest, $response, $args)
-    {
-        $collector = Repo::announcement()->getCollector()
-            ->limit(self::DEFAULT_COUNT)
-            ->offset(0);
-
-        foreach ($slimRequest->getQueryParams() as $param => $val) {
-            switch ($param) {
-                case 'typeIds':
-                    $collector->filterByTypeIds(
-                        array_map('intval', $this->paramToArray($val))
-                    );
-                    break;
-                case 'count':
-                    $collector->limit(min((int) $val, self::MAX_COUNT));
-                    break;
-                case 'offset':
-                    $collector->offset((int) $val);
-                    break;
-                case 'searchPhrase':
-                    $collector->searchPhrase($val);
-                    break;
-            }
-        }
-
-        $collector->filterByContextIds([$this->getRequest()->getContext()->getId()]);
-
-        Hook::call('API::submissions::params', [$collector, $slimRequest]);
-
-        $announcements = $collector->getMany();
-
-        return $response->withJson([
-            'itemsMax' => $collector->limit(null)->offset(null)->getCount(),
-            'items' => Repo::announcement()->getSchemaMap()->summarizeMany($announcements)->values(),
-        ], 200);
-    }
-
-    /**
-     * Add an announcement
-     *
-     * @param \Slim\Http\Request $slimRequest Slim request object
-     * @param \PKP\core\APIResponse $response object
-     * @param array $args arguments
-     *
-     * @return \PKP\core\APIResponse
-     */
-    public function add($slimRequest, $response, $args)
+    public function edit($slimRequest, $response, $args)
     {
         $request = $this->getRequest();
         $context = $request->getContext();
@@ -220,7 +225,7 @@ class SliderHomeFormHandler extends APIHandler
             [
                 'name' => "",
                 'content' => [],
-                'showContent' => false,
+                'show_content' => false,
                 'copyright' => [],
                 'sliderImage' => ""
             ],
@@ -232,9 +237,9 @@ class SliderHomeFormHandler extends APIHandler
         }
 
 		$sliderHomeDao = new SliderHomeDAO();
-		if (isset($args['sliderContentId'])) {
+		if (isset($args['itemId'])) {
 			// Load and update an existing content
-			$sliderContent = $sliderHomeDao->getById($args['sliderContentId'], $context->getId());
+			$sliderContent = $sliderHomeDao->getById($args['itemId'], $context->getId());
 		} else {
 			// Create a new item
 			$sliderContent = $sliderHomeDao->newDataObject();
@@ -242,7 +247,7 @@ class SliderHomeFormHandler extends APIHandler
 		}		
 		$sliderContent->setName($data['name']);
 		$sliderContent->setContent($data['content']);
-		$sliderContent->setShowContent(!empty($data['showContent']));	
+		$sliderContent->setShowContent(!empty($data['show_content']));	
 		$sliderContent->setCopyright($data['copyright']);
 		$sliderContent->setSliderImage($data['sliderImage']?:"");
 
@@ -264,7 +269,7 @@ class SliderHomeFormHandler extends APIHandler
 		$sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?:"");
 		$sliderContent->setSliderImageAltText(isset($data['sliderImageAltText'])?:"");
 
-		if (isset($args['sliderContentId'])) {
+		if (isset($args['itemId'])) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
 			$sliderHomeDao->updateObject($sliderContent);
 		} else {
@@ -275,56 +280,8 @@ class SliderHomeFormHandler extends APIHandler
         return $response->withJson([
                 'id' => $sliderContent->getData('id'),
                 'name' => $sliderContent->getData('name'),
-                'show_content' => $sliderContent->getData('showContent')
+                'show_content' => $sliderContent->getData('show_content')
             ], 200); // TODO @RS
-    }
-
-    /**
-     * Edit an announcement
-     *
-     * @param \Slim\Http\Request $slimRequest Slim request object
-     * @param \PKP\core\APIResponse $response object
-     * @param array $args arguments
-     *
-     * @return \PKP\core\APIResponse
-     */
-    public function edit($slimRequest, $response, $args)
-    {
-        $request = $this->getRequest();
-
-        $announcement = Repo::announcement()->get((int) $args['announcementId']);
-
-        if (!$announcement) {
-            return $response->withStatus(404)->withJsonError('api.announcements.404.announcementNotFound');
-        }
-
-        if ($announcement->getData('assocType') !== Application::get()->getContextAssocType()) {
-            throw new Exception('Announcement has an assocType that did not match the context.');
-        }
-
-        // Don't allow to edit an announcement from one context from a different context's endpoint
-        if ($request->getContext()->getId() !== $announcement->getData('assocId')) {
-            return $response->withStatus(403)->withJsonError('api.announcements.400.contextsNotMatched');
-        }
-
-        $params = $this->convertStringsToSchema(PKPSchemaService::SCHEMA_ANNOUNCEMENT, $slimRequest->getParsedBody());
-        $params['id'] = $announcement->getId();
-        $params['typeId'] ??= null;
-
-        $context = $request->getContext();
-        $primaryLocale = $context->getPrimaryLocale();
-        $allowedLocales = $context->getSupportedFormLocales();
-
-        $errors = Repo::announcement()->validate($announcement, $params, $allowedLocales, $primaryLocale);
-        if (!empty($errors)) {
-            return $response->withStatus(400)->withJson($errors);
-        }
-
-        Repo::announcement()->edit($announcement, $params);
-
-        $announcement = Repo::announcement()->get($announcement->getId());
-
-        return $response->withJson(Repo::announcement()->getSchemaMap()->map($announcement), 200);
     }
 
     /**
@@ -345,5 +302,19 @@ class SliderHomeFormHandler extends APIHandler
         $sliderHomeDao->deleteById($sliderContentId);
 
         return $response->withJson($sliderContentId, 200);
+    }
+
+    public function saveOrder($slimRequest, $response, $args) : Response {
+        $contextId = (int)$args['contextId'];
+        $request = $this->getRequest();
+        $context = $request->getContext();
+
+        foreach ($slimRequest->getParsedBody()['sequence'] as $item) {
+            $sliderHomeDao = new SliderHomeDAO();
+            $sliderContent = $sliderHomeDao->getById($item['id'], $contextId);
+            $sliderContent->setSequence($item['sequence']);
+            $sliderHomeDao->updateObject($sliderContent);
+        }
+        return $response->withStatus(200);
     }
 }

@@ -55,7 +55,7 @@ class SliderHomeSchemaMigration extends Migration {
                 $table->increments('slider_content_id');
                 $table->smallInteger('context_id');
                 $table->smallInteger('sequence');
-                $table->smallInteger('show_content');
+                $table->boolean('show_content');
             });
 
             // slider content settings

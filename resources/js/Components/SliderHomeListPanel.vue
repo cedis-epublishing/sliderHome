@@ -1,32 +1,69 @@
 <template>
-    <div>
+    <div class="sliderHomeListPanel" :class="{'-isOrdering': isOrdering}">
         <pkp-list-panel :items="items" title="title">
             <pkp-header slot="header">
                 <h2>{{ title }}</h2>
                 <spinner v-if="isLoading"></spinner>
-                <pkp-button ref="addSliderButton" @click="openAddModal" style="float: right;">
-                    {{ addSliderLabel }}
-                </pkp-button>
+				<template slot="actions">
+					<pkp-button
+						v-if="!isOrdering"
+						icon="sort"
+						:isActive="isOrdering"
+						@click="isOrdering = true"
+						:disabled="isLoading"
+					>
+						{{ __('common.order') }}
+					</pkp-button>
+					<template v-else>
+						<pkp-button
+							icon="sort"
+							:isActive="true"
+							@click="saveOrder"
+							:disabled="isLoading"
+						>
+							{{ __('common.save') }}
+						</pkp-button>
+						<pkp-button
+							:isWarnable="true"
+							:disabled="isLoading"
+							@click="isOrdering = false"
+						>
+							{{ __('common.cancel') }}
+						</pkp-button>
+					</template>
+					<pkp-button ref="addSliderButton" :disabled="isOrdering" @click="openAddModal" style="float: right;">
+						{{ addSliderLabel }}
+					</pkp-button>
+				</template>
             </pkp-header>{{ items.length }}
             <template v-slot:item-title="{item}">
-                <pkp-badge v-if="item.show_content" :isSuccess="true">
-                    <pkp-icon icon="fa-light fa-eye" :inline="true"></pkp-icon>
-                    {{ item.name }}
-                </pkp-badge>
-                <pkp-badge v-if="!item.show_content">
+                <pkp-badge :isSuccess="item.show_content">
+                    <pkp-icon v-if="item.show_content" icon="fa-light fa-eye" :inline="true"></pkp-icon>
                     {{ item.name }}
                 </pkp-badge>
             </template>
             <template v-slot:item-actions="{item}">
-                <pkp-button @click="toggleVisibility(item.id)">
+				<pkp-orderer
+					v-if="isOrdering"
+					:itemId="item.id"
+					:itemTitle="localize(item.title)"
+					:isDraggable="false"
+					@up="orderUp(item)"
+					@down="orderDown(item)"
+				></pkp-orderer>
+				<pkp-button v-if="!isOrdering" @click="toggleVisibility(item.id)">
                     Enable/Disable
                 </pkp-button>
-                <pkp-button @click="openEditModal(item.id)">
-                    {{ __('common.edit') }}
-                </pkp-button>
-                <pkp-button :isWarnable="true" @click="openDeleteModal(item.id)">
-                    {{ __('common.delete') }}
-                </pkp-button>
+				<pkp-button v-if="!isOrdering" @click="openEditModal(item.id)">
+					{{ __('common.edit') }}
+				</pkp-button>
+				<pkp-button
+					v-if="!isOrdering"
+					:isWarnable="true"
+					@click="openDeleteModal(item.id)"
+				>
+					{{ __('common.delete') }}
+				</pkp-button>
             </template>
         </pkp-list-panel>
         <pkp-modal
@@ -137,7 +174,7 @@ export default {
 		formSuccess(item) {
 			if (this.activeForm.method === 'POST') {
 				this.offset = 0;
-				this.get();
+				// this.get();
 				pkp.eventBus.$emit('add:sliderContent', item);
 			} else {
 				this.setItems(
@@ -249,8 +286,8 @@ export default {
 		openEditModal(id) {
 			this.resetFocusTo = document.activeElement;
 
-			const highlight = this.items.find((highlight) => highlight.id === id);
-			if (!highlight) {
+			const item = this.getItem(id);
+			if (!item) {
 				this.ajaxErrorCallback({});
 				return;
 			}
@@ -259,8 +296,8 @@ export default {
 			activeForm.action = this.apiUrl + '/' + id;
 			activeForm.method = 'PUT';
 			activeForm.fields = activeForm.fields.map((field) => {
-				if (Object.keys(highlight).includes(field.name)) {
-					field.value = highlight[field.name];
+				if (Object.keys(item).includes(field.name)) {
+					field.value = item[field.name];
 				}
 				return field;
 			});

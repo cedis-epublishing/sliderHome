@@ -53,7 +53,7 @@ class SliderContentForm extends Form {
 			$sliderContent = $sliderHomeDao->getById($this->sliderContentId, $this->contextId);
 			$this->setData('name', $sliderContent->getName());
 			$this->setData('content', $sliderContent->getContent());
-			$this->setData('showContent', $sliderContent->getShowContent());
+			$this->setData('show_content', $sliderContent->getShowContent());
 			$this->setData('copyright', $sliderContent->getCopyright());
 			
 			$locale = \PKP\facades\Locale::getLocale();
@@ -68,7 +68,7 @@ class SliderContentForm extends Form {
 	 * Assign form data to user-submitted data.
 	 */
 	function readInputData() {	
-		$this->readUserVars(array('name','content','showContent','copyright','temporaryFileId','sliderImage',
+		$this->readUserVars(array('name','content','show_content','copyright','temporaryFileId','sliderImage',
 		'sliderImageAltText','sliderImageLink'));
 	}
 
@@ -139,7 +139,7 @@ class SliderContentForm extends Form {
 		}		
 		$sliderContent->setName($this->getData('name'));
 		$sliderContent->setContent($this->getData('content'));
-		$sliderContent->setShowContent(!empty($this->getData('showContent')));	
+		$sliderContent->setShowContent(!empty($this->getData('show_content')));	
 		$sliderContent->setCopyright($this->getData('copyright'));
 		$sliderContent->setSliderImage($this->getData('sliderImage')?:"");
 

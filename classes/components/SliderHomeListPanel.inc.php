@@ -52,17 +52,17 @@ class SliderHomeListPanel extends ListPanel
             'apiUrl' => $this->apiUrl,
             'confirmDeleteMessage' => __('plugins.generic.sliderHome.ListPanel.confirmDelete'),
             'count' => $this->count,
-            'deleteLabel' => __('plugins.generic.sliderHome.deleteSliderContent'),
-            'editLabel' => __('plugins.generic.sliderHome.edit'),
+            // 'deleteLabel' => __('plugins.generic.sliderHome.deleteSliderContent'),
+            // 'editLabel' => __('plugins.generic.sliderHome.edit'),
             'form' => $this->form->getConfig(),
-            'urlBase' => $dispatcher->url(
-                $request,
-                Application::ROUTE_PAGE,
-                $request->getContext()->getPath(),
-                'announcement',
-                'view',
-                '__id__'
-            ),
+            // 'urlBase' => $dispatcher->url(
+            //     $request,
+            //     Application::ROUTE_PAGE,
+            //     $request->getContext()->getPath(),
+            //     'announcement',
+            //     'view',
+            //     '__id__'
+            // ),
             'itemsMax' => count($this->items),
             'getParams' => [
                 'contextIds' => [$request->getContext()->getId()],

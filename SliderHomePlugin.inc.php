@@ -61,7 +61,7 @@ class SliderHomePlugin extends GenericPlugin {
 
 		// regsiter new FormComponent endpoints
 		$handler = new SliderHomeFormHandler();
-		$endpoints = array_merge($endpoints, $handler->setupEndpoints());
+		$endpoints = array_merge_recursive($endpoints, $handler->setupEndpoints());
 	}
 	
 	// OMP/OJS 3.2: Add tab for slider content grid in website settings appearance
@@ -134,7 +134,9 @@ class SliderHomePlugin extends GenericPlugin {
 				return [
 					'id' => $item->getData('id'),
 					'name' => $item->getData('name'),
-					'show_content' => $item->getData('showContent')
+					'content' => $item->getData('content'),
+					'copyright' => $item->getData('copyright'),
+					'show_content' => $item->getData('show_content')
 				];
 			},
 			$sliderHomeDao->getByContextId($contextId)->toArray()

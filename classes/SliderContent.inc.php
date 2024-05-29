@@ -59,11 +59,11 @@ class SliderContent extends DataObject {
 	}
 
 	function getShowContent() {
-		return $this->getData('showContent');
+		return (bool)$this->getData('show_content');
 	}
 
 	function setShowContent($showContent) {
-		$this->setData('showContent', $showContent);
+		$this->setData('show_content', (bool)$showContent);
 	}	
 
 	function getSequence() {
