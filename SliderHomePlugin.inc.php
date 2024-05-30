@@ -8,8 +8,6 @@
 
 // TODO @ RS namespace APP\plugins\generic\sliderHome;
 
-// import('lib.pkp.classes.plugins.GenericPlugin');
-import('plugins.generic.sliderHome.controllers.grid.form.SliderContentForm');
 import('plugins.generic.sliderHome.classes.components.form.SliderContentForm');
 import('plugins.generic.sliderHome.classes.components.SliderHomeListPanel');
 import('plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler');
@@ -131,19 +129,25 @@ class SliderHomePlugin extends GenericPlugin {
 		$sliderHomeDao = new SliderHomeDao();
 		$sliderImages = array_map(
 			function ($item) {
+				$image = array_merge_recursive($item->getData('sliderImageAltText')?:[], $item->getData('sliderImage')?:[]);
+				foreach ($image as $locale => $localeData) {
+					$image[$locale] = array_combine(['altText', 'name'], $localeData);
+				}
 				return [
 					'id' => $item->getData('id'),
 					'name' => $item->getData('name'),
 					'content' => $item->getData('content'),
 					'copyright' => $item->getData('copyright'),
-					'show_content' => $item->getData('show_content')
+					'show_content' => $item->getData('show_content'),
+					'image' => $image,
+					'sliderImageLink' => $item->getData('sliderImageLink')
 				];
 			},
 			$sliderHomeDao->getByContextId($contextId)->toArray()
 		);
 
 		// get slider content form
-		$sliderContentForm = new SliderContentForm_NEW($contextApiUrl, $formLocaleNames, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
+		$sliderContentForm = new SliderContentForm($contextApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
 
 		// get SliderHomeListPanel
 		//http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
@@ -175,7 +179,7 @@ class SliderHomePlugin extends GenericPlugin {
 		# setup template, this allows us to use the constants in the tpl-file
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS' => FORM_SLIDER_SETTINGS,
-			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT_NEW,
+			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT,
 			'FORM_SLIDER_LIST_PANEL' => FORM_SLIDER_LIST_PANEL
 		]); 
 		
@@ -192,7 +196,7 @@ class SliderHomePlugin extends GenericPlugin {
 		// set state
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$state['components'][FORM_SLIDER_CONTENT_NEW] = $sliderContentForm->getConfig();
+		$state['components'][FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
 		$state['components'][FORM_SLIDER_LIST_PANEL] = $sliderHomeListPanel->getConfig();
 		$templateMgr->assign('state', $state);
 
@@ -308,8 +312,14 @@ class SliderHomePlugin extends GenericPlugin {
 				$contentHTML = new DOMDocument();
 
 				// get text content of slide
-				if ($value->content) {
-					$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text">'.$value->content.'</div>');
+				if ($value['content']) {
+					if (str_contains($value['content'], 'href')) {
+						$noclick = '';
+					} else {
+						$nocklick = ' noclick';
+					}
+
+					$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text'.$noclick.'">'.$value['content'].'</div>');
 				}
 				
 				// create slide tag
@@ -349,18 +359,11 @@ class SliderHomePlugin extends GenericPlugin {
 				// append overlay content to figure tag
 				if ($value['content']) {
 
-					if (str_contains($value['content'], 'href')) {
-						$noclick = '';
-					} else {
-						$nocklick = ' noclick';
-					}
-
 					$overlayContent = $contentHTML->createElement("div");
 					// copy all content tags
 					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
 						$overlayContent->appendChild($node);
 					}
-					$overlayContent->setAttribute('class',"slider-text".$noclick);
 					$sliderFigure->appendChild($overlayContent);
 				}
 

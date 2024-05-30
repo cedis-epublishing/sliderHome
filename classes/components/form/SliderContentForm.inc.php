@@ -16,7 +16,7 @@ use PKP\components\forms\FieldUploadImage;
 use PKP\components\forms\FormComponent;
 use PKP\context\Context;
 
-define('FORM_SLIDER_CONTENT_NEW', 'sliderContent');
+define('FORM_SLIDER_CONTENT', 'sliderContent');
 
 /**
  * A form for implementing a slider content dialog.
@@ -24,9 +24,9 @@ define('FORM_SLIDER_CONTENT_NEW', 'sliderContent');
  * @class SliderContentForm
  * @brief Class implemnting SliderContentForm
  */
-class SliderContentForm_NEW extends FormComponent {
+class SliderContentForm extends FormComponent {
 	/** @copydoc FormComponent::$id */
-	public $id = FORM_SLIDER_CONTENT_NEW;
+	public $id = FORM_SLIDER_CONTENT;
 
 	/** @copydoc FormComponent::$method */
 	public $method = 'POST';
@@ -45,21 +45,31 @@ class SliderContentForm_NEW extends FormComponent {
 	 * @param string $publicUrl url to the frontend page
 	 * @param array $data settings for form initialization
 	 */
-	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl) {
+	public function __construct($action, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl) {
 
 		$this->action = $action;
 		$this->context = $context;
 		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
-		$this->locales = $this->getLocales();//locales;
-		$this->title = 'dasd';
+		$this->locales = $this->getLocales();
 
 		$this
 		->addField(new FieldText('name', [
 			'label' => __('plugins.generic.sliderHome.name'),
 			'isRequired' => true,
-			// 'value' => $data['name'],
-			'size' => 'small',
+			'size' => 'medium',
         ]))
+		->addField(new FieldUploadImage('image', [
+			'label' => __('plugins.generic.sliderHome.imageUploadHeading'),
+			'baseUrl' => $baseUrl,
+			'options' => [
+				'url' => $temporaryFileApiUrl,
+			],
+			'isMultilingual' => true,
+		]))
+		->addField(new FieldText('sliderImageLink', [
+			'label' => __('plugins.generic.sliderHome.sliderImageLink'),
+			'size' => 'large',
+		]))
 		->addField(new FieldRichTextarea('content', [
 			'label' => __('plugins.generic.sliderHome.sliderTextContentLabel'),
 			'description' => __('plugins.generic.sliderHome.content'),
@@ -72,7 +82,6 @@ class SliderContentForm_NEW extends FormComponent {
 			'label' => __('plugins.generic.sliderHome.copyright'),
 			'isRequired' => false,
 			'isMultilingual' => true,
-			// 'value' => $data['copyright'],
 			'size' => 'small',
         ]))
 		->addField(new FieldOptions('show_content', [
@@ -84,9 +93,7 @@ class SliderContentForm_NEW extends FormComponent {
                     'label' => __('plugins.generic.sliderHome.showSliderContent'),
                 ],
             ],
-            // 'value' => True,#(bool) $data['show_content'],
         ]));
-		// image
 	}
 
 	/**

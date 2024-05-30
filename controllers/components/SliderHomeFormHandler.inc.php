@@ -227,7 +227,8 @@ class SliderHomeFormHandler extends APIHandler
                 'content' => [],
                 'show_content' => false,
                 'copyright' => [],
-                'sliderImage' => ""
+                'sliderImage' => "",
+                'sliderImageAltText' => ""
             ],
              $slimRequest->getParsedBody()
         );
@@ -249,25 +250,27 @@ class SliderHomeFormHandler extends APIHandler
 		$sliderContent->setContent($data['content']);
 		$sliderContent->setShowContent(!empty($data['show_content']));	
 		$sliderContent->setCopyright($data['copyright']);
-		$sliderContent->setSliderImage($data['sliderImage']?:"");
+		// $sliderContent->setSliderImage($data['sliderImage']?:"");
 
-		$locale = \PKP\facades\Locale::getLocale();
 		// Copy an uploaded slider file
-		if (isset($data['temporaryFileId']) && $temporaryFileId = $data['temporaryFileId']?:"") {
-			$user = $request->getUser();
-			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
-			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
-
-			import('classes.file.PublicFileManager');
-			$publicFileManager = new PublicFileManager();
-			$newFileName = 'slider_image_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
-			$context = $request->getContext();
-			$publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
-			$sliderContent->setSliderImage($newFileName);
-		}
-
-		$sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?:"");
-		$sliderContent->setSliderImageAltText(isset($data['sliderImageAltText'])?:"");
+        foreach ($data['image'] as $locale => $imageData) {
+            if (isset($imageData['temporaryFileId']) && $temporaryFileId = $imageData['temporaryFileId']?:"") {
+                $user = $request->getUser();
+                $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
+                $temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
+    
+                import('classes.file.PublicFileManager');
+                $publicFileManager = new PublicFileManager();
+                $newFileName = 'slider_image_' . $locale . '_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
+                $context = $request->getContext();
+                $publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
+                $sliderContent->setData('sliderImage', $newFileName, $locale);
+            }
+            if (isset($imageData['altText'])) {
+                $sliderContent->setData('sliderImageAltText', $imageData['altText'], $locale);
+            }
+        }
+        $sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?$data['sliderImageLink']:"");
 
 		if (isset($args['itemId'])) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
@@ -277,11 +280,7 @@ class SliderHomeFormHandler extends APIHandler
 			$sliderHomeDao->insertObject($sliderContent);
 		}
 
-        return $response->withJson([
-                'id' => $sliderContent->getData('id'),
-                'name' => $sliderContent->getData('name'),
-                'show_content' => $sliderContent->getData('show_content')
-            ], 200); // TODO @RS
+        return $response->withJson(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
     }
 
     /**

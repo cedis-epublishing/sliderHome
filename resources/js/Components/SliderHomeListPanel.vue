@@ -81,11 +81,14 @@
     </div>
 </template>
 
-<style scoped>
+<style lang="less">
 .custom-styling {
     margin-top: 10px;
     height: 30px;
     background-color: blue;
+}
+.sliderHomeListPanel {
+	margin-bottom: 3%;
 }
 </style>
 <script>
@@ -127,6 +130,10 @@ export default {
 			required: true,
 		},
         addSliderLabel: {
+			type: String,
+			required: true,
+		},
+		editSliderLabel: {
 			type: String,
 			required: true,
 		},
@@ -302,7 +309,7 @@ export default {
 				return field;
 			});
 			this.activeForm = activeForm;
-			this.activeFormTitle = this.i18nEdit;
+			this.activeFormTitle = this.editSliderLabel;
 			this.$modal.show('form');
 		},
 

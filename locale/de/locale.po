@@ -115,3 +115,6 @@ msgstr "Aktuelle {$label}"
 
 msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
 msgstr "Wollen Sie diesen Sliderinhalt wirklisch löschen?"
+
+msgid "plugins.generic.sliderHome.imageUploadHeading"
+msgstr "Sliderbild hochladen"

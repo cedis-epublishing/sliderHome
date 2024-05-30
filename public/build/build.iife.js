@@ -267,7 +267,7 @@
   }
   var cloneDeep_1 = cloneDeep;
   const cloneDeep$1 = /* @__PURE__ */ getDefaultExportFromCjs(cloneDeep_1);
-  const SliderHomeListPanel_vue_vue_type_style_index_0_scoped_66d5c44f_lang = "";
+  const SliderHomeListPanel_vue_vue_type_style_index_0_lang = "";
   function normalizeComponent(scriptExports, render, staticRenderFns, functionalTemplate, injectStyles, scopeId, moduleIdentifier, shadowMode) {
     var options = typeof scriptExports === "function" ? scriptExports.options : scriptExports;
     if (render) {
@@ -353,6 +353,10 @@
         required: true
       },
       addSliderLabel: {
+        type: String,
+        required: true
+      },
+      editSliderLabel: {
         type: String,
         required: true
       },
@@ -519,7 +523,7 @@
           return field;
         });
         this.activeForm = activeForm;
-        this.activeFormTitle = this.i18nEdit;
+        this.activeFormTitle = this.editSliderLabel;
         this.$modal.show("form");
       },
       /**
@@ -642,7 +646,7 @@
     _sfc_staticRenderFns,
     false,
     null,
-    "66d5c44f",
+    null,
     null,
     null
   );

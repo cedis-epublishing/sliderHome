@@ -1,6 +1,8 @@
-
-.custom-styling[data-v-66d5c44f] {
-    margin-top: 10px;
-    height: 30px;
-    background-color: blue;
+.custom-styling {
+  margin-top: 10px;
+  height: 30px;
+  background-color: blue;
+}
+.sliderHomeListPanel {
+  margin-bottom: 3%;
 }

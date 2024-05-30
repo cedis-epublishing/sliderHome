@@ -151,14 +151,14 @@ class SliderHomeDAO extends SchemaDAO {
 	 * @return array
 	 */
 	function getLocaleFieldNames() {
-		return ['copyright','content','sliderImageAltText'];
+		return ['copyright','content','sliderImageAltText', 'sliderImage'];
 	}
 
 	/**
 	 * @copydoc DAO::getAdditionalFieldNames()
 	 */
 	function getAdditionalFieldNames() {
-		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImage','sliderImageLink']);
+		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImageLink']);
 	}
 
 }
