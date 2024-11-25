@@ -1,6 +1,6 @@
 - Slider Home Plugin
-- Version: 2.4.0.0
-- Date: 5.9.2023
+- Version: 2.5.0.0
+- Date: 25.11.2024
 - Author: Carola Fanselow, Ronald Steffen
 
 About
@@ -22,8 +22,17 @@ This plugin is compatible with...
 
 Installation
 ------------
-To install the plugin:
+To install a release package of the plugin:
  - Upload the tar.gz file (Management > Website Settings > Plugins > Generic Plugins)
+
+To install from source git clone or download the source to `plugins/generic/sliderHome`, go to your ojs root folder and execute:
+
+```bash
+php lib/pkp/tools/intsallPluginVersion.php plugins/generic/sliderHome/version.xml
+cd plugins/generic/sliderHome
+npm install
+npm run build
+```
 
 Usage
 ------------

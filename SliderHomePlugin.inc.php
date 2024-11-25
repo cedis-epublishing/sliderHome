@@ -326,7 +326,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$slide = $contentHTML->createElement('div');
 				$slide->setAttribute("class", "swiper-slide");
 
-				// create slider fiure and image tag
+				// create slider figure and image tag
 				// figure
 				$sliderFigure = $contentHTML->createElement("figure");
 				
@@ -364,7 +364,7 @@ class SliderHomePlugin extends GenericPlugin {
 					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
 						$overlayContent->appendChild($node);
 					}
-					$sliderFigure->appendChild($overlayContent);
+					$sliderImgLink->appendChild($overlayContent);
 				}
 
 				// append slider image to slide tag

@@ -22,34 +22,19 @@
 }
 
 .slider-text {
-	margin-top: -130px  !important;
-	margin-bottom: 30px;
-	padding: 10px !important ;
 	z-index: 1000;
 	background-color:rgba(255,255,255,0.6);
 	width: inherit;
-	height: 100px  !important ;
-	position: relative;
+	text-align: center;
+	position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+	margin-top: 20%;
 }
 
 .noclick {
 	pointer-events:none;
-}
-
-@media only screen and (max-width: 1200px) {
-.slider-text {
-	margin-top: -130px  !important ;
-	background-color:rgba(255,255,255,0.6);
-	height: auto !important ;
-}
-}
-
-@media only screen and (max-width: 600px) {
-.slider-text {
-	margin-top: -150px  !important;
-	background-color:rgba(255,255,255,0.6);
-	height: auto !important ;
-}
 }
 
 .slider-text p {
