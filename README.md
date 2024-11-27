@@ -39,6 +39,14 @@ Usage
 
 Go to "Website -> Appearance -> Slider Plugin" and create new slider entries. You can add a slider image and HTML content to overlay onto the slider image separately.
 
+A config.inc.php setting is supported to enable TinyMCE plugins and add functions to the toolbars. E.g. to enable HTML source code editing add the following to config.inc.php. Only plugins that are enable by OJS are available.
+
+```php
+[sliderHome]
+tinymceplugins=',code'
+tinymcetoolbar=' | code'
+```
+
 Support
 ---------------
 Additional information on this plugin can be found in docs/pluginDocumentation_home.md

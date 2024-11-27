@@ -52,6 +52,9 @@ class SliderContentForm extends FormComponent {
 		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
 		$this->locales = $this->getLocales();
 
+		$tinyMCEPlugins = Config::getVar('sliderHome', 'tinymceplugins');
+		$tinyMCEToolbar = Config::getVar('sliderHome', 'tinymcetoolbar');
+
 		$this
 		->addField(new FieldText('name', [
 			'label' => __('plugins.generic.sliderHome.name'),
@@ -76,8 +79,8 @@ class SliderContentForm extends FormComponent {
 			'description' => __('plugins.generic.sliderHome.content'),
 			'isMultilingual' => true,
 			'size' => 'small',
-			'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist',
-			'plugins' => 'paste,link,lists',
+			'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist'.$tinyMCEToolbar,
+			'plugins' => 'paste,link,lists'.$tinyMCEPlugins,
 		]))
 		->addField(new FieldText('copyright', [
 			'label' => __('plugins.generic.sliderHome.copyright'),

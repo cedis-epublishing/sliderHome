@@ -402,6 +402,13 @@
       formSuccess(item) {
         if (this.activeForm.method === "POST") {
           this.offset = 0;
+          this.get;
+          const newItems = [...this.items];
+          newItems.push(item);
+          this.setItems(
+            newItems.map((i) => i.id === item.id ? item : i),
+            this.itemsMax + 1
+          );
           pkp.eventBus.$emit("add:sliderContent", item);
         } else {
           this.setItems(
