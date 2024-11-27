@@ -253,7 +253,7 @@ class SliderHomeFormHandler extends APIHandler
 		// $sliderContent->setSliderImage($data['sliderImage']?:"");
 
 		// Copy an uploaded slider file
-        foreach ($data['image'] as $locale => $imageData) {
+        foreach ($data['sliderImage'] as $locale => $imageData) {
             if (isset($imageData['temporaryFileId']) && $temporaryFileId = $imageData['temporaryFileId']?:"") {
                 $user = $request->getUser();
                 $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */

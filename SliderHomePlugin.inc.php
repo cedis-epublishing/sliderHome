@@ -13,6 +13,7 @@ import('plugins.generic.sliderHome.classes.components.SliderHomeListPanel');
 import('plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler');
 import('plugins.generic.sliderHome.controllers.components.SliderHomeFormHandler');
 use PKP\plugins\GenericPlugin;
+use PKP\facades\Locale;
 
 /**
  * @class SliderHomePlugin
@@ -128,10 +129,10 @@ class SliderHomePlugin extends GenericPlugin {
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
 		$sliderImages = array_map(
-			function ($item) {
+			function ($item) use ($baseUrl) {
 				$image = array_merge_recursive($item->getData('sliderImageAltText')?:[], $item->getData('sliderImage')?:[]);
 				foreach ($image as $locale => $localeData) {
-					$image[$locale] = array_combine(['altText', 'name'], $localeData);
+					$image[$locale] = array_combine(['altText', 'uploadName'], $localeData);
 				}
 				return [
 					'id' => $item->getData('id'),
@@ -139,8 +140,10 @@ class SliderHomePlugin extends GenericPlugin {
 					'content' => $item->getData('content'),
 					'copyright' => $item->getData('copyright'),
 					'show_content' => $item->getData('show_content'),
-					'image' => $image,
-					'sliderImageLink' => $item->getData('sliderImageLink')
+					'sliderImage' => $image,
+					'sliderImageLink' => $item->getData('sliderImageLink'),
+					'thumbnail' => $image[Locale::getLocale()]['uploadName']?true:false,
+					'thumbnailUrl' => $baseUrl.'/'.$image[Locale::getLocale()]['uploadName']
 				];
 			},
 			$sliderHomeDao->getByContextId($contextId)->toArray()

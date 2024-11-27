@@ -37,6 +37,12 @@
 				</template>
             </pkp-header>{{ items.length }}
             <template v-slot:item-title="{item}">
+				<img
+					v-if="item.thumbnail"
+					class="sliderThumbnail"
+					:alt="thumbnailDescription"
+					:src="item.thumbnailUrl"
+				/>
                 <pkp-badge :isSuccess="item.show_content">
                     <pkp-icon v-if="item.show_content" icon="fa-light fa-eye" :inline="true"></pkp-icon>
                     {{ item.name }}
@@ -89,6 +95,19 @@
 }
 .sliderHomeListPanel {
 	margin-bottom: 3%;
+}
+.pkpFormField--upload__preview {
+	flex-wrap: wrap;
+}
+.pkpFormField--uploadImage__thumbnail {
+	width: 20rem;
+}
+.sliderThumbnail {
+	width: 3rem;
+}
+.listPanel__itemTitle {
+	display: flex!important;
+	gap: 5px;
 }
 </style>
 <script>

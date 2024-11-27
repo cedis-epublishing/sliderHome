@@ -58,13 +58,14 @@ class SliderContentForm extends FormComponent {
 			'isRequired' => true,
 			'size' => 'medium',
         ]))
-		->addField(new FieldUploadImage('image', [
+		->addField(new FieldUploadImage('sliderImage', [
 			'label' => __('plugins.generic.sliderHome.imageUploadHeading'),
 			'baseUrl' => $baseUrl,
 			'options' => [
 				'url' => $temporaryFileApiUrl,
 			],
 			'isMultilingual' => true,
+			'value' => []
 		]))
 		->addField(new FieldText('sliderImageLink', [
 			'label' => __('plugins.generic.sliderHome.sliderImageLink'),

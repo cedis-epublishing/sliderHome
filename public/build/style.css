@@ -1,1 +1,24 @@
-.custom-styling{margin-top:10px;height:30px;background-color:#00f}.sliderHomeListPanel{margin-bottom:3%}
+.custom-styling {
+  margin-top: 10px;
+  height: 30px;
+  background-color: blue;
+}
+.sliderHomeListPanel {
+  margin-bottom: 3%;
+}
+.pkpFormField--upload__preview {
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+.pkpFormField--uploadImage__thumbnail {
+  width: 20rem;
+}
+.sliderThumbnail {
+  width: 3rem;
+}
+.listPanel__itemTitle {
+  display: -webkit-box!important;
+  display: -ms-flexbox!important;
+  display: flex!important;
+  gap: 5px;
+}
