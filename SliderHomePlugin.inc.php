@@ -132,8 +132,11 @@ class SliderHomePlugin extends GenericPlugin {
 			function ($item) use ($baseUrl) {
 				$image = array_merge_recursive($item->getData('sliderImageAltText')?:[], $item->getData('sliderImage')?:[]);
 				foreach ($image as $locale => $localeData) {
-					$image[$locale] = array_combine(['altText', 'uploadName'], $localeData);
+					if (is_array($localeData)) {
+						$image[$locale] = array_combine(['altText', 'uploadName'], $localeData);
+					}
 				}
+				$thumbFileName = is_array($image[Locale::getLocale()])?$image[Locale::getLocale()]['uploadName']:"";
 				return [
 					'id' => $item->getData('id'),
 					'name' => $item->getData('name'),
@@ -142,8 +145,8 @@ class SliderHomePlugin extends GenericPlugin {
 					'show_content' => $item->getData('show_content'),
 					'sliderImage' => $image,
 					'sliderImageLink' => $item->getData('sliderImageLink'),
-					'thumbnail' => $image[Locale::getLocale()]['uploadName']?true:false,
-					'thumbnailUrl' => $baseUrl.'/'.$image[Locale::getLocale()]['uploadName']
+					'thumbnail' => $thumbFileName?true:false,
+					'thumbnailUrl' => $baseUrl.'/'.($thumbFileName?$thumbFileName:"")
 				];
 			},
 			$sliderHomeDao->getByContextId($contextId)->toArray()
@@ -322,6 +325,7 @@ class SliderHomePlugin extends GenericPlugin {
 				// create slider figure and image tag
 				// figure
 				$sliderFigure = $contentHTML->createElement("figure");
+				$sliderFigure->setAttribute("class", "slider-figure");
 				
 				$baseUrl = Config::getVar('general', 'base_url');
 				$publicFilesDir = Config::getVar('files', 'public_files_dir');
@@ -341,6 +345,7 @@ class SliderHomePlugin extends GenericPlugin {
 					$sliderFigure->appendChild($sliderImgLink);
 				} else {
 					$sliderFigure->appendChild($sliderImg);
+					$sliderImgLink = NULL;
 				}				
 				
 				if ($value['copyright']) {
@@ -353,11 +358,23 @@ class SliderHomePlugin extends GenericPlugin {
 				if ($value['content']) {
 
 					$overlayContent = $contentHTML->createElement("div");
+					$overlayContent->setAttribute("id", "overlayContnent");
+					$bottom = '';
+					if ($value['sliderImage']) {
+						$bottom = ' slider-text-bottom';
+					}
 					// copy all content tags
 					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
+						$node->setAttribute("class", "slider-text".$noclick.$bottom);
 						$overlayContent->appendChild($node);
 					}
-					$sliderImgLink->appendChild($overlayContent);
+					if ($sliderImgLink) {
+						$sliderImgLink->appendChild($overlayContent);
+					} elseif ($sliderFigure) {
+						$sliderFigure->appendChild($overlayContent);
+					} else {
+						$slide->appendChild($overlayContent);
+					}
 				}
 
 				// append slider image to slide tag

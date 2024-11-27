@@ -30,7 +30,10 @@
     top: 0;
     left: 0;
     width: 100%;
-	margin-top: 20%;
+}
+
+.slider-text-bottom {
+	margin-top: 30%;
 }
 
 .noclick {

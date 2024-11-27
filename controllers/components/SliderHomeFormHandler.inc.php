@@ -227,7 +227,7 @@ class SliderHomeFormHandler extends APIHandler
                 'content' => [],
                 'show_content' => false,
                 'copyright' => [],
-                'sliderImage' => "",
+                'sliderImage' => [],
                 'sliderImageAltText' => ""
             ],
              $slimRequest->getParsedBody()
@@ -268,9 +268,14 @@ class SliderHomeFormHandler extends APIHandler
                 $data['sliderImage'][$locale]['uploadName'] = $newFileName;
                 $data['thumbnail'] = true;
 				$data['thumbnailUrl'] = $baseUrl.'/'.$newFileName;
-                $context = $request->getContext();
                 $publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
                 $sliderContent->setData('sliderImage', $newFileName, $locale);
+            }
+            if ($imageData == "") {
+                // we need to delete an existing image
+                $filename = $sliderContent->getData('sliderImage')[$locale];
+                $publicFileManager->removeContextFile($context->getId(), $filename);
+                $sliderContent->setData('sliderImage', NULL, $locale);
             }
             if (isset($imageData['altText'])) {
                 $sliderContent->setData('sliderImageAltText', $imageData['altText'], $locale);
