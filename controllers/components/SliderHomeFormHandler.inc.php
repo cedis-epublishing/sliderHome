@@ -250,7 +250,10 @@ class SliderHomeFormHandler extends APIHandler
 		$sliderContent->setContent($data['content']);
 		$sliderContent->setShowContent(!empty($data['show_content']));	
 		$sliderContent->setCopyright($data['copyright']);
-		// $sliderContent->setSliderImage($data['sliderImage']?:"");
+
+        import('classes.file.PublicFileManager');
+		$publicFileManager = new PublicFileManager();
+		$baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($context->getId());
 
 		// Copy an uploaded slider file
         foreach ($data['sliderImage'] as $locale => $imageData) {
@@ -262,6 +265,9 @@ class SliderHomeFormHandler extends APIHandler
                 import('classes.file.PublicFileManager');
                 $publicFileManager = new PublicFileManager();
                 $newFileName = 'slider_image_' . $locale . '_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
+                $data['sliderImage'][$locale]['uploadName'] = $newFileName;
+                $data['thumbnail'] = true;
+				$data['thumbnailUrl'] = $baseUrl.'/'.$newFileName;
                 $context = $request->getContext();
                 $publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
                 $sliderContent->setData('sliderImage', $newFileName, $locale);

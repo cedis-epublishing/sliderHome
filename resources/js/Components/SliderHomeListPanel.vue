@@ -200,7 +200,6 @@ export default {
 		formSuccess(item) {
 			if (this.activeForm.method === 'POST') {
 				this.offset = 0;
-				// this.get();
 				pkp.eventBus.$emit('add:sliderContent', item);
 			} else {
 				this.setItems(

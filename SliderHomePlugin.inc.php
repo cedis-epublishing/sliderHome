@@ -184,17 +184,7 @@ class SliderHomePlugin extends GenericPlugin {
 			'FORM_SLIDER_SETTINGS' => FORM_SLIDER_SETTINGS,
 			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT,
 			'FORM_SLIDER_LIST_PANEL' => FORM_SLIDER_LIST_PANEL
-		]); 
-		
-		// In OJS 3.3 $templateMgr->setState doesn't seem to update template vars anymore
-		// The $templateMgr Object provided by $args differs from the one provided by TemplateManager::getManager($request)
-		// $templateMgr->setState([
-        //     'components' => [
-        //         	FORM_SLIDER_SETTINGS => $sliderSettingsForm->getConfig(),
-		// 			FORM_SLIDER_CONTENT => $sliderContentForm->getConfig(),
-		// 			FORM_SLIDER_LIST_PANEL => $sliderHomeListPanel->getConfig()
-        //     ],
-        // ]);
+		]);
 
 		// set state
 		$state = $templateMgr->getTemplateVars('state');
