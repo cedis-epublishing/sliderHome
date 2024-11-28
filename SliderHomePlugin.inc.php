@@ -130,8 +130,9 @@ class SliderHomePlugin extends GenericPlugin {
 		$sliderHomeDao = new SliderHomeDao();
 		$sliderImages = array_map(
 			function ($item) use ($baseUrl) {
-				$image = array_merge_recursive($item->getData('sliderImageAltText')?:[], $item->getData('sliderImage')?:[]);
-				foreach ($image as $locale => $localeData) {
+				$image = [];
+				$imageData = array_merge_recursive($item->getData('sliderImageAltText')?:[], $item->getData('sliderImage')?:[]);
+				foreach ($imageData as $locale => $localeData) {
 					if (is_array($localeData)) {
 						$image[$locale] = array_combine(['altText', 'uploadName'], $localeData);
 					}
@@ -226,7 +227,7 @@ class SliderHomePlugin extends GenericPlugin {
 					$templateMgr->assign('sliderContent',$sliderContent);
 					$this->addHeader($templateMgr,$request->getBaseUrl());
 					$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
-					return true;					
+					return true;
 				}
 			case 'frontend/pages/indexJournal.tpl':
 				$this->addHeader($templateMgr,$request->getBaseUrl());
@@ -242,7 +243,7 @@ class SliderHomePlugin extends GenericPlugin {
 				);
 				$templateMgr->addStyleSheet('sliderHomeListPanelStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/public/build/style.css", [
 					'contexts' => ['backend']
-				] );		
+				] );
 		}
 		return false;
 	}

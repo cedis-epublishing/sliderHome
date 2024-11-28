@@ -137,77 +137,6 @@ class SliderHomeFormHandler extends APIHandler
         $sliderHomeDao->updateObject($sliderContent);
     }
 
-    // /**
-    //  * Get a single submission
-    //  *
-    //  * @param \Slim\Http\Request $slimRequest Slim request object
-    //  * @param \PKP\core\APIResponse $response object
-    //  * @param array $args arguments
-    //  *
-    //  * @return \PKP\core\APIResponse
-    //  */
-    // public function get($slimRequest, $response, $args)
-    // {
-    //     $announcement = Repo::announcement()->get((int) $args['announcementId']);
-
-    //     if (!$announcement) {
-    //         return $response->withStatus(404)->withJsonError('api.announcements.404.announcementNotFound');
-    //     }
-
-    //     // The assocId in announcements should always point to the contextId
-    //     if ($announcement->getData('assocId') !== $this->getRequest()->getContext()->getId()) {
-    //         return $response->withStatus(404)->withJsonError('api.announcements.400.contextsNotMatched');
-    //     }
-
-    //     return $response->withJson(Repo::announcement()->getSchemaMap()->map($announcement), 200);
-    // }
-
-    // /**
-    //  * Get a collection of announcements
-    //  *
-    //  * @param \Slim\Http\Request $slimRequest Slim request object
-    //  * @param \PKP\core\APIResponse $response object
-    //  * @param array $args arguments
-    //  *
-    //  * @return \PKP\core\APIResponse
-    //  */
-    // public function getMany($slimRequest, $response, $args)
-    // {
-    //     $collector = Repo::announcement()->getCollector()
-    //         ->limit(self::DEFAULT_COUNT)
-    //         ->offset(0);
-
-    //     foreach ($slimRequest->getQueryParams() as $param => $val) {
-    //         switch ($param) {
-    //             case 'typeIds':
-    //                 $collector->filterByTypeIds(
-    //                     array_map('intval', $this->paramToArray($val))
-    //                 );
-    //                 break;
-    //             case 'count':
-    //                 $collector->limit(min((int) $val, self::MAX_COUNT));
-    //                 break;
-    //             case 'offset':
-    //                 $collector->offset((int) $val);
-    //                 break;
-    //             case 'searchPhrase':
-    //                 $collector->searchPhrase($val);
-    //                 break;
-    //         }
-    //     }
-
-    //     $collector->filterByContextIds([$this->getRequest()->getContext()->getId()]);
-
-    //     Hook::call('API::submissions::params', [$collector, $slimRequest]);
-
-    //     $announcements = $collector->getMany();
-
-    //     return $response->withJson([
-    //         'itemsMax' => $collector->limit(null)->offset(null)->getCount(),
-    //         'items' => Repo::announcement()->getSchemaMap()->summarizeMany($announcements)->values(),
-    //     ], 200);
-    // }
-
     /**
      * Edit or add new slider content
      *
@@ -228,7 +157,9 @@ class SliderHomeFormHandler extends APIHandler
                 'show_content' => false,
                 'copyright' => [],
                 'sliderImage' => [],
-                'sliderImageAltText' => ""
+                'sliderImageAltText' => "",
+                'thumbnail' => false,
+                'thumbnailUrl' => ""
             ],
              $slimRequest->getParsedBody()
         );

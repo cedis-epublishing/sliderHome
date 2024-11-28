@@ -199,6 +199,7 @@ export default {
 		 */
 		formSuccess(item) {
 			if (this.activeForm.method === 'POST') {
+				// new item has been created
 				this.offset = 0;
 				this.get;
 				const newItems = [...this.items];
@@ -207,13 +208,16 @@ export default {
 					newItems.map((i) => (i.id === item.id ? item : i)),
 					this.itemsMax+1
 				);
+				// update ui component
 				pkp.eventBus.$emit('add:sliderContent', item);
 			} else {
-				this.setItems(
-					this.items.map((i) => (i.id === item.id ? item : i)),
-					this.itemsMax
+				// item has been edited
+				// merge old item state with updated item values
+				this.items = this.items.map(i => 
+					i.id === item.id ? { ...i, ...item } : i
 				);
-				pkp.eventBus.$emit('update:sliderContent', item);
+				// update ui component
+				pkp.eventBus.$emit('update:sliderContent', this.items.find(i => i.id === item.id));
 			}
 			this.$modal.hide('form');
 		},
