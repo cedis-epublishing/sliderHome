@@ -50,6 +50,18 @@ class SliderHomeSettingsForm extends FormComponent {
 			// 'label' => __('plugins.generic.slider.settings.form.groupLabel'),
 			// 'description' => __('plugins.generic.slider.settings.form.groupDescription'),
 		], [])
+		->addField(new FieldOptions('slideEffect', [
+			'label' => __('plugins.generic.slider.settings.form.slideEffect'),
+			// 'description' => __('plugins.generic.slider.settings.form.slideEffect.description'),
+			'type' => 'radio',
+			'options' => [
+				['value' => "", 'label' => __('plugins.generic.slider.settings.form.default')],
+				['value' => "coverflow", 'label' => __('plugins.generic.slider.settings.form.coverflow')],
+				['value' => "cube", 'label' => __('plugins.generic.slider.settings.form.cube')],
+			],
+			'value' => $data['slideEffect'],
+			'groupId' => 'slidersettings'
+		]))
 		->addField(new FieldText('maxHeight', [
 			'label' => __('plugins.generic.slider.settings.form.maxHeight'),
 			'description' => __('plugins.generic.slider.settings.form.maxHeight.description'),

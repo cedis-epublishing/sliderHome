@@ -113,6 +113,7 @@ class SliderHomePlugin extends GenericPlugin {
 			$delay = 2000;
 			$this->updateSetting($contextId, 'delay', $delay, $type = null, $isLocalized = false);
 		}
+		$slideEffect = $this->getSetting($contextId, 'slideEffect');
 
 		// instantinate settings form
 		$this->import('classes.components.form.context.SliderHomeSettingsForm');
@@ -121,7 +122,8 @@ class SliderHomePlugin extends GenericPlugin {
 				'speed' => $speed,
 				'delay' => $delay,
 				'stopOnLastSlide' => $this->getSetting($contextId, 'stopOnLastSlide'),
-				'fallbackLocale' => $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary"
+				'fallbackLocale' => $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary",
+				'slideEffect' => $this->getSetting($contextId, 'slideEffect')?:""
 			]
 		);
 
@@ -277,6 +279,7 @@ class SliderHomePlugin extends GenericPlugin {
 		$delay = $this->getSetting($contextId, 'delay');
 		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
 		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
+		$slideEffect = $this->getSetting($contextId, 'slideEffect')?:"";
 
 		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
@@ -360,13 +363,9 @@ class SliderHomePlugin extends GenericPlugin {
 
 					$overlayContent = $contentHTML->createElement("div");
 					$overlayContent->setAttribute("id", "overlayContnent");
-					$bottom = '';
-					if ($value['sliderImage']) {
-						$bottom = ' slider-text-bottom';
-					}
 					// copy all content tags
 					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
-						$node->setAttribute("class", "slider-text".$noclick.$bottom);
+						$node->setAttribute("class", "slider-text".$noclick);
 						$overlayContent->appendChild($node);
 					}
 					if ($sliderImgLink) {
@@ -391,6 +390,7 @@ class SliderHomePlugin extends GenericPlugin {
 			"<script>
 				var swiper = new Swiper('.swiper-container', {
 					autoHeight: true, //enable auto height
+					effect: '".$slideEffect."',
 					pagination: {
 						el: '.swiper-pagination',
 						clickable: true,

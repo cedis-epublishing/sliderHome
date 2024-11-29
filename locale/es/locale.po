@@ -121,3 +121,15 @@ msgstr "¿Realmente deseas eliminar el contenido de este control deslizante?"
 
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Cargue la imagen"
+
+msgid "plugins.generic.slider.settings.form.slideEffect"
+msgstr "Efecto de transición del slider"
+
+msgid "plugins.generic.slider.settings.form.default"
+msgstr "Ninguno"
+
+msgid "plugins.generic.slider.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.slider.settings.form.cube"
+msgstr "Cube"

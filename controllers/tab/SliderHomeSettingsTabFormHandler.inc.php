@@ -51,6 +51,7 @@ class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 		$plugin->updateSetting($contextId, 'delay', $args['delay'], $type = null, $isLocalized = false);
 		$plugin->updateSetting($contextId, 'stopOnLastSlide', ($args['stopOnLastSlide'] === "true")?true:false, $type = null, $isLocalized = false);
 		$plugin->updateSetting($contextId, 'fallbackLocale', $args['fallbackLocale'], $type = null, $isLocalized = false);
+		$plugin->updateSetting($contextId, 'slideEffect', $args['slideEffect'], $type = null, $isLocalized = false);
 
 		return false;
 	}

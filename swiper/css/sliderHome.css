@@ -24,16 +24,16 @@
 .slider-text {
 	z-index: 1000;
 	background-color:rgba(255,255,255,0.6);
-	width: inherit;
 	text-align: center;
 	position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	width: 100vh;
 }
 
-.slider-text-bottom {
-	margin-top: 30%;
+.slider-text p {
+	min-width: 20vw;
 }
 
 .noclick {
@@ -84,4 +84,8 @@
 
 .slider-link {
 	display: block;
+}
+
+.slider-figure {
+	transform: translate(0%, 0%);
 }

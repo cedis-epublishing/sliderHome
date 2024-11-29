@@ -124,3 +124,15 @@ msgstr "Do you really want to delete this silder content?"
 
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Upload slider image"
+
+msgid "plugins.generic.slider.settings.form.slideEffect"
+msgstr "Slide transition effect"
+
+msgid "plugins.generic.slider.settings.form.default"
+msgstr "None"
+
+msgid "plugins.generic.slider.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.slider.settings.form.cube"
+msgstr "Cube"

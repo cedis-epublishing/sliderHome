@@ -43,7 +43,7 @@
 					:alt="thumbnailDescription"
 					:src="item.thumbnailUrl"
 				/>
-                <pkp-badge :isSuccess="item.show_content">
+                <pkp-badge :isSuccess="item.show_content" class="sliderCenterVert">
                     <pkp-icon v-if="item.show_content" icon="fa-light fa-eye" :inline="true"></pkp-icon>
                     {{ item.name }}
                 </pkp-badge>
@@ -108,6 +108,11 @@
 .listPanel__itemTitle {
 	display: flex!important;
 	gap: 5px;
+}
+.sliderCenterVert {
+	height: fit-content;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 </style>
 <script>

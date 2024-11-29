@@ -118,3 +118,15 @@ msgstr "Wollen Sie diesen Sliderinhalt wirklisch löschen?"
 
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Sliderbild hochladen"
+
+msgid "plugins.generic.slider.settings.form.slideEffect"
+msgstr "Slide-Übergangseffekt"
+
+msgid "plugins.generic.slider.settings.form.default"
+msgstr "Kein Übergnagseffekt"
+
+msgid "plugins.generic.slider.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.slider.settings.form.cube"
+msgstr "Cube"
