@@ -6,14 +6,25 @@
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  */
 
-// TODO @ RS namespace APP\plugins\generic\sliderHome;
+namespace APP\plugins\generic\sliderHome;
 
-import('plugins.generic.sliderHome.classes.components.form.SliderContentForm');
-import('plugins.generic.sliderHome.classes.components.SliderHomeListPanel');
-import('plugins.generic.sliderHome.controllers.tab.SliderHomeSettingsTabFormHandler');
-import('plugins.generic.sliderHome.controllers.components.SliderHomeFormHandler');
 use PKP\plugins\GenericPlugin;
+use PKP\plugins\Hook;
+use PKP\core\PKPApplication;
+use PKP\core\Registry;
+use PKP\config\Config;
+use APP\file\PublicFileManager;
+use APP\template\TemplateManager;
 use PKP\facades\Locale;
+use DOMDocument;
+use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
+use APP\plugins\generic\sliderHome\classes\components\form\SliderAddPublicationForm;
+use APP\plugins\generic\sliderHome\classes\components\form\context\SliderHomeSettingsForm;
+use APP\plugins\generic\sliderHome\classes\components\form\SliderContentForm;
+use APP\plugins\generic\sliderHome\classes\components\SliderHomeListPanel;
+use APP\plugins\generic\sliderHome\controllers\tab\SliderHomeSettingsTabFormHandler;
+use APP\plugins\generic\sliderHome\controllers\components\SliderHomeFormHandler;
+use APP\plugins\generic\sliderHome\SliderHomeSchemaMigration;
 
 /**
  * @class SliderHomePlugin

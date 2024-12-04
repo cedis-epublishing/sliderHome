@@ -9,9 +9,10 @@
  * @brief File implemeting the slider settings tab handler.
  */
 
-// import('pages/management/SettingsHandler');
+namespace APP\plugins\generic\sliderHome\controllers\tab;
+
 use APP\pages\management\SettingsHandler;
-import('lib.pkp.classes.validation.ValidatorFactory');
+use PKP\validation\ValidatorFactory;
 
 /**
  * @class SliderHomeSettingsTabFormHandler

@@ -18,7 +18,8 @@ export default defineConfig({
       // otherwise there would be risk that page will be rendered before plugin components gets registered
       formats: ["iife"],
     },
-    outDir: resolve(__dirname, "public/build"),
+    outDir: resolve(__dirname, "build"),
+    publicDir: resolve(__dirname, "public"),
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library

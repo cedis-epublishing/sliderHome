@@ -8,11 +8,12 @@
  * @brief File implemeting the slider DAO object.
  */
 
-import('lib.pkp.classes.db.SchemaDAO');
-import('plugins.generic.sliderHome.classes.SliderContent');
+namespace APP\plugins\generic\sliderHome\classes;
 
+use PKP\db\SchemaDAO;
 use Illuminate\Support\Facades\DB;
 use PKP\db\DAOResultFactory;
+use APP\plugins\generic\sliderHome\classes\SliderContent;
 
 
  /**

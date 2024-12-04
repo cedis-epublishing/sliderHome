@@ -10,11 +10,14 @@
  * @brief Describe database table structures.
  */
 
+namespace APP\plugins\generic\sliderHome;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema as Schema;
+use APP\file\PublicFileManager;
 
 class SliderHomeSchemaMigration extends Migration {
     /**
@@ -31,7 +34,6 @@ class SliderHomeSchemaMigration extends Migration {
                 // remove slider images
                 $slider = DB::table('slider')->get();
 
-                // import('classes.file.PublicFileManager');
                 // $publicFileManager = new PublicFileManager();
                 // $request = Application::get()->getRequest();
                 // // this would need to be context specific, need to loop through all contexts

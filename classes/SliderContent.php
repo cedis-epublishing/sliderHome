@@ -8,6 +8,10 @@
  * @brief File implemeting the slider content data object.
  */
 
+namespace APP\plugins\generic\sliderHome\classes;
+
+use PKP\core\DataObject;
+
  /**
  * @class SliderContent
  * @brief Data object representing a slider content.

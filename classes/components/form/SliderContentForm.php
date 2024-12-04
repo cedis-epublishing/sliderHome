@@ -8,6 +8,8 @@
  * @brief File implemnting SliderContentForm
  */
 
+namespace APP\plugins\generic\sliderHome\classes\components\form;
+
 use APP\core\Application;
 use PKP\components\forms\FieldRichTextarea;
 use PKP\components\forms\FieldText;
@@ -15,6 +17,7 @@ use PKP\components\forms\FieldOptions;
 use PKP\components\forms\FieldUploadImage;
 use PKP\components\forms\FormComponent;
 use PKP\context\Context;
+use PKP\config\Config;
 
 define('FORM_SLIDER_CONTENT', 'sliderContent');
 

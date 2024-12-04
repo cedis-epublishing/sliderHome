@@ -13,6 +13,7 @@
  * @brief A ListPanel component for editing slider image data
  */
 
+namespace APP\plugins\generic\sliderHome\classes\components;
 
 use APP\core\Application;
 use PKP\components\listPanels\ListPanel;

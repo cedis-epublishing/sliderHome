@@ -8,6 +8,8 @@
  * @brief File implemnting SliderHomeSettingsForm
  */
 
+namespace APP\plugins\generic\sliderHome\classes\components\form\context;
+
 use \PKP\components\forms\FormComponent;
 use \PKP\components\forms\FieldText;
 use \PKP\components\forms\FieldOptions;

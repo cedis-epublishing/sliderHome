@@ -3,18 +3,17 @@
 /**
  * @file comtrollers/components/SliderHomeFormHandler.php
  *
- *  TODO @RS
  * Copyright (c) 2014-2021 Simon Fraser University
  * Copyright (c) 2003-2021 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  * @class SliderHomeFormHandlerHandler
  *
- * @ingroup api_v1_announcement
- *
  * @brief Handle API requests for announcement operations.
  *
  */
+
+namespace APP\plugins\generic\sliderHome\controllers\components;
 
 use APP\core\Application;
 use APP\facades\Repo;
@@ -26,6 +25,7 @@ use PKP\jobs\notifications\NewAnnouncementNotifyUsers;
 use PKP\mail\Mailer;
 use PKP\notification\NotificationSubscriptionSettingsDAO;
 use PKP\notification\PKPNotification;
+use APP\file\PublicFileManager;
 use PKP\plugins\Hook;
 use PKP\security\authorization\PolicySet;
 use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
@@ -33,7 +33,7 @@ use PKP\security\authorization\UserRolesRequiredPolicy;
 use PKP\security\Role;
 use PKP\services\PKPSchemaService;
 
-import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+use APP\plugins\generic\sliderHome\SliderHomeDAO;
 
 class SliderHomeFormHandler extends APIHandler
 {
@@ -161,7 +161,7 @@ class SliderHomeFormHandler extends APIHandler
                 'thumbnail' => false,
                 'thumbnailUrl' => ""
             ],
-             $slimRequest->getParsedBody()
+            $slimRequest->getParsedBody()
         );
 
         if (!$context) {
@@ -182,7 +182,6 @@ class SliderHomeFormHandler extends APIHandler
 		$sliderContent->setShowContent(!empty($data['show_content']));	
 		$sliderContent->setCopyright($data['copyright']);
 
-        import('classes.file.PublicFileManager');
 		$publicFileManager = new PublicFileManager();
 		$baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($context->getId());
 
@@ -193,7 +192,6 @@ class SliderHomeFormHandler extends APIHandler
                 $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
                 $temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
     
-                import('classes.file.PublicFileManager');
                 $publicFileManager = new PublicFileManager();
                 $newFileName = 'slider_image_' . $locale . '_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
                 $data['sliderImage'][$locale]['uploadName'] = $newFileName;
@@ -223,6 +221,30 @@ class SliderHomeFormHandler extends APIHandler
 		}
 
         return $response->withJson(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
+    }
+
+    function addFromPublication($slimRequest, $response, $args) {
+        $request = $this->getRequest();
+        $context = $request->getContext();
+        $data = array_merge(
+            [
+                'name' => "",
+                'content' => [],
+                'show_content' => false,
+                'copyright' => [],
+                'sliderImage' => [],
+                'sliderImageAltText' => "",
+                'thumbnail' => false,
+                'thumbnailUrl' => ""
+            ],
+             $slimRequest->getParsedBody()
+        );
+
+        if (!$context) {
+            throw new Exception('You can not add a slide without sending a request to the API endpoint of a particular context.');
+        }
+
+
     }
 
     /**
