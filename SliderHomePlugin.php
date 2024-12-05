@@ -45,11 +45,10 @@ class SliderHomePlugin extends GenericPlugin {
 	function register($category, $path, $mainContextId = null) {
 		if (parent::register($category, $path, $mainContextId)) {
 			if ($this->getEnabled($mainContextId)) {
-				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
-				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab')); //to enable display of plugin settings tab
-				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler')); //to load (old style) grid handler for image uploadd form
-				HookRegistry::register('Templates::Index::journal', array($this, 'callbackIndexJournal')); //to enable slider display in OJS frontend
-				HookRegistry::register('APIHandler::endpoints', array($this, 'callbackSetupEndpoints')); //to setup endpoint for ComponentForm submission via REST API
+				Hook::add('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
+				Hook::add('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab')); //to enable display of plugin settings tab
+				Hook::add('Templates::Index::journal', array($this, 'callbackIndexJournal')); //to enable slider display in OJS frontend
+				Hook::add('APIHandler::endpoints', array($this, 'callbackSetupEndpoints')); //to setup endpoint for ComponentForm submission via REST API
 			}
 			return true;
 		}
@@ -92,7 +91,6 @@ class SliderHomePlugin extends GenericPlugin {
 		}, $supportedFormLocales);
 		$formLocaleNames = $context->getSupportedFormLocaleNames(); // TODO @RS
 
-		import('classes.file.PublicFileManager');
 		$publicFileManager = new PublicFileManager();
 		$baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($context->getId());
 		$temporaryFileApiUrl = $dispatcher->url($request, ROUTE_API, $context->getPath(), 'temporaryFiles');
@@ -127,7 +125,6 @@ class SliderHomePlugin extends GenericPlugin {
 		$slideEffect = $this->getSetting($contextId, 'slideEffect');
 
 		// instantinate settings form
-		$this->import('classes.components.form.context.SliderHomeSettingsForm');
 		$sliderSettingsForm = new SliderHomeSettingsForm($contextApiUrl, $locales, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl,
 			['maxHeight' => $maxHeight,
 				'speed' => $speed,
@@ -139,7 +136,6 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 
 		// get slider data
-		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
 		$sliderImages = array_map(
 			function ($item) use ($baseUrl) {
@@ -247,14 +243,14 @@ class SliderHomePlugin extends GenericPlugin {
 			case 'management/website.tpl':
 				$templateMgr->addJavaScript(
 					'sliderHomeJS',
-					"{$request->getBaseUrl()}/{$this->getPluginPath()}/public/build/build.iife.js",
+					"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/build.iife.js",
 					[
 						'inline' => false,
 						'contexts' => ['backend'],
 						'priority' => STYLE_SEQUENCE_LAST
 					]
 				);
-				$templateMgr->addStyleSheet('sliderHomeListPanelStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/public/build/style.css", [
+				$templateMgr->addStyleSheet('sliderHomeListPanelStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/style.css", [
 					'contexts' => ['backend']
 				] );
 		}
@@ -292,7 +288,6 @@ class SliderHomePlugin extends GenericPlugin {
 		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
 		$slideEffect = $this->getSetting($contextId, 'slideEffect')?:"";
 
-		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
 		$sliderHomeDao = new SliderHomeDao();
 
 		# get slider content based on locale to show
@@ -420,20 +415,6 @@ class SliderHomePlugin extends GenericPlugin {
 		}
 		return $sliderContent;
 	}	
-	
-	/**
-	 * Set up handler TODO @RS rename
-	 */
-	function setupGridHandler($hookName, $params) {
-		
-		$component =& $params[0];
-		if ($component == 'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler') {			
-			import($component);
-			SliderHomeGridHandler::setPlugin($this);
-			return true;
-		}	
-		return false;
-	}
 
 	/**
 	 * @copydoc PKPPlugin::getDisplayName()
@@ -453,7 +434,6 @@ class SliderHomePlugin extends GenericPlugin {
 	 * @copydoc Plugin::getInstallMigration()
 	 */
 	function getInstallMigration() {
-		$this->import('SliderHomeSchemaMigration');
 		return new SliderHomeSchemaMigration();
 	}
 }
