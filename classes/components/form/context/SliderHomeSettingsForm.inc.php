@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2021 Universitätsbibliothek Freie Universität Berlin
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING..
- * 
+ *
  * @brief File implemnting SliderHomeSettingsForm
  */
 
@@ -16,11 +16,14 @@ define('FORM_SLIDER_SETTINGS', 'sliderSettings');
 
 /**
  * A form for implementing slider settings.
- * 
+ *
  * @class SliderHomeSettingsForm
  * @brief Class implemnting SliderHomeSettingsForm
  */
 class SliderHomeSettingsForm extends FormComponent {
+
+	public $successMessage;
+
 	/** @copydoc FormComponent::$id */
 	public $id = FORM_SLIDER_SETTINGS;
 

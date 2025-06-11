@@ -22,7 +22,7 @@ class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 		$errors = [];
 
 		$plugin = PluginRegistry::getPlugin('generic', 'sliderhomeplugin');
-		$request = Application::getRequest();
+		$request = Application::get()->getRequest();
 		$contextId = $request->getContext()->getId();
 		$args = $request->_requestVars;
 		$response =& $functionArgs[1];
@@ -40,7 +40,7 @@ class SliderHomeSettingsTabFormHandler extends SettingsHandler {
 		if ($validator->fails()) {
 			$errors = $validator->errors();
 		}
-		  
+
 		if (!empty($errors)) {
 			return $response->withStatus(400)->withJson($errors);
 		}

@@ -67,7 +67,7 @@
 							</a>
 						</h4>
 						<div class="date">
-							{$announcement->getDatePosted()}
+							{$announcement->getDatePosted()|date_format:$dateFormatShort}
 						</div>
 					</article>
 				{/if}

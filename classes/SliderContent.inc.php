@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2021 Universitätsbibliothek Freie Universität Berlin
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
- * 
+ *
  * @brief File implemeting the slider content data object.
  */
 
@@ -16,10 +16,10 @@ class SliderContent extends DataObject {
 
 	/**
 	 * Constructor
-	 */	
+	 */
 	function __construct() {
 		parent::__construct();
-	} 
+	}
 
 	//
 	// Get/set methods
@@ -64,7 +64,7 @@ class SliderContent extends DataObject {
 
 	function setShowContent($showContent) {
 		$this->setData('showContent', $showContent);
-	}	
+	}
 
 	function getSequence() {
 		return $this->getData('sequence');
@@ -81,7 +81,7 @@ class SliderContent extends DataObject {
 	function setSliderImage($filename) {
 		$this->setData('sliderImage', $filename);
 	}
-	
+
 	function getSliderImageLink() {
 		return $this->getData('sliderImageLink')?:"";
 	}
@@ -99,7 +99,7 @@ class SliderContent extends DataObject {
 	}
 
 	function getLocale() {
-		$request = Application::getRequest();
+		$request = Application::get()->getRequest();
 		return $request->getContext()->getPrimaryLocale();
 	}
 }

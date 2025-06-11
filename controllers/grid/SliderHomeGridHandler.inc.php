@@ -35,16 +35,16 @@ class SliderHomeGridHandler extends GridHandler {
 
 	/**
 	 * Constructor
-	 */	
+	 */
 	function __construct() {
-		parent::__construct();	
+		parent::__construct();
 		$this->addRoleAssignment(
 			array(ROLE_ID_MANAGER,ROLE_ID_SITE_ADMIN),
 			array('index', 'fetchGrid', 'fetchRow','addSliderContent',
 				'editSliderContent', 'updateSliderContent', 'delete','saveSequence',
 				'uploadFile', 'deleteCoverImage')
 		);
-	} 
+	}
 
 	//
 	// Overridden template methods
@@ -135,7 +135,8 @@ class SliderHomeGridHandler extends GridHandler {
 			$contextId = $context->getId();
 		}
 
-		$sliderHomeDao = new SliderHomeDAO(); 
+		/** @var SliderHomeDAO $sliderHomeDao */
+		$sliderHomeDao = DAORegistry::getDAO('SliderHomeDao');
 		return $sliderHomeDao->getByContextId($contextId);
 	}
 
@@ -145,8 +146,8 @@ class SliderHomeGridHandler extends GridHandler {
 	function initFeatures($request, $args) {
 		import('lib.pkp.classes.controllers.grid.feature.OrderGridItemsFeature');
 		return array(new OrderGridItemsFeature());
-	}	
-	
+	}
+
 	/**
 	 * @copydoc GridHandler::getRowInstance()
 	 */
@@ -154,12 +155,12 @@ class SliderHomeGridHandler extends GridHandler {
 		import('plugins.generic.sliderHome.controllers.grid.SliderHomeGridRow');
 		return new SliderHomeGridRow();
 	}
-	
+
 	//
 	// Public Grid Actions
 	//
 	/**
-	 * Display the grid's containing page. 
+	 * Display the grid's containing page.
 	 * for OJS 3.1.2
 	 * @param $args array
 	 * @param $request PKPRequest
@@ -169,9 +170,9 @@ class SliderHomeGridHandler extends GridHandler {
 		import('lib.pkp.classes.form.Form');
 		$form = new Form(self::$plugin->getTemplateResource('websiteSettingsTab.tpl'));
 
-		return new JSONMessage(true, $form->fetch($request));		
+		return new JSONMessage(true, $form->fetch($request));
 	}
-	
+
 	/**
 	 * An action to add a new user
 	 * @param $args array Arguments to the request
@@ -195,7 +196,7 @@ class SliderHomeGridHandler extends GridHandler {
 		if ($context) {
 			$contextId = $context->getId();
 		}
-	
+
 		$sliderContentForm = new SliderContentForm($request, self::$plugin, $contextId, $sliderContentId);
 		$sliderContentForm->initData();
 
@@ -209,26 +210,26 @@ class SliderHomeGridHandler extends GridHandler {
 	 * @return string Serialized JSON object
 	 */
 	function updateSliderContent($args, $request) {
-		$sliderContentId = $request->getUserVar('sliderContentId');		
+		$sliderContentId = $request->getUserVar('sliderContentId');
 		$context = $request->getContext();
 		$contextId = CONTEXT_ID_NONE;
 		if ($context) {
 			$contextId = $context->getId();
-		}		
+		}
 
 		$sliderContentForm = new SliderContentForm($request, self::$plugin, $contextId, $sliderContentId);
-		$sliderContentForm->readInputData();		
+		$sliderContentForm->readInputData();
 		// Check the results
-		if ($sliderContentForm->validate()) {			
-			// Save the results			
-			$sliderContentForm->execute();			
+		if ($sliderContentForm->validate()) {
+			// Save the results
+			$sliderContentForm->execute();
  			return DAO::getDataChangedEvent($sliderContentId);
-		} else {		
+		} else {
 			return new JSONMessage(false);
 		}
 	}
 
-	/**                               
+	/**
 	 * @param $args array
 	 * Delete a user
 	 * @param $request PKPRequest
@@ -241,10 +242,20 @@ class SliderHomeGridHandler extends GridHandler {
 		$contextId = CONTEXT_ID_NONE;
 		if ($context) {
 			$contextId = $context->getId();
-		}		
+		}
 
-		$sliderHomeDao = new SliderHomeDAO();
+		/** @var SliderHomeDAO $sliderHomeDao */
+		$sliderHomeDao = DAORegistry::getDAO('SliderHomeDao');
+
+		/** @var SliderContent $sliderContent */
 		$sliderContent = $sliderHomeDao->getById($sliderContentId, $contextId);
+
+		$publicFileManager = new PublicFileManager();
+
+		$sliderImage = $sliderContent->getSliderImage();
+		if ($sliderImage) {
+			$publicFileManager->removeContextFile($contextId, $sliderImage);
+		}
 
 		$sliderHomeDao->deleteObject($sliderContent);
 
@@ -267,7 +278,11 @@ class SliderHomeGridHandler extends GridHandler {
 		if ($context) {
 			$contextId = $context->getId();
 		}
-		$sliderHomeDao = new SliderHomeDAO();
+
+		/** @var SliderHomeDAO $sliderHomeDao */
+		$sliderHomeDao = DAORegistry::getDAO('SliderHomeDao');
+
+		/** @var SliderContent $sliderContent */
 		$sliderContent = $sliderHomeDao->getById($rowId, $contextId);
 		$sliderContent->setSequence($newSequence);
 		$sliderHomeDao->updateObject($sliderContent);
@@ -298,14 +313,17 @@ class SliderHomeGridHandler extends GridHandler {
 		$contextId = CONTEXT_ID_NONE;
 		if ($context) {
 			$contextId = $context->getId();
-		}		
+		}
 
-		$sliderHomeDao = new SliderHomeDAO();
+		/** @var SliderHomeDAO $sliderHomeDao */
+		$sliderHomeDao = DAORegistry::getDAO('SliderHomeDao');
+
+		/** @var SliderContent $sliderContent */
 		$sliderContent = $sliderHomeDao->getById($sliderContentId, $contextId);
 
 
 		// Check if the passed filename matches the filename for this slider image
-		if ($args['sliderImage'] != $sliderContent->getCoverImage()) {
+		if ($args['sliderImage'] != $sliderContent->getSliderImage()) {
 			return new JSONMessage(false, __('editor.issues.removeCoverImageFileNameMismatch'));
 		}
 
@@ -318,7 +336,7 @@ class SliderHomeGridHandler extends GridHandler {
 
 		// Remove the file
 		$publicFileManager = new PublicFileManager();
-		if ($publicFileManager->removeContextFile($issue->getJournalId(), $file)) {
+		if ($publicFileManager->removeContextFile($contextId, $file)) {
 			$json = new JSONMessage(true);
 			$json->setEvent('fileDeleted');
 			return $json;
