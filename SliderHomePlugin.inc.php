@@ -10,7 +10,7 @@ import('lib.pkp.classes.plugins.GenericPlugin');
 
 /**
  * @class SliderHomePlugin
- * 
+ *
  * @brief Enables display of image slider on the journal/press home page.
  */
 class SliderHomePlugin extends GenericPlugin {
@@ -22,10 +22,14 @@ class SliderHomePlugin extends GenericPlugin {
 	/**
 	 * @copydoc Plugin::register()
 	 */
-	function register($category, $path, $mainContextId = null) {	
-	
+	function register($category, $path, $mainContextId = null) {
+
 		if (parent::register($category, $path, $mainContextId)) {
 			if ($this->getEnabled($mainContextId)) {
+				import('plugins.generic.sliderHome.classes.SliderHomeDAO');
+				$sliderHomeDao = new SliderHomeDAO();
+				DAORegistry::registerDAO('SliderHomeDao', $sliderHomeDao);
+
 				HookRegistry::register('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
 				HookRegistry::register('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab')); //to enable display of plugin settings tab
 				HookRegistry::register('LoadComponentHandler', array($this, 'setupGridHandler')); //to load (old style) grid handler for image uploadd form
@@ -44,17 +48,17 @@ class SliderHomePlugin extends GenericPlugin {
 		$handler = new SliderHomeSettingsTabFormHandler();
 
 		// add the new endpoint
-		$endpoints['POST'][] = 
+		$endpoints['POST'][] =
 			[
 				'pattern' => '/{contextPath}/api/{version}/contexts/{contextId}/sliderSettings',
 				'handler' => [$handler, 'saveFormData'],
 				'roles' => array(ROLE_ID_SITE_ADMIN, ROLE_ID_MANAGER)
 			];
 	}
-	
+
 	// OMP/OJS 3.2: Add tab for slider content grid in website settings appearance
 	function callbackAppearanceTab($hookName, $args) {
-		# prepare data
+		// prepare data
 		$templateMgr =& $args[1];
 		$output =& $args[2];
 		$request =& Registry::get('request');
@@ -81,15 +85,15 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 		$contextUrl = $request->getRouter()->url($request, $context->getPath());
 
-		# get data to initilaize ComponentForm 
+		// get data to initilaize ComponentForm
 		$maxHeight = $this->getSetting($contextId, 'maxHeight');
-		if (!$maxHeight) { 
+		if (!$maxHeight) {
 			// set default value
 			$maxHeight = 100;
 			$this->updateSetting($contextId, 'maxHeight', $maxHeight, $type = null, $isLocalized = false);
 		}
 		$speed = $this->getSetting($contextId, 'speed');
-		if (!$speed) { 
+		if (!$speed) {
 			// set default value
 			$speed = 2000;
 			$this->updateSetting($contextId, 'speed', $speed, $type = null, $isLocalized = false);
@@ -112,7 +116,7 @@ class SliderHomePlugin extends GenericPlugin {
 			]
 		);
 
-		# setup template
+		// setup template
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS',
 		]);
@@ -128,21 +132,21 @@ class SliderHomePlugin extends GenericPlugin {
 	}
 
 	// OJS: there's a template hook on the frontend journal index page
-	function callbackIndexJournal($hookName, $args) {	
+	function callbackIndexJournal($hookName, $args) {
 		$request = $this->getRequest();
 
 		$output =& $args[2];
 		$output .= $this->getSliderContent($request);
 
 		return false;
-	}	
-		
+	}
+
 	// OMP: no template hook on the index template -> use display hook to replace template
 	function callbackDisplay($hookName, $args) {
 		$request = $this->getRequest();
 		$templateMgr =& $args[0];
 		$template =& $args[1];
-		$applicationName = PKPApplication::get()->getName();		
+		$applicationName = PKPApplication::get()->getName();
 		switch ($template) {
 			case 'frontend/pages/index.tpl':
 				if ($applicationName=="omp") {
@@ -150,14 +154,14 @@ class SliderHomePlugin extends GenericPlugin {
 					$templateMgr->assign('sliderContent',$sliderContent);
 					$this->addHeader($templateMgr,$request->getBaseUrl());
 					$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
-					return true;					
+					return true;
 				}
 			case 'frontend/pages/indexJournal.tpl':
 				$this->addHeader($templateMgr,$request->getBaseUrl());
 		}
 		return false;
 	}
-	
+
 	private function addHeader($templateMgr,$baseUrl) {
 		$templateMgr->addHeader(
 			'slider',
@@ -166,18 +170,18 @@ class SliderHomePlugin extends GenericPlugin {
 		$templateMgr->addHeader(
 			'swiper-min',
 			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
-		);		
+		);
 		$templateMgr->addHeader(
 			'swiper-min-js',
 			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
 		);
 	}
-	
+
 	// get markup for slider content, incl. containers/wrappers
 	private function getSliderContent($request) {
 
 		$templateMgr = TemplateManager::getManager($request);
-		$locale = $templateMgr->getTemplateVars('currentLocale'); 
+		$locale = $templateMgr->getTemplateVars('currentLocale');
 		$context = $request->getContext();
 		$primaryLocale = $context->getPrimaryLocale();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
@@ -188,8 +192,8 @@ class SliderHomePlugin extends GenericPlugin {
 		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
 		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
 
-		import('plugins.generic.sliderHome.classes.SliderHomeDAO');
-		$sliderHomeDao = new SliderHomeDao();
+		/** @var SliderHomeDAO $sliderHomeDao */
+		$sliderHomeDao = DAORegistry::getDAO('SliderHomeDao');
 
 		# get slider content based on locale to show
 		if ($fallbackLocale =='usePrimary') {
@@ -209,7 +213,7 @@ class SliderHomePlugin extends GenericPlugin {
 		} else {
 			$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
 		};
-		
+
 		$sliderContent = "";
 
 		if (!empty($contentArray)) {
@@ -230,7 +234,7 @@ class SliderHomePlugin extends GenericPlugin {
 				// create slider fiure and image tag
 				// figure
 				$sliderFigure = $contentHTML->createElement("figure");
-				
+
 				$baseUrl = Config::getVar('general', 'base_url');
 				$publicFilesDir = Config::getVar('files', 'public_files_dir');
 
@@ -249,8 +253,8 @@ class SliderHomePlugin extends GenericPlugin {
 					$sliderFigure->appendChild($sliderImgLink);
 				} else {
 					$sliderFigure->appendChild($sliderImg);
-				}				
-				
+				}
+
 				if ($value['copyright']) {
 					$smallTag = $contentHTML->createElement("small", $value['copyright']);
 					$smallTag->setAttribute('class',"slider-copyright");
@@ -282,9 +286,9 @@ class SliderHomePlugin extends GenericPlugin {
 				$sliderContent.= $contentHTML->saveHTML($slide);
 
 			}
-			// add slider navigation 
+			// add slider navigation
 			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";
-			$sliderContent .= 
+			$sliderContent .=
 			"<script>
 				var swiper = new Swiper('.swiper-container', {
 					autoHeight: true, //enable auto height
@@ -305,19 +309,19 @@ class SliderHomePlugin extends GenericPlugin {
 			</script>";
 		}
 		return $sliderContent;
-	}	
-	
+	}
+
 	/**
 	 * Set up handler
 	 */
 	function setupGridHandler($hookName, $params) {
-		
+
 		$component =& $params[0];
-		if ($component == 'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler') {			
+		if ($component == 'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler') {
 			import($component);
 			SliderHomeGridHandler::setPlugin($this);
 			return true;
-		}	
+		}
 		return false;
 	}
 

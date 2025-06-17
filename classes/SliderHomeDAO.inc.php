@@ -54,14 +54,14 @@ class SliderHomeDAO extends SchemaDAO {
 			}
 			$result[] = $data;
 		}
-		
+
 		return $result;
 	}
 
 	function getByContextId($contextId, $rangeInfo = null) {
 		$result = Capsule::table('slider')
 		->where('context_id', $contextId)
-		->orderBy('sequence')	
+		->orderBy('sequence')
 		->get();
 		return new DAOResultFactory($result, $this, '_fromRow');
 	}
@@ -72,7 +72,7 @@ class SliderHomeDAO extends SchemaDAO {
 		->max('sequence');
 	}
 
-	function insertObject($sliderContent) {	
+	function insertObject($sliderContent) {
 		Capsule::table('slider')->insert([
 			'context_id' => (int) $sliderContent->getContextId(),
 			'sequence' => $sliderContent->getSequence(),
@@ -83,7 +83,7 @@ class SliderHomeDAO extends SchemaDAO {
 
 		$this->updateDataObjectSettings('slider_settings', $sliderContent, [
 			'slider_content_id' => $sliderContent->getId()
-		]);		
+		]);
 
 		return $sliderContent->getId();
 	}
@@ -101,7 +101,7 @@ class SliderHomeDAO extends SchemaDAO {
 			'slider_content_id' => $sliderContent->getId()
 		]);
 	}
-	
+
 	function deleteById($sliderContentId) {
 		Capsule::table('slider')
 		->where('slider_content_id', $sliderContentId)
@@ -120,6 +120,7 @@ class SliderHomeDAO extends SchemaDAO {
 	}
 
 	function _fromRow($row) {
+		/** @var SliderContent $sliderContent */
 		$sliderContent = $this->newDataObject();
 		$sliderContent->setId($row['slider_content_id']);
 		$sliderContent->setContextId($row['context_id']);
