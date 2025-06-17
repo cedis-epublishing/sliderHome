@@ -65,7 +65,7 @@ class SliderContentForm extends Form {
 
 			$this->setData('sliderImage', $sliderContent->getSliderImage()?:"");
 			$this->setData('sliderImageLink', $sliderContent->getSliderImageLink()?:"");
-			$this->setData('sliderImageAltText', $sliderContent->getSliderImageAltText($locale)?:"");
+			$this->setData('sliderImageAltText', $sliderContent->getSliderImageAltText()?:"");
 		}
 	}
 
@@ -158,7 +158,7 @@ class SliderContentForm extends Form {
 		if ($temporaryFileId = $this->getData('temporaryFileId')?:"") {
 			$user = $request->getUser();
 			/** @var TemporaryFileDao $temporaryFileDao */
-			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDao');
+			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO');
 			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
 
 			import('classes.file.PublicFileManager');
@@ -190,7 +190,7 @@ class SliderContentForm extends Form {
 			$request = Application::get()->getRequest();
 			$user = $request->getUser();
 			/** @var TemporaryFileDao $temporaryFileDao */
-			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDao');
+			$temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO');
 			$temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
 
 			import('classes.file.PublicFileManager');

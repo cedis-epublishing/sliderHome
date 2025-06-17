@@ -90,19 +90,19 @@ class SliderHomePlugin extends GenericPlugin {
 		if (!$maxHeight) {
 			// set default value
 			$maxHeight = 100;
-			$this->updateSetting($contextId, 'maxHeight', $maxHeight, $type = null, $isLocalized = false);
+			$this->updateSetting($contextId, 'maxHeight', $maxHeight, $type = null);
 		}
 		$speed = $this->getSetting($contextId, 'speed');
 		if (!$speed) {
 			// set default value
 			$speed = 2000;
-			$this->updateSetting($contextId, 'speed', $speed, $type = null, $isLocalized = false);
+			$this->updateSetting($contextId, 'speed', $speed, $type = null);
 		}
 		$delay = $this->getSetting($contextId, 'delay');
 		if (!$delay) {
 			// set default value
 			$delay = 2000;
-			$this->updateSetting($contextId, 'delay', $delay, $type = null, $isLocalized = false);
+			$this->updateSetting($contextId, 'delay', $delay, $type = null);
 		}
 
 		// instantinate settings form
