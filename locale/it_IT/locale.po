@@ -1,0 +1,90 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Plugin Slider in Home"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Mostra uno slider in home page."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Contenuto dello slider"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Aggiungi contenuto allo slider"
+
+msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
+msgstr "Modifica il contenuto dello Slider"
+
+msgid "plugins.generic.sliderHome.grid.title"
+msgstr "Campi dello Slider"
+
+msgid "plugins.generic.sliderHome.noneCreated"
+msgstr "Nessun campo è stato ancora creato."
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Nome di questa immagine dello slider"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "Contenuto"
+
+msgid "plugins.generic.sliderHome.noneExist"
+msgstr "Ancora nessun contenuto."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Mostra il contenuto di questo slider sulla home page."
+
+msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgstr "Altezza massima del cursore come percentuale dell'altezza dello schermo."
+
+msgid "plugins.generic.slider.settings.form.maxHeight"
+msgstr "Altezza dello Slider"
+
+msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgstr "Errore: l'altezza del cursore deve essere compresa tra 0 e 100!"
+
+msgid "plugins.generic.slider.settings.form.speed.description"
+msgstr "Durata della transizione tra le diapositive (in ms)."
+
+msgid "plugins.generic.slider.settings.form.speed"
+msgstr "Velocità dello slider"
+
+msgid "plugins.generic.slider.settings.form.speed.error"
+msgstr "Errore: la velocità dello slider deve essere un numero positivo!"
+
+msgid "plugins.generic.slider.settings.form.delay.description"
+msgstr "Ritardo tra le transizioni (in ms)."
+
+msgid "plugins.generic.slider.settings.form.delay"
+msgstr "Ritardo dello Slider"
+
+msgid "plugins.generic.slider.settings.form.delay.error"
+msgstr "Errore: il ritardo dello slider deve essere un numero positivo!"
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgstr "Interrompi la presentazione dopo l'ultima diapositiva."
+
+msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Ripetizione dello Slider"
+
+msgid "plugins.generic.slider.settings.form.success"
+msgstr "Le impostazioni dello slider sono state aggiornate.. <a href=\"{$url}\" target=\"_blank\">Visualizza ora</a>"
+
+msgid "plugins.generic.slider.settings.form.groupLabel"
+msgstr "Impostazioni dello Slider"
+
+msgid "plugins.generic.slider.settings.form.groupDescription"
+msgstr "Nota bene:<br>L'altezza dello slider è determinata dall'altezza dell'immagine più grande visualizzata. Solo se tale altezza supera la risoluzione verticale dello schermo, è possibile limitare l'altezza dello slider impostando l'altezza massima dello slider come percentuale della risoluzione verticale dello schermo. In caso contrario, questa impostazione non avrà alcun effetto. Sia l'altezza che la larghezza delle immagini saranno ridimensionate.<br>Per utilizzare l'intera larghezza dello slider, preparare le immagini con altezze inferiori alla risoluzione verticale dello schermo."
