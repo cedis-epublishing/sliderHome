@@ -104,8 +104,8 @@ class SliderHomeDAO extends SchemaDAO {
 		]);
 	}
 	
-	function deleteById($sliderContentId) {
-		DB::table('slider')
+	function deleteById(int $sliderContentId):int {
+		return DB::table('slider')
 		->where('slider_content_id', $sliderContentId)
 		->delete();
 		DB::table('slider_settings')
@@ -147,20 +147,20 @@ class SliderHomeDAO extends SchemaDAO {
 	// 	return $this->_getInsertId('slider', 'slider_content_id');
 	// }
 
-	/**
-	 * Get field names for which data is localized.
-	 * @return array
-	 */
-	function getLocaleFieldNames() {
-		return ['copyright','content','sliderImageAltText', 'sliderImage'];
-	}
+	// /**
+	//  * Get field names for which data is localized.
+	//  * @return array
+	//  */
+	// function getLocaleFieldNames() {
+	// 	return ['copyright','content','sliderImageAltText', 'sliderImage'];
+	// }
 
-	/**
-	 * @copydoc DAO::getAdditionalFieldNames()
-	 */
-	function getAdditionalFieldNames() {
-		return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImageLink']);
-	}
+	// /**
+	//  * @copydoc DAO::getAdditionalFieldNames()
+	//  */
+	// function getAdditionalFieldNames() {
+	// 	return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImageLink']);
+	// }
 
 }
 

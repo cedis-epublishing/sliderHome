@@ -21,10 +21,21 @@ use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
 use APP\plugins\generic\sliderHome\classes\components\form\SliderAddPublicationForm;
 use APP\plugins\generic\sliderHome\classes\components\form\context\SliderHomeSettingsForm;
 use APP\plugins\generic\sliderHome\classes\components\form\SliderContentForm;
-use APP\plugins\generic\sliderHome\classes\components\SliderHomeListPanel;
+use APP\plugins\generic\sliderHome\classes\components\SliderHomeContentList;
 use APP\plugins\generic\sliderHome\controllers\tab\SliderHomeSettingsTabFormHandler;
 use APP\plugins\generic\sliderHome\controllers\components\SliderHomeFormHandler;
 use APP\plugins\generic\sliderHome\SliderHomeSchemaMigration;
+use APP\core\Application;
+use PKP\security\Role;
+
+use Illuminate\Http\Request as IlluminateRequest;
+use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use PKP\core\PKPBaseController;
+use PKP\handler\APIHandler;
+
+use PKP\components\forms\FormComponent;
+use PKP\components\forms\FieldText;
 
 /**
  * @class SliderHomePlugin
@@ -48,32 +59,87 @@ class SliderHomePlugin extends GenericPlugin {
 				Hook::add('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
 				Hook::add('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab')); //to enable display of plugin settings tab
 				Hook::add('Templates::Index::journal', array($this, 'callbackIndexJournal')); //to enable slider display in OJS frontend
-				Hook::add('APIHandler::endpoints', array($this, 'callbackSetupEndpoints')); //to setup endpoint for ComponentForm submission via REST API
+				Hook::add('Schema::get::context', array($this, 'addToSchema'));
+				// Hook::add('APIHandler::endpoints', array($this, 'callbackSetupEndpoints')); //to setup endpoint for ComponentForm submission via REST API
+				$router = Application::get()->getRequest()->getRouter();
+				if ($router instanceof \PKP\core\APIRouter) {
+					Hook::add("APIHandler::endpoints::{$router->getEntity()}", [$this, 'callbackSetupEndpoints']);
+				}
 			}
 			return true;
 		}
 		return false;
 	}
 
-	function callbackSetupEndpoints($hook, $args) {
-		$endpoints =& $args[0];
+	public function addToSchema($hookName, $params) {
+		$schema =& $params[0];
 
-		$handler = new SliderHomeSettingsTabFormHandler();
+		$schema->properties->{"maxHeight"} = (object) [
+			'type' => 'integer',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
+		$schema->properties->{"speed"} = (object) [
+			'type' => 'integer',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
+		$schema->properties->{"delay"} = (object) [
+			'type' => 'integer',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
+		$schema->properties->{"fallbackLocale"} = (object) [
+			'type' => 'string',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
+		$schema->properties->{"slideEffect"} = (object) [
+			'type' => 'string',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
+		$schema->properties->{"stopOnLastSlide"} = (object) [
+			'type' => 'boolean',
+			'apiSummary' => true,
+			'validation' => ['nullable'],
+		];
 
-		// add the new endpoint
-		$endpoints['POST'][] = 
-			[
-				'pattern' => '/{contextPath}/api/{version}/contexts/{contextId}/sliderSettings',
-				'handler' => [$handler, 'saveFormData'],
-				'roles' => array(ROLE_ID_SITE_ADMIN, ROLE_ID_MANAGER)
-			];
+		return false;
+	}
 
-		// regsiter new FormComponent endpoints
-		$handler = new SliderHomeFormHandler();
-		$endpoints = array_merge_recursive($endpoints, $handler->setupEndpoints());
+	function callbackSetupEndpoints($hook, $controller, $apiHandler) {
+		// $endpoints =& $args[0];
+
+		// $handler = new SliderHomeSettingsTabFormHandler();
+
+		// // add the new endpoint
+		// $endpoints['POST'][] = 
+		// 	[
+		// 		'pattern' => '/{contextPath}/api/{version}/contexts/{contextId}/sliderSettings',
+		// 		'handler' => [$handler, 'saveFormData'],
+		// 		'roles' => array(Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER)
+		// 	];
+
+		if ($hook === 'APIHandler::endpoints::contexts') {
+			// $request = Application::get()->getRequest();
+        	// $context = $request->getContext();
+			// $apiHandler->addRoute(
+			// 	'POST',
+			// 	$context->getId() . '/sliderSettings',   // The route uri
+			// 	[new SliderHomeFormHandler(), 'saveFormData'], // The handler function
+			// 	'sliderHomeSettings.saveFormData', // Name of the route
+			// 	[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+			// );
+					// regsiter new FormComponent endpoints
+
+			// $handler = new SliderHomeFormHandler();
+			// $endpoints = array_merge_recursive($endpoints, $handler->setupEndpoints());
+		}
+
+		return Hook::CONTINUE;
 	}
 	
-	// OMP/OJS 3.2: Add tab for slider content grid in website settings appearance
 	function callbackAppearanceTab($hookName, $args) {		
 
 		# prepare data
@@ -93,47 +159,17 @@ class SliderHomePlugin extends GenericPlugin {
 
 		$publicFileManager = new PublicFileManager();
 		$baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($context->getId());
-		$temporaryFileApiUrl = $dispatcher->url($request, ROUTE_API, $context->getPath(), 'temporaryFiles');
-		$publicFileApiUrl = $dispatcher->url($request, ROUTE_API, $context->getPath(), '_uploadPublicFile');
+		$temporaryFileApiUrl = $dispatcher->url($request, Application::ROUTE_API, $context->getPath(), 'temporaryFiles');
+		$publicFileApiUrl = $dispatcher->url($request, Application::ROUTE_API, $context->getPath(), '_uploadPublicFile');
 		$contextApiUrl = $dispatcher->url(
 			$request,
-			ROUTE_API,
+			Application::ROUTE_API,
 			$context->getPath(),
-			'contexts/' . $context->getId() . "/sliderSettings"
+			'contexts/' . $context->getId()
 		);
-		$contextUrl = $request->getRouter()->url($request, $context->getPath());
-
-		# get data to initilaize ComponentForm 
-		$maxHeight = $this->getSetting($contextId, 'maxHeight');
-		if (!$maxHeight) { 
-			// set default value
-			$maxHeight = 100;
-			$this->updateSetting($contextId, 'maxHeight', $maxHeight, $type = null, $isLocalized = false);
-		}
-		$speed = $this->getSetting($contextId, 'speed');
-		if (!$speed) { 
-			// set default value
-			$speed = 2000;
-			$this->updateSetting($contextId, 'speed', $speed, $type = null, $isLocalized = false);
-		}
-		$delay = $this->getSetting($contextId, 'delay');
-		if (!$delay) {
-			// set default value
-			$delay = 2000;
-			$this->updateSetting($contextId, 'delay', $delay, $type = null, $isLocalized = false);
-		}
-		$slideEffect = $this->getSetting($contextId, 'slideEffect');
 
 		// instantinate settings form
-		$sliderSettingsForm = new SliderHomeSettingsForm($contextApiUrl, $locales, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl,
-			['maxHeight' => $maxHeight,
-				'speed' => $speed,
-				'delay' => $delay,
-				'stopOnLastSlide' => $this->getSetting($contextId, 'stopOnLastSlide'),
-				'fallbackLocale' => $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary",
-				'slideEffect' => $this->getSetting($contextId, 'slideEffect')?:""
-			]
-		);
+		$sliderSettingsForm = new SliderHomeSettingsForm($contextApiUrl, $locales, $context);
 
 		// get slider data
 		$sliderHomeDao = new SliderHomeDao();
@@ -163,32 +199,33 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 
 		// get slider content form
+		$contextUrl = "";
 		$sliderContentForm = new SliderContentForm($contextApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
 
-		// get SliderHomeListPanel
-		//http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
+		// // get SliderHomeContentList
+		// //http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
+		// $apiUrl = $dispatcher->url(
+		// 	$request,
+		// 	PKPApplication::ROUTE_COMPONENT,
+		// 	null,
+		// 	'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler',
+		// 	'MY_TEST_OP',
+		// 	null,
+		// 	null
+		// );
+		
 		$apiUrl = $dispatcher->url(
 			$request,
-			PKPApplication::ROUTE_COMPONENT,
-			null,
-			'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler',
-			null,
-			null,
-			null
-		);
-		$apiUrl = $dispatcher->url(
-			$request,
-			ROUTE_API,
+			Application::ROUTE_API,
 			$context->getPath(),
 			"contexts/" . $contextId . "/sliderHome"
 		);
-		$sliderHomeListPanel = new SliderHomeListPanel(
-            FORM_SLIDER_LIST_PANEL,
+		$sliderHomeContentList = new SliderHomeContentList(
+            SLIDER_CONTENT_LIST,
             __('plugins.generic.sliderHome.gridTitle'),
             [
                 'apiUrl' => $apiUrl,
                 'form' => $sliderContentForm,
-                'items' => $sliderImages,
             ]
         );
 
@@ -196,14 +233,14 @@ class SliderHomePlugin extends GenericPlugin {
 		$templateMgr->setConstants([
 			'FORM_SLIDER_SETTINGS' => FORM_SLIDER_SETTINGS,
 			'FORM_SLIDER_CONTENT' => FORM_SLIDER_CONTENT,
-			'FORM_SLIDER_LIST_PANEL' => FORM_SLIDER_LIST_PANEL
+			'SLIDER_CONTENT_LIST' => SLIDER_CONTENT_LIST
 		]);
 
 		// set state
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$state['components'][FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
-		$state['components'][FORM_SLIDER_LIST_PANEL] = $sliderHomeListPanel->getConfig();
+		$state[FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
+		$state[SLIDER_CONTENT_LIST] = $sliderHomeContentList->getConfig();
 		$templateMgr->assign('state', $state);
 
 		// render template
@@ -243,14 +280,14 @@ class SliderHomePlugin extends GenericPlugin {
 			case 'management/website.tpl':
 				$templateMgr->addJavaScript(
 					'sliderHomeJS',
-					"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/build.iife.js",
+					"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/sliderHome.iife.js",
 					[
 						'inline' => false,
 						'contexts' => ['backend'],
-						'priority' => STYLE_SEQUENCE_LAST
+						'priority' => TemplateManager::STYLE_SEQUENCE_LAST
 					]
 				);
-				$templateMgr->addStyleSheet('sliderHomeListPanelStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/style.css", [
+				$templateMgr->addStyleSheet('sliderHomeContentListStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/css/sliderHome.css", [
 					'contexts' => ['backend']
 				] );
 		}
@@ -260,7 +297,7 @@ class SliderHomePlugin extends GenericPlugin {
 	private function addHeader($templateMgr,$baseUrl) {
 		$templateMgr->addHeader(
 			'slider',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/sliderHome.css'>"
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/resources/css/sliderHome.css'>"
 		);
 		$templateMgr->addHeader(
 			'swiper-min',

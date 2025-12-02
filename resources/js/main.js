@@ -1,3 +1,3 @@
-import SliderHomeListPanel from "./Components/SliderHomeListPanel.vue";
+import SliderHomeContentList from "./Components/SliderHomeContentList.vue";
 
-pkp.Vue.component("SliderHomeListPanel", SliderHomeListPanel);
+pkp.registry.registerComponent("SliderHomeContentList", SliderHomeContentList);

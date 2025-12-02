@@ -1,12 +1,12 @@
 <?php
 /**
- * @file classes/components/SliderHomeListPanel.php
+ * @file classes/components/SliderHomeContentList.php
  * TODO @RS
  * Copyright (c) 2014-2021 Simon Fraser University
  * Copyright (c) 2000-2021 John Willinsky
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
- * @class SliderHomeListPanel
+ * @class SliderHomeContentList
  *
  * @ingroup classes_components_list
  *
@@ -16,14 +16,13 @@
 namespace APP\plugins\generic\sliderHome\classes\components;
 
 use APP\core\Application;
-use PKP\components\listPanels\ListPanel;
 
-define('FORM_SLIDER_LIST_PANEL','sliderHomeListPanelComponent');
+define('SLIDER_CONTENT_LIST','sliderHomeContentListComponent');
 
-class SliderHomeListPanel extends ListPanel
+class SliderHomeContentList
 {
     /** @copydoc FormComponent::$id */
-	public $id = FORM_SLIDER_LIST_PANEL;
+	public $id = SLIDER_CONTENT_LIST;
 
     /** @var string URL to the API endpoint where items can be retrieved */
     public $apiUrl = '';
@@ -39,6 +38,7 @@ class SliderHomeListPanel extends ListPanel
 
     /** @var int Max number of items available to display in this list panel  */
     public $itemsMax = 0;
+    public $items = []; //[['id' => 1, 'name' => 'TESTSLIDE A'],['id' => 2, 'name' => 'TESTSLIDE B']];
 
     /**
      * @copydoc ListPanel::getConfig()
@@ -47,18 +47,26 @@ class SliderHomeListPanel extends ListPanel
     {
         $request = Application::get()->getRequest();
         $dispatcher = $request->getDispatcher();
-        return parent::getConfig() + [
-            'addSliderLabel' => __('plugins.generic.sliderHome.addSliderContent'),
-            'editSliderLabel' => __('plugins.generic.sliderHome.gridTitle'),
+        $this->items = [['id' => 1, 'title' => 'TESTSLIDE A'],['id' => 2, 'title' => 'TESTSLIDE B']];
+        // return parent::getConfig() + [
+        return [
+            'AddSliderContentButtonLabel' => __('plugins.generic.sliderHome.addSliderContent'),
+            'EditSliderContentButtonLabel' => __('plugins.generic.sliderHome.editSliderContent'),
+            'SliderGridTitle' => __('plugins.generic.sliderHome.gridTitle'),
             'apiUrl' => $this->apiUrl,
             'confirmDeleteMessage' => __('plugins.generic.sliderHome.ListPanel.confirmDelete'),
             'count' => $this->count,
-            'form' => $this->form->getConfig(),
+            // 'form' => $this->form->getConfig(),
+            'items' => $this->items,
             'itemsMax' => count($this->items),
             'getParams' => [
                 'contextIds' => [$request->getContext()->getId()],
                 'count' => 30,
             ],
+            'columns' => [
+					['name' => 'colA', 'label' => 'Col A'],
+					['name' => 'colB', 'label' => 'Col B']
+				]
         ];
     }
 }

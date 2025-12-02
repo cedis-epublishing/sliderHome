@@ -26,7 +26,7 @@ msgstr "Contenido del slider"
 msgid "plugins.generic.sliderHome.addSliderContent"
 msgstr "Agregar contenido del slider"
 
-msgid "plugins.generic.sliderHome.tooltip.editSliderContent"
+msgid "plugins.generic.sliderHome.editSliderContent"
 msgstr "Editar contenido del slider"
 
 msgid "plugins.generic.sliderHome.grid.title"

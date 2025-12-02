@@ -1,8 +1,9 @@
 {
-  "name": "backenduiexampleplugin",
+  "name": "sliderhomeplugin",
   "version": "1.0.0",
-  "description": "Backend UI Example using vue.js for Open Journal Systems",
+  "description": "SliderHome plugin",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite build --watch --minify=false",
     "build": "vite build",
@@ -11,15 +12,22 @@
   "author": "",
   "license": "GPL-3",
   "devDependencies": {
-    "@rushstack/eslint-patch": "^1.3.2",
-    "@vitejs/plugin-vue2": "^2.2.0",
-    "@vue/eslint-config-prettier": "^7.1.0",
-    "eslint": "^8.43.0",
-    "eslint-plugin-vue": "^9.15.1",
-    "prettier": "^2.8.8",
-    "vite": "^4.3.9"
+    "@rushstack/eslint-patch": "^1.14.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.20.0",
+    "eslint-plugin-vue": "^10.5.1",
+    "less": "^4.4.2",
+    "less-loader": "^12.3.0",
+    "postcss": "^8.5.6",
+    "postcss-import": "^16.1.1",
+    "postcss-loader": "^8.2.0",
+    "prettier": "^3.6.2",
+    "swiper": "^12.0.3",
+    "vite": "^6.4.1"
   },
   "dependencies": {
-    "16": "^0.0.2"
+    "n": "^10.2.0"
   }
 }

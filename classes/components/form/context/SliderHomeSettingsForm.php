@@ -27,7 +27,7 @@ class SliderHomeSettingsForm extends FormComponent {
 	public $id = FORM_SLIDER_SETTINGS;
 
 	/** @copydoc FormComponent::$method */
-	public $method = 'POST';
+	public $method = 'PUT';
 
 	/**
 	 * Constructor
@@ -41,10 +41,11 @@ class SliderHomeSettingsForm extends FormComponent {
 	 * @param string $publicUrl url to the frontend page
 	 * @param array $data settings for form initialization
 	 */
-	public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl, $data) {
+	public function __construct($action, $locales, $context) {
+	// public function __construct($action, $locales, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl, $data) {
 
 		$this->action = $action;
-		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
+		// $this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
 		$this->locales = $locales;
 
 		$this->addGroup([
@@ -61,14 +62,14 @@ class SliderHomeSettingsForm extends FormComponent {
 				['value' => "coverflow", 'label' => __('plugins.generic.slider.settings.form.coverflow')],
 				['value' => "cube", 'label' => __('plugins.generic.slider.settings.form.cube')],
 			],
-			'value' => $data['slideEffect'],
+			'value' => $context->getData('slideEffect') ?? "",
 			'groupId' => 'slidersettings'
 		]))
 		->addField(new FieldText('maxHeight', [
 			'label' => __('plugins.generic.slider.settings.form.maxHeight'),
 			'description' => __('plugins.generic.slider.settings.form.maxHeight.description'),
 			'isRequired' => false,
-			'value' => $data['maxHeight'],
+			'value' => $context->getData('maxHeight') ?? "100",
 			'size' => 'small',
 			'groupId' => 'slidersettings',
 			'tooltip' => __('plugins.generic.slider.settings.form.groupDescription')
@@ -77,7 +78,7 @@ class SliderHomeSettingsForm extends FormComponent {
 			'label' => __('plugins.generic.slider.settings.form.speed'),
 			'description' => __('plugins.generic.slider.settings.form.speed.description'),
 			'isRequired' => false,
-			'value' => $data['speed'],
+			'value' => $context->getData('speed') ?? "2000",
 			'size' => 'small',
 			'groupId' => 'slidersettings'
 		]))
@@ -85,7 +86,7 @@ class SliderHomeSettingsForm extends FormComponent {
 			'label' => __('plugins.generic.slider.settings.form.delay'),
 			'description' => __('plugins.generic.slider.settings.form.delay.description'),
 			'isRequired' => false,
-			'value' => $data['delay'],
+			'value' => $context->getData('delay') ?? "2000",
 			'size' => 'small',
 			'groupId' => 'slidersettings'
 		]))
@@ -94,7 +95,7 @@ class SliderHomeSettingsForm extends FormComponent {
 			'options' => [
 				['value' => false, 'label' => __('plugins.generic.slider.settings.form.stopOnLastSlide')]
 			],
-			'value' => (bool) $data['stopOnLastSlide'],
+			'value' => (bool) $context->getData('stopOnLastSlide') ?? false,
 			'groupId' => 'slidersettings'
 		]))
 		->addField(new FieldOptions('fallbackLocale', [
@@ -105,7 +106,7 @@ class SliderHomeSettingsForm extends FormComponent {
 				['value' => "usePrimary", 'label' => __('locale.primary')],
 				['value' => "useNone", 'label' => __('plugins.generic.slider.settings.form.fallbackLocale.useNone', ['label' => __('grid.columns.locale')])],
 			],
-			'value' => $data['fallbackLocale'],
+			'value' => $context->getData('fallbackLocale') ?? "usePrimary",
 			'groupId' => 'slidersettings'
 		]));
 	}
