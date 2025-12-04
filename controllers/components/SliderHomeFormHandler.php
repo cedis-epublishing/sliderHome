@@ -31,9 +31,10 @@ use PKP\security\authorization\PolicySet;
 use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
 use PKP\security\authorization\UserRolesRequiredPolicy;
 use PKP\security\Role;
-use PKP\services\PKPSchemaService;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
-use APP\plugins\generic\sliderHome\SliderHomeDAO;
+use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
 
 class SliderHomeFormHandler extends APIHandler
 {
@@ -46,10 +47,10 @@ class SliderHomeFormHandler extends APIHandler
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($controller)
     {
         $this->_handlerPath = 'sliderHome';
-        parent::__construct();
+        parent::__construct($controller);
     }
 
     // Example APIHandler from the core setup endpoints in the constructor
@@ -73,7 +74,7 @@ class SliderHomeFormHandler extends APIHandler
             'POST' => [
                 [
                     'pattern' => $this->getEndpointPattern(),
-                    'handler' => [$this, 'edit'],
+                    'handler' => [$this, 'add'],
                     'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
                 ],
             ],
@@ -106,7 +107,7 @@ class SliderHomeFormHandler extends APIHandler
     }
 
     // As a plugin we need to overwrite this because the API router otherwise searches our handler file in the api folder
-    function getEndpointPattern() {
+    function getEndpointPattern(): string {
         return '/{contextPath}/api/{version}/contexts/{contextId}/' . $this->_handlerPath;
     }
 
@@ -140,15 +141,12 @@ class SliderHomeFormHandler extends APIHandler
     /**
      * Edit or add new slider content
      *
-     * @param \Slim\Http\Request $slimRequest Slim request object
-     * @param \PKP\core\APIResponse $response object
-     * @param array $args arguments
-     *
-     * @return \PKP\core\APIResponse
+     * @param IlluminateRequest $illuminateRequest
+     * @return JsonResponse
      */
-    public function edit($slimRequest, $response, $args)
+    public function edit($illuminateRequest): JsonResponse
     {
-        $request = $this->getRequest();
+        $request = Application::get()->getRequest();
         $context = $request->getContext();
         $data = array_merge(
             [
@@ -161,7 +159,7 @@ class SliderHomeFormHandler extends APIHandler
                 'thumbnail' => false,
                 'thumbnailUrl' => ""
             ],
-            $slimRequest->getParsedBody()
+            $request->getUserVars()
         );
 
         if (!$context) {
@@ -169,9 +167,9 @@ class SliderHomeFormHandler extends APIHandler
         }
 
 		$sliderHomeDao = new SliderHomeDAO();
-		if (isset($args['itemId'])) {
+		if ($illuminateRequest->route('sliderContentId')) {
 			// Load and update an existing content
-			$sliderContent = $sliderHomeDao->getById($args['itemId'], $context->getId());
+			$sliderContent = $sliderHomeDao->getById((int)$illuminateRequest->route('sliderContentId'), $context->getId());
 		} else {
 			// Create a new item
 			$sliderContent = $sliderHomeDao->newDataObject();
@@ -212,7 +210,7 @@ class SliderHomeFormHandler extends APIHandler
         }
         $sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?$data['sliderImageLink']:"");
 
-		if (isset($args['itemId'])) {
+		if ($illuminateRequest->route('sliderContentId')) {
 			$sliderContent->setSequence($sliderContent->getData('sequence'));
 			$sliderHomeDao->updateObject($sliderContent);
 		} else {
@@ -220,7 +218,7 @@ class SliderHomeFormHandler extends APIHandler
 			$sliderHomeDao->insertObject($sliderContent);
 		}
 
-        return $response->withJson(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
+        return response()->json(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
     }
 
     function addFromPublication($slimRequest, $response, $args) {
@@ -250,34 +248,31 @@ class SliderHomeFormHandler extends APIHandler
     /**
      * Delete a slider entry
      *
-     * @param \Slim\Http\Request $slimRequest Slim request object
-     * @param \PKP\core\APIResponse $response object
-     * @param array $args arguments
-     *
-     * @return \PKP\core\APIResponse
+     * @param IlluminateRequest $illuminateRequest
+     * @return JsonResponse
      */
-    public function delete($slimRequest, $response, $args)
+    public function delete($illuminateRequest): JsonResponse
     {
-        $sliderContentId = $args['itemId'];
-        $contextId = $args['contextId'];
-
         $sliderHomeDao = new SliderHomeDAO();
-        $sliderHomeDao->deleteById($sliderContentId);
-
-        return $response->withJson($sliderContentId, 200);
+        $sliderContentId = (int)$illuminateRequest->route('sliderContentId');
+        if ($sliderHomeDao->deleteById($sliderContentId)) {
+            return response()->json($sliderContentId, 200);
+        } else {
+            return response()->json(['error' => 'Could not delete slider content with id '.$sliderContentId], 500);
+        }
     }
 
-    public function saveOrder($slimRequest, $response, $args) : Response {
-        $contextId = (int)$args['contextId'];
-        $request = $this->getRequest();
-        $context = $request->getContext();
+    public function saveOrder($illuminateRequest) : JsonResponse {
+        $request = Application::get()->getRequest();
+        $contextId = $request->getContext()->getId();
+        $orderedIds = $request->getUserVars()['orderedIds'];
 
-        foreach ($slimRequest->getParsedBody()['sequence'] as $item) {
+        foreach ($orderedIds as $sequence => $id) {
             $sliderHomeDao = new SliderHomeDAO();
-            $sliderContent = $sliderHomeDao->getById($item['id'], $contextId);
-            $sliderContent->setSequence($item['sequence']);
+            $sliderContent = $sliderHomeDao->getById($id, $contextId);
+            $sliderContent->setSequence($sequence);
             $sliderHomeDao->updateObject($sliderContent);
         }
-        return $response->withStatus(200);
+        return response()->json(200);
     }
 }

@@ -1,0 +1,42 @@
+{
+  "title": "SliderHome database schema",
+  "description": "SliderHome slide data object.",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "contextId": {
+      "type": "integer"
+    },
+    "content": {
+      "type": "string",
+      "multilingual": true
+    },
+    "show_content": {
+      "type": "boolean",
+      "default": false
+    },
+    "copyright": {
+      "type": "string",
+      "multilingual": true
+    },
+    "sliderImage": {
+      "type": "string",
+      "multilingual": true
+    },
+    "sliderImageAltText": {
+      "type": "string",
+      "multilingual": true
+    },
+    "sliderImageLink": {
+      "type": "string"
+    },
+    "sequence": {
+      "type": "integer"
+    }
+  }
+}

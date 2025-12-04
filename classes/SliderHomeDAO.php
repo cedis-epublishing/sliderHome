@@ -22,6 +22,18 @@ use APP\plugins\generic\sliderHome\classes\SliderContent;
  */
 class SliderHomeDAO extends SchemaDAO {
 
+	public $schema = 'sliderHome';
+	public $schemaName = 'sliderHome';
+    public $tableName = 'slider';
+    public $settingsTableName = 'slider_settings';
+    public $primaryKeyColumn = 'slider_content_id';
+    public $primaryTableColumns = [
+		'id' => 'slider_content_id',
+        'contextId' => 'context_id',
+        'sequence' => 'sequence',
+        'show_content' => 'show_content'
+    ];
+
 	function __construct() {
 		parent::__construct();
 	}
@@ -74,35 +86,45 @@ class SliderHomeDAO extends SchemaDAO {
 		->max('sequence');
 	}
 
-	function insertObject($sliderContent) {	
-		DB::table('slider')->insert([
-			'context_id' => (int) $sliderContent->getContextId(),
-			'sequence' => $sliderContent->getSequence(),
-			'show_content' => $sliderContent->getShowContent()
-		]);
+	// function insertObject($sliderContent) {	
+	// 	DB::table('slider')->insert([
+	// 		'context_id' => (int) $sliderContent->getContextId(),
+	// 		'sequence' => $sliderContent->getSequence(),
+	// 		'show_content' => $sliderContent->getShowContent()
+	// 	]);
 
-		$sliderContent->setId($this->getInsertId());
+	// 	$sliderContent->setId($this->getInsertId());
 
-		$this->updateDataObjectSettings('slider_settings', $sliderContent, [
-			'slider_content_id' => $sliderContent->getId()
-		]);		
+	// 	DB::table('slider_settings')->insert([
+	// 		'context_id' => (int) $sliderContent->getContextId(),
+	// 		'slider_content_id' => $sliderContent->getId(),
+	// 		'setting_name' => 'name',
+	// 		'setting_value' => $sliderContent->getName(),
+	// 		'locale' => ''
+	// 	]);
 
-		return $sliderContent->getId();
-	}
+    //     // $this->updateLocaleFields($staticPage);
 
-	function updateObject($sliderContent) {
-		DB::table('slider')
-		->where('slider_content_id', $sliderContent->getId())
-		->update([
-			'context_id' => (int) $sliderContent->getContextId(),
-			'sequence' => $sliderContent->getSequence(),
-			'show_content' => $sliderContent->getShowContent()
-		]);
+	// 	$this->updateDataObjectSettings('slider_settings', $sliderContent, [
+	// 		'slider_content_id' => $sliderContent->getId()
+	// 	]);		
 
-		$this->updateDataObjectSettings('slider_settings', $sliderContent, [
-			'slider_content_id' => $sliderContent->getId()
-		]);
-	}
+	// 	return $sliderContent->getId();
+	// }
+
+	// function updateObject($sliderContent) {
+	// 	DB::table('slider')
+	// 	->where('slider_content_id', $sliderContent->getId())
+	// 	->update([
+	// 		'context_id' => (int) $sliderContent->getContextId(),
+	// 		'sequence' => $sliderContent->getSequence(),
+	// 		'show_content' => $sliderContent->getShowContent()
+	// 	]);
+
+	// 	$this->updateDataObjectSettings('slider_settings', $sliderContent, [
+	// 		'slider_content_id' => $sliderContent->getId()
+	// 	]);
+	// }
 	
 	function deleteById(int $sliderContentId):int {
 		return DB::table('slider')

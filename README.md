@@ -47,9 +47,9 @@ tinymceplugins=',code'
 tinymcetoolbar=' | code'
 ```
 
-Support
----------------
-Additional information on this plugin can be found in docs/pluginDocumentation_home.md
+## Development
 
+- Run nvm use before each development session
+- Use `npm run dev`
 
 

@@ -55,18 +55,18 @@ class SliderHomeSchemaMigration extends Migration {
             // main slider table
             Schema::create('slider', function (Blueprint $table) {
                 $table->increments('slider_content_id');
-                $table->smallInteger('context_id');
-                $table->smallInteger('sequence');
-                $table->boolean('show_content');
+                $table->smallInteger('context_id')->default(0);
+                $table->smallInteger('sequence')->default(0);
+                $table->boolean('show_content')->default('boolean');
             });
 
             // slider content settings
             Schema::create('slider_settings', function (Blueprint $table) {
-                $table->bigInteger('slider_content_id');
+                $table->bigInteger('slider_content_id')->default(0);
                 $table->string('locale', 14)->default('');
-                $table->string('setting_name', 255);
+                $table->string('setting_name', 255)->default('');
                 $table->longText('setting_value')->nullable();
-                $table->string('setting_type', 6)->comment('(bool|int|float|string|object)');
+                $table->string('setting_type', 6)->default('string')->comment('(bool|int|float|string|object)');
                 $table->index(['slider_content_id'], 'slider_settings_slider_id');
                 $table->unique(['slider_content_id', 'locale', 'setting_name'], 'slider_settings_pkey');
             });

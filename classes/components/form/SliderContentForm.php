@@ -51,9 +51,7 @@ class SliderContentForm extends FormComponent {
 	public function __construct($action, $context, $baseUrl, $temporaryFileApiUrl, $imageUploadUrl, $publicUrl) {
 
 		$this->action = $action;
-		$this->context = $context;
-		$this->successMessage = __('plugins.generic.slider.settings.form.success', ['url' => $publicUrl]);
-		$this->locales = $this->getLocales();
+		$this->locales = $this->getLocales($context);
 
 		$tinyMCEPlugins = Config::getVar('sliderHome', 'tinymceplugins');
 		$tinyMCEToolbar = Config::getVar('sliderHome', 'tinymcetoolbar');
@@ -83,7 +81,7 @@ class SliderContentForm extends FormComponent {
 			'isMultilingual' => true,
 			'size' => 'small',
 			'toolbar' => 'bold italic superscript subscript | link | blockquote bullist numlist'.$tinyMCEToolbar,
-			'plugins' => 'paste,link,lists'.$tinyMCEPlugins,
+			'plugins' => explode(',','link,lists'.$tinyMCEPlugins),
 		]))
 		->addField(new FieldText('copyright', [
 			'label' => __('plugins.generic.sliderHome.copyright'),
@@ -93,7 +91,6 @@ class SliderContentForm extends FormComponent {
         ]))
 		->addField(new FieldOptions('show_content', [
             'label' => __('plugins.generic.sliderHome.showSliderContent'),
-            'description' => $description,
             'options' => [
                 [
                     'value' => true,
@@ -108,7 +105,7 @@ class SliderContentForm extends FormComponent {
      */
     protected function getLocales(?Context $context = null): array
     {
-        $localeNames = $this?->context?->getSupportedFormLocaleNames()
+        $localeNames = $context?->getSupportedFormLocaleNames()
             ?? Application::get()->getRequest()->getSite()->getSupportedLocaleNames();
 
         return array_map(fn (string $locale, string $name) => ['key' => $locale, 'label' => $name], array_keys($localeNames), $localeNames);

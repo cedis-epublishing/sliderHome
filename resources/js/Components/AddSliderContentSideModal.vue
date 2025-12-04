@@ -4,16 +4,7 @@
       {{ mode === 'add' ? 'Add Slider Content' : `Edit ${item?.title || 'Item'}` }}
     </template>
     <PkpSideModalLayoutBasic>
-      <div v-if="form && Object.keys(form).length > 0">
         <PkpForm v-bind="form" @success="handleSuccess" />
-      </div>
-      <div v-else>
-        <p>{{ t("plugins.generic.backendUiExample.sideModalContent") }}</p>
-        <pre>mode: {{ mode }}, hasForm: {{ !!form }}, itemId: {{ itemId }}</pre>
-        <PkpButton @click="submit">{{
-          t("plugins.generic.backendUiExample.sideModalSubmit")
-        }}</PkpButton>
-      </div>
     </PkpSideModalLayoutBasic>
   </PkpSideModalBody>
 </template>
@@ -24,6 +15,8 @@ import { inject } from "vue";
 const { useLocalize } = pkp.modules.useLocalize;
 
 const closeModal = inject("closeModal");
+
+const emit = defineEmits(['set']);
 
 const { t } = useLocalize();
 
@@ -44,17 +37,17 @@ const props = defineProps({
 	itemId: {
 		type: [String, Number],
 		default: null
-	}
+	},
+	onFormSuccess: { type: Function, default: null }
 });
 
-console.log('AddSliderContentSideModal props:', props);
+props.form.action = props.form.action + props.mode + (props.itemId ? `/${props.itemId}` : '');
 
 function handleSuccess(data) {
-	console.log('Form submitted:', data, 'Mode:', props.mode, 'ItemId:', props.itemId);
-	closeModal();
-}
-
-function submit() {
+	if (props.onFormSuccess) {
+		console.log('Add::calling onFormSuccess');
+		props.onFormSuccess(data);
+	} 
 	closeModal();
 }
 </script>

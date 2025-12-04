@@ -65,9 +65,16 @@ class SliderHomePlugin extends GenericPlugin {
 				if ($router instanceof \PKP\core\APIRouter) {
 					Hook::add("APIHandler::endpoints::{$router->getEntity()}", [$this, 'callbackSetupEndpoints']);
 				}
+				Hook::add('Schema::get::sliderHome', [$this, 'addSliderHomeSchema']);
 			}
 			return true;
 		}
+		return false;
+	}
+
+	public function addSliderHomeSchema($hookName, $params) {
+		$schema = &$params[0];
+		$schema = json_decode(file_get_contents($this->getPluginPath().'/schema.json'));
 		return false;
 	}
 
@@ -109,34 +116,51 @@ class SliderHomePlugin extends GenericPlugin {
 	}
 
 	function callbackSetupEndpoints($hook, $controller, $apiHandler) {
-		// $endpoints =& $args[0];
-
-		// $handler = new SliderHomeSettingsTabFormHandler();
-
-		// // add the new endpoint
-		// $endpoints['POST'][] = 
-		// 	[
-		// 		'pattern' => '/{contextPath}/api/{version}/contexts/{contextId}/sliderSettings',
-		// 		'handler' => [$handler, 'saveFormData'],
-		// 		'roles' => array(Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER)
-		// 	];
-
-		if ($hook === 'APIHandler::endpoints::contexts') {
-			// $request = Application::get()->getRequest();
-        	// $context = $request->getContext();
-			// $apiHandler->addRoute(
-			// 	'POST',
-			// 	$context->getId() . '/sliderSettings',   // The route uri
-			// 	[new SliderHomeFormHandler(), 'saveFormData'], // The handler function
-			// 	'sliderHomeSettings.saveFormData', // Name of the route
-			// 	[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
-			// );
-					// regsiter new FormComponent endpoints
-
-			// $handler = new SliderHomeFormHandler();
-			// $endpoints = array_merge_recursive($endpoints, $handler->setupEndpoints());
+		if ($apiHandler instanceof SliderHomeFormHandler === false) {
+			if ($hook === 'APIHandler::endpoints::contexts') {
+				$request = Application::get()->getRequest();
+				$apiHandler->addRoute(
+					'POST',
+					$request->getContext()->getId().'/sliderHome/add',   // The route uri on top of the given hook
+					function (IlluminateRequest $request) use ($controller): JsonResponse {
+						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
+						return $sliderContentFormHandler->edit($request);
+					}, // The handler function
+					'sliderHomeSettings.saveFormData', // Name of the route
+					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+				);
+				$apiHandler->addRoute(
+					'DELETE',
+					$request->getContext()->getId().'/sliderHome/{sliderContentId}',   // The route uri on top of the given hook
+					function (IlluminateRequest $request) use ($controller): JsonResponse {
+						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
+						return $sliderContentFormHandler->delete($request);
+					}, // The handler function
+					'sliderHomeSettings.deleteSliderContent', // Name of the route
+					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+				);
+				$apiHandler->addRoute(
+					'POST',
+					$request->getContext()->getId().'/sliderHome/edit/{sliderContentId}',   // The route uri on top of the given hook
+					function (IlluminateRequest $request, $sliderContentId) use ($controller): JsonResponse {
+						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
+						return $sliderContentFormHandler->edit($request, $sliderContentId);
+					}, // The handler function
+					'sliderHomeSettings.editSliderContent', // Name of the route
+					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+				);
+				$apiHandler->addRoute(
+					'POST',
+					$request->getContext()->getId().'/sliderHome/saveOrder',   // The route uri on top of the given hook
+					function (IlluminateRequest $request) use ($controller): JsonResponse {
+						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
+						return $sliderContentFormHandler->saveOrder($request);
+					}, // The handler function
+					'sliderHomeSettings.saveFormData', // Name of the route
+					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+				);
+			}
 		}
-
 		return Hook::CONTINUE;
 	}
 	
@@ -199,8 +223,13 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 
 		// get slider content form
-		$contextUrl = "";
-		$sliderContentForm = new SliderContentForm($contextApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
+		$sliderContentFormApiUrl = $dispatcher->url(
+			$request,
+			Application::ROUTE_API,
+			$context->getPath(),
+			"contexts/" . $contextId . "/sliderHome/"
+		);
+		$sliderContentForm = new SliderContentForm($sliderContentFormApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
 
 		// // get SliderHomeContentList
 		// //http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
@@ -220,14 +249,7 @@ class SliderHomePlugin extends GenericPlugin {
 			$context->getPath(),
 			"contexts/" . $contextId . "/sliderHome"
 		);
-		$sliderHomeContentList = new SliderHomeContentList(
-            SLIDER_CONTENT_LIST,
-            __('plugins.generic.sliderHome.gridTitle'),
-            [
-                'apiUrl' => $apiUrl,
-                'form' => $sliderContentForm,
-            ]
-        );
+		$sliderHomeContentList = new SliderHomeContentList($apiUrl,$sliderImages);
 
 		# setup template, this allows us to use the constants in the tpl-file
 		$templateMgr->setConstants([
@@ -239,8 +261,8 @@ class SliderHomePlugin extends GenericPlugin {
 		// set state
 		$state = $templateMgr->getTemplateVars('state');
 		$state['components'][FORM_SLIDER_SETTINGS] = $sliderSettingsForm->getConfig();
-		$state[FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
-		$state[SLIDER_CONTENT_LIST] = $sliderHomeContentList->getConfig();
+		$state['components'][FORM_SLIDER_CONTENT] = $sliderContentForm->getConfig();
+		$state['components'][SLIDER_CONTENT_LIST] = $sliderHomeContentList->getConfig();
 		$templateMgr->assign('state', $state);
 
 		// render template

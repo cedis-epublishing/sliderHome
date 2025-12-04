@@ -40,15 +40,20 @@ class SliderHomeContentList
     public $itemsMax = 0;
     public $items = []; //[['id' => 1, 'name' => 'TESTSLIDE A'],['id' => 2, 'name' => 'TESTSLIDE B']];
 
+
+    public function __construct($apiUrl, $items = [])
+    {
+        $this->apiUrl = $apiUrl;
+        $this->items = $items;
+        $this->itemsMax = count($items);
+    }
+
     /**
      * @copydoc ListPanel::getConfig()
      */
     public function getConfig()
     {
         $request = Application::get()->getRequest();
-        $dispatcher = $request->getDispatcher();
-        $this->items = [['id' => 1, 'title' => 'TESTSLIDE A'],['id' => 2, 'title' => 'TESTSLIDE B']];
-        // return parent::getConfig() + [
         return [
             'AddSliderContentButtonLabel' => __('plugins.generic.sliderHome.addSliderContent'),
             'EditSliderContentButtonLabel' => __('plugins.generic.sliderHome.editSliderContent'),
@@ -64,8 +69,8 @@ class SliderHomeContentList
                 'count' => 30,
             ],
             'columns' => [
-					['name' => 'colA', 'label' => 'Col A'],
-					['name' => 'colB', 'label' => 'Col B']
+					['name' => 'sliderName', 'label' => __('plugins.generic.sliderHome.sliderName')],
+                    ['name' => 'sliderActions', 'label' => ''],
 				]
         ];
     }
