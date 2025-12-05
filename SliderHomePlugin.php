@@ -126,7 +126,7 @@ class SliderHomePlugin extends GenericPlugin {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->edit($request);
 					}, // The handler function
-					'sliderHomeSettings.saveFormData', // Name of the route
+					'sliderHomeSettings.add', // Name of the route
 					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
 				);
 				$apiHandler->addRoute(
@@ -136,7 +136,7 @@ class SliderHomePlugin extends GenericPlugin {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->delete($request);
 					}, // The handler function
-					'sliderHomeSettings.deleteSliderContent', // Name of the route
+					'sliderHomeSettings.delete', // Name of the route
 					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
 				);
 				$apiHandler->addRoute(
@@ -146,7 +146,7 @@ class SliderHomePlugin extends GenericPlugin {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->edit($request, $sliderContentId);
 					}, // The handler function
-					'sliderHomeSettings.editSliderContent', // Name of the route
+					'sliderHomeSettings.edit', // Name of the route
 					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
 				);
 				$apiHandler->addRoute(
@@ -156,7 +156,17 @@ class SliderHomePlugin extends GenericPlugin {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->saveOrder($request);
 					}, // The handler function
-					'sliderHomeSettings.saveFormData', // Name of the route
+					'sliderHomeSettings.saveOrder', // Name of the route
+					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
+				);
+				$apiHandler->addRoute(
+					'POST',
+					$request->getContext()->getId().'/sliderHome/toggleVisibility/{sliderContentId}',   // The route uri on top of the given hook
+					function (IlluminateRequest $request) use ($controller): JsonResponse {
+						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
+						return $sliderContentFormHandler->toggleVisibility($request);
+					}, // The handler function
+					'sliderHomeSettings.toggleVisibility', // Name of the route
 					[Role::ROLE_ID_SITE_ADMIN, Role::ROLE_ID_MANAGER]
 				);
 			}
@@ -230,18 +240,6 @@ class SliderHomePlugin extends GenericPlugin {
 			"contexts/" . $contextId . "/sliderHome/"
 		);
 		$sliderContentForm = new SliderContentForm($sliderContentFormApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
-
-		// // get SliderHomeContentList
-		// //http://localhost:50020/ojs/index.php/dja/$$$call$$$/plugins/generic/slider-home/controllers/grid/slider-home-grid/delete?sliderContentId=2
-		// $apiUrl = $dispatcher->url(
-		// 	$request,
-		// 	PKPApplication::ROUTE_COMPONENT,
-		// 	null,
-		// 	'plugins.generic.sliderHome.controllers.grid.SliderHomeGridHandler',
-		// 	'MY_TEST_OP',
-		// 	null,
-		// 	null
-		// );
 		
 		$apiUrl = $dispatcher->url(
 			$request,
@@ -340,12 +338,12 @@ class SliderHomePlugin extends GenericPlugin {
 		$primaryLocale = $context->getPrimaryLocale();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
-		$maxHeight = $this->getSetting($contextId, 'maxHeight');
-		$speed = $this->getSetting($contextId, 'speed');
-		$delay = $this->getSetting($contextId, 'delay');
-		$stopOnLastSlide = $this->getSetting($contextId, 'stopOnLastSlide')?"true":"false";
-		$fallbackLocale = $this->getSetting($contextId, 'fallbackLocale')?:"usePrimary";
-		$slideEffect = $this->getSetting($contextId, 'slideEffect')?:"";
+		$maxHeight = $context->getData('maxHeight');
+		$speed = $context->getData('speed');
+		$delay = $context->getData('delay');
+		$stopOnLastSlide = $context->getData('stopOnLastSlide')?"true":"false";
+		$fallbackLocale = $context->getData('fallbackLocale')?:"usePrimary";
+		$slideEffect = $context->getData('slideEffect')?:"";
 
 		$sliderHomeDao = new SliderHomeDao();
 
@@ -353,7 +351,7 @@ class SliderHomePlugin extends GenericPlugin {
 		if ($fallbackLocale =='usePrimary') {
 			$contentArrayCurrentLocale = $sliderHomeDao->getAllContent($contextId, $locale);
 			$contentArrayPrimaryLocale = $sliderHomeDao->getAllContent($contextId, $primaryLocale);
-			$localizedFields = $sliderHomeDao->getLocaleFieldNames();
+			$localizedFields = $sliderHomeDao->getLocaleFieldNames(); // @TODO @RS
 			$contentArray = array_map(
 				function ($current, $primary) use ($localizedFields) {
 					foreach ($localizedFields as $field) {

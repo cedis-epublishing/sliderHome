@@ -57,7 +57,7 @@
     }
   };
   const _hoisted_1 = { class: "flex gap-x-2" };
-  const _hoisted_2 = { class: "flex gap-x-2 items-end" };
+  const _hoisted_2 = { class: "flex gap-x-2 items-end justify-end" };
   const _sfc_main = {
     __name: "SliderHomeContentList",
     props: {
@@ -166,6 +166,22 @@
           modalStyle: "negative"
         });
       }
+      function toggleVisibility(itemId) {
+        const item = props.data.items.find((i) => i.id === itemId);
+        const newVisibility = !item.show_content;
+        $.ajax({
+          url: props.slidercontentform.action + "toggleVisibility/" + itemId,
+          type: "POST",
+          headers: {
+            "X-Csrf-Token": pkp.currentUser.csrfToken
+          },
+          data: { show_content: newVisibility },
+          success: (r) => {
+            const updatedItems = props.data.items.map((i) => i.id === itemId ? { ...i, show_content: newVisibility } : i);
+            emit("set", "sliderHomeContentListComponent", { items: updatedItems });
+          }
+        });
+      }
       const {
         items: orderedItems,
         sortingEnabled,
@@ -224,7 +240,7 @@
                   class: "bg bg-default"
                 }, {
                   default: vue.withCtx(() => [
-                    vue.createTextVNode(vue.toDisplayString(__props.data.AddSliderContentButtonLabel), 1)
+                    vue.createTextVNode(vue.toDisplayString(__props.data.ButtonLabelAdd), 1)
                   ]),
                   _: 1
                 })) : vue.createCommentVNode("", true),
@@ -293,7 +309,16 @@
                                   vue.createTextVNode(vue.toDisplayString(vue.unref(t)("common.delete")), 1)
                                 ]),
                                 _: 1
-                              }, 8, ["onClick"])
+                              }, 8, ["onClick"]),
+                              vue.createVNode(_component_PkpButton, {
+                                onClick: ($event) => toggleVisibility(item.id),
+                                class: "bg bg-default"
+                              }, {
+                                default: vue.withCtx(() => [
+                                  vue.createTextVNode(vue.toDisplayString(item.show_content ? __props.data.ButtonLabelHide : __props.data.ButtonLabelShow), 1)
+                                ]),
+                                _: 2
+                              }, 1032, ["onClick"])
                             ])
                           ]),
                           _: 2

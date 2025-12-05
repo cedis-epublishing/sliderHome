@@ -136,3 +136,9 @@ msgstr "Coverflow"
 
 msgid "plugins.generic.slider.settings.form.cube"
 msgstr "Cube"
+
+msgid "plugins.generic.slider.tableview.show"
+msgstr "Show"
+
+msgid "plugins.generic.slider.tableview.hide"
+msgstr "Hide"

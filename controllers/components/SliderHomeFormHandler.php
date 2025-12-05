@@ -53,59 +53,6 @@ class SliderHomeFormHandler extends APIHandler
         parent::__construct($controller);
     }
 
-    // Example APIHandler from the core setup endpoints in the constructor
-    // doing this as a plugin results in an infinite loop since parant::__construct
-    // also calls 'APIHandler::endpoints'. Also we need to merge our endpoints with
-    // the ones provided by 'APIHandler::endpoints' in SliderHomePlugin::callbackSetupEndpoints()
-    public function setupEndpoints() {
-        $this->_endpoints = [
-            // 'GET' => [
-            //     [
-            //         'pattern' => $this->getEndpointPattern(),
-            //         'handler' => [$this, 'getMany'],
-            //         'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-            //     ],
-            //     [
-            //         'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
-            //         'handler' => [$this, 'get'],
-            //         'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-            //     ],
-            // ],
-            'POST' => [
-                [
-                    'pattern' => $this->getEndpointPattern(),
-                    'handler' => [$this, 'add'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-            ],
-            'PUT' => [
-                [
-                    'pattern' => $this->getEndpointPattern() . '/{itemId:\d+}',
-                    'handler' => [$this, 'edit'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-                [
-                    'pattern' => $this->getEndpointPattern() . '/toggleVisibility/{itemId:\d+}',
-                    'handler' => [$this, 'toggleVisibility'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-                [
-                    'pattern' => $this->getEndpointPattern() . '/order',
-                    'handler' => [$this, 'saveOrder'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-            ],
-            'DELETE' => [
-                [
-                    'pattern' => $this->getEndpointPattern() . '/delete/{itemId:\d+}',
-                    'handler' => [$this, 'delete'],
-                    'roles' => [Role::ROLE_ID_MANAGER, Role::ROLE_ID_SITE_ADMIN],
-                ],
-            ],
-        ];
-        return $this->_endpoints;
-    }
-
     // As a plugin we need to overwrite this because the API router otherwise searches our handler file in the api folder
     function getEndpointPattern(): string {
         return '/{contextPath}/api/{version}/contexts/{contextId}/' . $this->_handlerPath;
@@ -128,14 +75,18 @@ class SliderHomeFormHandler extends APIHandler
         return parent::authorize($request, $args, $roleAssignments);
     }
 
-    function toggleVisibility($slimRequest, $response, $args) {
-        $sliderContentId = $args['itemId'];
-        $contextId = $args['contextId'];
+    function toggleVisibility($illuminateRequest): JsonResponse {
+        $request = Application::get()->getRequest();
+        $contextId = $request->getContext()->getId();
+
+        $sliderContentId = (int)$illuminateRequest->route('sliderContentId');
 
         $sliderHomeDao = new SliderHomeDAO();
 		$sliderContent = $sliderHomeDao->getById($sliderContentId, $contextId);
 		$sliderContent->setShowContent(!$sliderContent->getShowContent());
         $sliderHomeDao->updateObject($sliderContent);
+
+        return response()->json(['id' => $sliderContentId, 'show_content' => $sliderContent->getShowContent()], 200);
     }
 
     /**

@@ -55,9 +55,10 @@ class SliderHomeContentList
     {
         $request = Application::get()->getRequest();
         return [
-            'AddSliderContentButtonLabel' => __('plugins.generic.sliderHome.addSliderContent'),
-            'EditSliderContentButtonLabel' => __('plugins.generic.sliderHome.editSliderContent'),
-            'SliderGridTitle' => __('plugins.generic.sliderHome.gridTitle'),
+            'ButtonLabelAdd' => __('plugins.generic.sliderHome.addSliderContent'),
+            'ButtonLabelEdit' => __('plugins.generic.sliderHome.editSliderContent'),
+            'ButtonLabelShow' => __('plugins.generic.slider.tableview.show'),
+            'ButtonLabelHide' => __('plugins.generic.slider.tableview.hide'),
             'apiUrl' => $this->apiUrl,
             'confirmDeleteMessage' => __('plugins.generic.sliderHome.ListPanel.confirmDelete'),
             'count' => $this->count,

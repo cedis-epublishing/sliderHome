@@ -12,7 +12,7 @@
 				<div class="flex gap-x-2">
 					<template v-if="!sortingEnabled">
 						<PkpButton @click="handleAdd" class="bg bg-default">
-							{{ data.AddSliderContentButtonLabel }}
+							{{ data.ButtonLabelAdd }}
 						</PkpButton>
 					</template>
 					<PkpButton @click="sortingEnabled ? saveSorting() : startSorting()" class="bg bg-default">
@@ -40,13 +40,15 @@
 					/>
 					<PkpTableCell v-else>
 						<!-- Normal mode actions -->
-						 <div class="flex gap-x-2 items-end">
-							
+						 <div class="flex gap-x-2 items-end justify-end">
 							<PkpButton @click="handleEdit(item.id)" class="bg bg-default">
 								{{ t('common.edit') }}
 							</PkpButton>
 							<PkpButton @click="handleDelete(item.id)" class="bg bg-danger">
 								{{ t('common.delete') }}
+							</PkpButton>
+							<PkpButton @click="toggleVisibility(item.id)" class="bg bg-default">
+								{{ item.show_content ? data.ButtonLabelHide : data.ButtonLabelShow }}
 							</PkpButton>
 						</div>
 					</PkpTableCell>
@@ -181,6 +183,24 @@ const { t } = useLocalize();
 				},
 			],
 			modalStyle: 'negative',
+		});
+	}
+
+	function toggleVisibility(itemId) {
+		const item = props.data.items.find(i => i.id === itemId);
+		const newVisibility = !item.show_content;
+
+		$.ajax({
+			url: props.slidercontentform.action + 'toggleVisibility/' + itemId,
+			type: 'POST',
+			headers: {
+				'X-Csrf-Token': pkp.currentUser.csrfToken,
+			},
+			data: {show_content: newVisibility},
+			success: (r) => {
+				const updatedItems = props.data.items.map(i => i.id === itemId ? {...i, show_content: newVisibility} : i);
+				emit('set', 'sliderHomeContentListComponent', {items: updatedItems});
+			},
 		});
 	}
 
