@@ -18,24 +18,15 @@ use APP\template\TemplateManager;
 use PKP\facades\Locale;
 use DOMDocument;
 use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
-use APP\plugins\generic\sliderHome\classes\components\form\SliderAddPublicationForm;
 use APP\plugins\generic\sliderHome\classes\components\form\context\SliderHomeSettingsForm;
 use APP\plugins\generic\sliderHome\classes\components\form\SliderContentForm;
 use APP\plugins\generic\sliderHome\classes\components\SliderHomeContentList;
-use APP\plugins\generic\sliderHome\controllers\tab\SliderHomeSettingsTabFormHandler;
 use APP\plugins\generic\sliderHome\controllers\components\SliderHomeFormHandler;
 use APP\plugins\generic\sliderHome\SliderHomeSchemaMigration;
 use APP\core\Application;
 use PKP\security\Role;
-
 use Illuminate\Http\Request as IlluminateRequest;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use PKP\core\PKPBaseController;
-use PKP\handler\APIHandler;
-
-use PKP\components\forms\FormComponent;
-use PKP\components\forms\FieldText;
 
 /**
  * @class SliderHomePlugin
@@ -59,26 +50,25 @@ class SliderHomePlugin extends GenericPlugin {
 				Hook::add('TemplateManager::display',array($this, 'callbackDisplay')); //to enable slider display in OMP frontend
 				Hook::add('Template::Settings::website::appearance', array($this, 'callbackAppearanceTab')); //to enable display of plugin settings tab
 				Hook::add('Templates::Index::journal', array($this, 'callbackIndexJournal')); //to enable slider display in OJS frontend
-				Hook::add('Schema::get::context', array($this, 'addToSchema'));
-				// Hook::add('APIHandler::endpoints', array($this, 'callbackSetupEndpoints')); //to setup endpoint for ComponentForm submission via REST API
+				Hook::add('Schema::get::context', array($this, 'addToContextSchema'));
 				$router = Application::get()->getRequest()->getRouter();
 				if ($router instanceof \PKP\core\APIRouter) {
 					Hook::add("APIHandler::endpoints::{$router->getEntity()}", [$this, 'callbackSetupEndpoints']);
 				}
-				Hook::add('Schema::get::sliderHome', [$this, 'addSliderHomeSchema']);
+				Hook::add('Schema::get::sliderHome', [$this, 'addSliderHomeDBSchema']);
 			}
 			return true;
 		}
 		return false;
 	}
 
-	public function addSliderHomeSchema($hookName, $params) {
+	public function addSliderHomeDBSchema($hookName, $params) {
 		$schema = &$params[0];
 		$schema = json_decode(file_get_contents($this->getPluginPath().'/schema.json'));
 		return false;
 	}
 
-	public function addToSchema($hookName, $params) {
+	public function addToContextSchema($hookName, $params) {
 		$schema =& $params[0];
 
 		$schema->properties->{"maxHeight"} = (object) [
@@ -321,11 +311,11 @@ class SliderHomePlugin extends GenericPlugin {
 		);
 		$templateMgr->addHeader(
 			'swiper-min',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/swiper/css/swiper-bundle.min.css'>"
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.css'>"
 		);		
 		$templateMgr->addHeader(
 			'swiper-min-js',
-			"<script src='".$baseUrl."/plugins/generic/sliderHome/swiper/js/swiper-bundle.min.js'></script>"
+			"<script src='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.js'></script>"
 		);
 	}
 	
@@ -464,6 +454,7 @@ class SliderHomePlugin extends GenericPlugin {
 					navigation: {
 						nextEl: '.swiper-button-next',
     					prevEl: '.swiper-button-prev',
+						addIcons: false,
 					},
 					speed: ".$speed.",
 					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },

@@ -38,7 +38,7 @@ class SliderHomeDAO extends SchemaDAO {
 		parent::__construct();
 	}
 
-	function getById($sliderContentId, $contextId = null) {
+	function getById($sliderContentId, $contextId = null): ?SliderContent {
 		$row = DB::table('slider')
 		->where('slider_content_id', $sliderContentId)
 		->where('context_id', $contextId)
@@ -47,7 +47,7 @@ class SliderHomeDAO extends SchemaDAO {
 		return $row ? $this->_fromRow((array) $row) : null;
 	}
 
-	function getAllContent($contextId, $locale) {
+	function getAllContent($contextId, $locale): array {
 
 		$rows = DB::table('slider')
 		->where('context_id', $contextId)
@@ -72,7 +72,7 @@ class SliderHomeDAO extends SchemaDAO {
 		return $result;
 	}
 
-	function getByContextId($contextId, $rangeInfo = null) {
+	function getByContextId($contextId, $rangeInfo = null): DAOResultFactory {
 		$result = DB::table('slider')
 		->where('context_id', $contextId)
 		->orderBy('sequence')	
@@ -80,53 +80,13 @@ class SliderHomeDAO extends SchemaDAO {
 		return new DAOResultFactory($result, $this, '_fromRow');
 	}
 
-	function getMaxSequence($contextId) {
+	function getMaxSequence($contextId): int {
 		return DB::table('slider')
 		->where('context_id', $contextId)
 		->max('sequence');
 	}
-
-	// function insertObject($sliderContent) {	
-	// 	DB::table('slider')->insert([
-	// 		'context_id' => (int) $sliderContent->getContextId(),
-	// 		'sequence' => $sliderContent->getSequence(),
-	// 		'show_content' => $sliderContent->getShowContent()
-	// 	]);
-
-	// 	$sliderContent->setId($this->getInsertId());
-
-	// 	DB::table('slider_settings')->insert([
-	// 		'context_id' => (int) $sliderContent->getContextId(),
-	// 		'slider_content_id' => $sliderContent->getId(),
-	// 		'setting_name' => 'name',
-	// 		'setting_value' => $sliderContent->getName(),
-	// 		'locale' => ''
-	// 	]);
-
-    //     // $this->updateLocaleFields($staticPage);
-
-	// 	$this->updateDataObjectSettings('slider_settings', $sliderContent, [
-	// 		'slider_content_id' => $sliderContent->getId()
-	// 	]);		
-
-	// 	return $sliderContent->getId();
-	// }
-
-	// function updateObject($sliderContent) {
-	// 	DB::table('slider')
-	// 	->where('slider_content_id', $sliderContent->getId())
-	// 	->update([
-	// 		'context_id' => (int) $sliderContent->getContextId(),
-	// 		'sequence' => $sliderContent->getSequence(),
-	// 		'show_content' => $sliderContent->getShowContent()
-	// 	]);
-
-	// 	$this->updateDataObjectSettings('slider_settings', $sliderContent, [
-	// 		'slider_content_id' => $sliderContent->getId()
-	// 	]);
-	// }
 	
-	function deleteById(int $sliderContentId):int {
+	function deleteById(int $sliderContentId): int {
 		return DB::table('slider')
 		->where('slider_content_id', $sliderContentId)
 		->delete();
@@ -135,27 +95,15 @@ class SliderHomeDAO extends SchemaDAO {
 		->delete();
 	}
 
-	function deleteObject($sliderContent) {
-		$this->deleteById($sliderContent->getId());
+	function deleteObject($sliderContent): int {
+		return $this->deleteById($sliderContent->getId());
 	}
 
-	function newDataObject() {
+	function newDataObject(): SliderContent {
 		return new SliderContent();
 	}
 
-	function _fromRow($row) {
-		$sliderContent = $this->newDataObject();
-		$sliderContent->setId($row['slider_content_id']);
-		$sliderContent->setContextId($row['context_id']);
-		$sliderContent->setSequence($row['sequence']);
-		$sliderContent->setShowContent($row['show_content']);
-
-		$this->getDataObjectSettings('slider_settings', 'slider_content_id', $row['slider_content_id'], $sliderContent);
-
-		return $sliderContent;
-	}
-
-	function getSliderSettings($sliderContent) {
+	function getSliderSettings($sliderContent): array {
 		return [
 			'name' =>  $sliderContent->getName(),
 			'content' => $sliderContent->getContent(),
@@ -164,26 +112,6 @@ class SliderHomeDAO extends SchemaDAO {
 			'sliderImageAltText' =>  $sliderContent->getSliderImageAltText()
 		];
 	}
-
-	// function getInsertId():int {
-	// 	return $this->_getInsertId('slider', 'slider_content_id');
-	// }
-
-	// /**
-	//  * Get field names for which data is localized.
-	//  * @return array
-	//  */
-	// function getLocaleFieldNames() {
-	// 	return ['copyright','content','sliderImageAltText', 'sliderImage'];
-	// }
-
-	// /**
-	//  * @copydoc DAO::getAdditionalFieldNames()
-	//  */
-	// function getAdditionalFieldNames() {
-	// 	return array_merge(parent::getAdditionalFieldNames(), ['name','sliderImageLink']);
-	// }
-
 }
 
 ?>

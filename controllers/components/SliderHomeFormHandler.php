@@ -16,24 +16,14 @@
 namespace APP\plugins\generic\sliderHome\controllers\components;
 
 use APP\core\Application;
-use APP\facades\Repo;
-use Illuminate\Support\Facades\Bus;
 use PKP\db\DAORegistry;
-use PKP\facades\Locale;
 use PKP\handler\APIHandler;
-use PKP\jobs\notifications\NewAnnouncementNotifyUsers;
-use PKP\mail\Mailer;
-use PKP\notification\NotificationSubscriptionSettingsDAO;
-use PKP\notification\PKPNotification;
 use APP\file\PublicFileManager;
-use PKP\plugins\Hook;
 use PKP\security\authorization\PolicySet;
 use PKP\security\authorization\RoleBasedHandlerOperationPolicy;
 use PKP\security\authorization\UserRolesRequiredPolicy;
-use PKP\security\Role;
 use Exception;
 use Illuminate\Http\JsonResponse;
-
 use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
 
 class SliderHomeFormHandler extends APIHandler

@@ -11,6 +11,7 @@
 namespace APP\plugins\generic\sliderHome\classes;
 
 use PKP\core\DataObject;
+use APP\core\Application;
 
  /**
  * @class SliderContent
@@ -29,80 +30,80 @@ class SliderContent extends DataObject {
 	// Get/set methods
 	//
 
-	function getContextId(){
+	function getContextId(): int {
 		return $this->getData('contextId');
 	}
 
-	function setContextId($contextId) {
+	function setContextId($contextId): ?int {
 		return $this->setData('contextId', $contextId);
 	}
 
 
-	function setName($name) {
+	function setName($name): ?string {
 		return $this->setData('name', $name);
 	}
 
-	function getName() {
+	function getName(): string {
 		return $this->getData('name');
 	}
 
-	function setContent($content) {
+	function setContent($content): ?string {
 		return $this->setData('content', $content);
 	}
 
-	function getContent() {
+	function getContent(): string {
 		return $this->getData('content');
 	}
 
-	function setCopyright($copyright) {
+	function setCopyright($copyright): ?string {
 		return $this->setData('copyright', $copyright);
 	}
 
-	function getCopyright() {
+	function getCopyright(): string {
 		return $this->getData('copyright');
 	}
 
-	function getShowContent() {
+	function getShowContent(): ?bool {
 		return (bool)$this->getData('show_content');
 	}
 
-	function setShowContent($showContent) {
-		$this->setData('show_content', (bool)$showContent);
+	function setShowContent($showContent): ?bool {
+		return $this->setData('show_content', (bool)$showContent);
 	}	
 
-	function getSequence() {
+	function getSequence(): int {
 		return $this->getData('sequence');
 	}
 
-	function setSequence($sequence) {
-		$this->setData('sequence', $sequence);
+	function setSequence($sequence): ?int {
+		return $this->setData('sequence', $sequence);
 	}
 
-	function getSliderImage() {
+	function getSliderImage(): string {
 		return $this->getData('sliderImage');
 	}
 
-	function setSliderImage($filename) {
-		$this->setData('sliderImage', $filename);
+	function setSliderImage($filename): ?string {
+		return $this->setData('sliderImage', $filename);
 	}
 	
-	function getSliderImageLink() {
+	function getSliderImageLink(): string {
 		return $this->getData('sliderImageLink')?:"";
 	}
 
-	function setSliderImageLink($link) {
-		$this->setData('sliderImageLink', $link);
+	function setSliderImageLink($link): ?string {
+		return $this->setData('sliderImageLink', $link);
 	}
 
-	function getSliderImageAltText() {
+	function getSliderImageAltText(): string {
 		return $this->getData('sliderImageAltText');
 	}
 
-	function setSliderImageAltText($altText) {
-		$this->setData('sliderImageAltText', $altText);
+	function setSliderImageAltText($altText): ?string {
+		return $this->setData('sliderImageAltText', $altText);
 	}
 
-	function getLocale() {
+	function getLocale(): string {
 		$request = Application::getRequest();
 		return $request->getContext()->getPrimaryLocale();
 	}

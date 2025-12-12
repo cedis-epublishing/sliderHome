@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 // import i18nExtractKeys from "./i18nExtractKeys.vite.js";
 
 // https://vitejs.dev/config/
@@ -12,7 +13,21 @@ export default defineConfig({
       '@': resolve(__dirname, '../../../lib/ui-library/src'), // Adjust the path as necessary
     },
   },
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/swiper/swiper-bundle.min.js',
+          dest: 'swiper' 
+        },
+        {
+          src: 'node_modules/swiper/swiper-bundle.min.css',
+          dest: 'swiper'
+        }
+      ]
+    })
+  ],
   build: {
     lib: {
       // Could also be a dictionary or array of multiple entry points

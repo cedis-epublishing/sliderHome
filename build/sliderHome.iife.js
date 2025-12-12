@@ -23,9 +23,7 @@
     },
     emits: ["set"],
     setup(__props, { emit: __emit }) {
-      const { useLocalize } = pkp.modules.useLocalize;
       const closeModal = vue.inject("closeModal");
-      const { t } = useLocalize();
       const props = __props;
       props.form.action = props.form.action + props.mode + (props.itemId ? `/${props.itemId}` : "");
       function handleSuccess(data) {
@@ -148,7 +146,6 @@
                     "X-Csrf-Token": pkp.currentUser.csrfToken,
                     "X-Http-Method-Override": "DELETE"
                   },
-                  // error: this.ajaxErrorCallback,
                   success: (r) => {
                     const filteredItems = props.data.items.filter((i) => i.id !== itemId);
                     emit("set", "sliderHomeContentListComponent", { items: filteredItems });
@@ -217,8 +214,6 @@
       }
       const columns = vue.computed(() => props.data.columns);
       return (_ctx, _cache) => {
-        const _component_icon = vue.resolveComponent("icon");
-        const _component_badge = vue.resolveComponent("badge");
         const _component_PkpButton = vue.resolveComponent("PkpButton");
         const _component_PkpTableColumn = vue.resolveComponent("PkpTableColumn");
         const _component_PkpTableHeader = vue.resolveComponent("PkpTableHeader");
@@ -249,7 +244,7 @@
                   class: "bg bg-default"
                 }, {
                   default: vue.withCtx(() => [
-                    vue.createTextVNode(vue.toDisplayString(vue.unref(sortingEnabled) ? "Save Order" : vue.unref(t)("common.order")), 1)
+                    vue.createTextVNode(vue.toDisplayString(vue.unref(sortingEnabled) ? vue.unref(t)("common.save") : vue.unref(t)("common.order")), 1)
                   ]),
                   _: 1
                 })
@@ -281,7 +276,11 @@
                       default: vue.withCtx(() => [
                         vue.createVNode(_component_PkpTableCell, null, {
                           default: vue.withCtx(() => [
-                            vue.createTextVNode(vue.toDisplayString(item.name), 1)
+                            vue.createElementVNode("span", {
+                              class: "fa fa-eye pkpIcon--inline",
+                              style: vue.normalizeStyle(item.show_content ? "color: green;" : "color: gray;")
+                            }, null, 4),
+                            vue.createTextVNode(" " + vue.toDisplayString(item.name), 1)
                           ]),
                           _: 2
                         }, 1024),
@@ -336,14 +335,6 @@
             __props.data.SliderGridTitle ? {
               name: "label",
               fn: vue.withCtx(() => [
-                vue.createVNode(_component_icon, { icon: "Bug" }),
-                vue.createVNode(_component_badge, { label: "32 submissions" }, {
-                  default: vue.withCtx(() => [..._cache[1] || (_cache[1] = [
-                    vue.createTextVNode("32", -1)
-                  ])]),
-                  _: 1
-                }),
-                _cache[2] || (_cache[2] = vue.createElementVNode("i", { class: "fa-solid fa-eye" }, null, -1)),
                 vue.withDirectives(vue.createElementVNode("span", null, null, 512), [
                   [_directive_strip_unsafe_html, __props.data.SliderGridTitle]
                 ])

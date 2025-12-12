@@ -12,13 +12,8 @@
 <script setup>
 import { inject } from "vue";
 
-const { useLocalize } = pkp.modules.useLocalize;
-
 const closeModal = inject("closeModal");
-
 const emit = defineEmits(['set']);
-
-const { t } = useLocalize();
 
 // Accept params as component props
 const props = defineProps({
