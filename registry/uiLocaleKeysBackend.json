@@ -1,0 +1,14 @@
+[
+  "common.confirmDelete",
+  "common.delete",
+  "common.edit",
+  "common.loading",
+  "common.no",
+  "common.order",
+  "common.save",
+  "common.select",
+  "common.title",
+  "common.yes",
+  "editor.issues.identification",
+  "plugins.generic.sliderHome.addFromIssue"
+]
