@@ -88,3 +88,69 @@ msgstr "Impostazioni dello Slider"
 
 msgid "plugins.generic.slider.settings.form.groupDescription"
 msgstr "Nota bene:<br>L'altezza dello slider è determinata dall'altezza dell'immagine più grande visualizzata. Solo se tale altezza supera la risoluzione verticale dello schermo, è possibile limitare l'altezza dello slider impostando l'altezza massima dello slider come percentuale della risoluzione verticale dello schermo. In caso contrario, questa impostazione non avrà alcun effetto. Sia l'altezza che la larghezza delle immagini saranno ridimensionate.<br>Per utilizzare l'intera larghezza dello slider, preparare le immagini con altezze inferiori alla risoluzione verticale dello schermo."
+
+msgid "plugins.generic.sliderHome.prevSlide"
+msgstr "Diapositiva precedente"
+
+msgid "plugins.generic.sliderHome.nextSlide"
+msgstr "Diapositiva successiva"
+
+msgid "plugins.generic.slider.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.slider.settings.form.cube"
+msgstr "Cube"
+
+msgid "plugins.generic.slider.settings.form.default"
+msgstr "Nessuno"
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgstr "Impostazioni di localizzazione"
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgstr "Questa opzione determina se applicare la lingua primaria per i campi localizzati (Copyright, Contenuto HTML, Testo alternativo immagine) se sono vuoti."
+
+msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgstr "Attuale {$label}"
+
+msgid "plugins.generic.slider.settings.form.slideEffect"
+msgstr "Effetto di transizione dello slider"
+
+msgid "plugins.generic.slider.tableview.show"
+msgstr "Mostra"
+
+msgid "plugins.generic.slider.tableview.hide"
+msgstr "Nascondi"
+
+msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
+msgstr "Vuoi davvero eliminare questo contenuto dello slider?"
+
+msgid "plugins.generic.sliderHome.addFromIssue"
+msgstr "Aggiungi numero/volume"
+
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Nota sul copyright"
+
+msgid "plugins.generic.sliderHome.grid.visible"
+msgstr "Visibile"
+
+msgid "plugins.generic.sliderHome.imageDetailsHint"
+msgstr "Se vuoi aggiungere un link all'immagine o un testo alternativo, carica e salva prima l'immagine e poi modifica la voce salvata."
+
+msgid "plugins.generic.sliderHome.imageUploadHeading"
+msgstr "Carica immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "Se vuoi mettere un link sull'immagine dello slider puoi fornire un URL qui."
+
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Nome dell'immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "Contenuto HTML sovrapposto dello slider"
+
+msgid "plugins.generic.sliderHome.noResults"
+msgstr "Please search for an issue"

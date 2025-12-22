@@ -1,7 +1,15 @@
 <template>
   <PkpSideModalBody>
     <template #title>
-      {{ mode === 'add' ? 'Add Slider Content' : `Edit ${item?.title || 'Item'}` }}
+	  <span v-if ="mode === 'add'">
+	  	{{ form.ButtonLabelAdd }}
+	  </span>
+	  <span v-if ="mode === 'addFromIssue'">
+	  	{{ form.ButtonLabeladdFromIssue }}
+	  </span>
+	  <span v-if ="mode === 'edit'">
+		{{ form.ButtonLabelEdit }}: {{ item ? item.name : '' }}
+	  </span>
     </template>
     <PkpSideModalLayoutBasic>
         <PkpForm v-bind="form" @success="handleSuccess" />
@@ -10,7 +18,11 @@
 </template>
 
 <script setup>
-import { inject } from "vue";
+import { inject, watch, ref } from "vue";
+// import { toggleLocale } from 'pkp/modules/FormLocales';
+
+const { useLocalize } = pkp.modules.useLocalize;
+const { t } = useLocalize();
 
 const closeModal = inject("closeModal");
 const emit = defineEmits(['set']);
@@ -36,13 +48,30 @@ const props = defineProps({
 	onFormSuccess: { type: Function, default: null }
 });
 
-props.form.action = props.form.action + props.mode + (props.itemId ? `/${props.itemId}` : '');
+// add hidden fields so the endpoint receives `mode` and `itemId` as parameters when the form posts.
+const ensureHiddenField = (name, value) => {
+	if (!props.form || !Array.isArray(props.form.fields)) return;
+	const existing = props.form.fields.find(f => f.name === name);
+	if (existing) {
+		existing.value = value;
+	} else {
+		props.form.fields.push({ name, type: 'hidden', value });
+	}
+};
+
+// initialize hidden fields
+ensureHiddenField('mode', props.mode);
+ensureHiddenField('itemId', props.itemId ?? '');
+
+// keep them in sync if props change
+watch(() => props.mode, (v) => ensureHiddenField('mode', v));
+watch(() => props.itemId, (v) => ensureHiddenField('itemId', v ?? ''));
 
 function handleSuccess(data) {
 	if (props.onFormSuccess) {
-		console.log('Add::calling onFormSuccess');
 		props.onFormSuccess(data);
 	} 
 	closeModal();
 }
+
 </script>

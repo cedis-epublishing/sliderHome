@@ -108,13 +108,21 @@ class SliderHomeFormHandler extends APIHandler
         }
 
 		$sliderHomeDao = new SliderHomeDAO();
-		if ($illuminateRequest->route('sliderContentId')) {
-			// Load and update an existing content
-			$sliderContent = $sliderHomeDao->getById((int)$illuminateRequest->route('sliderContentId'), $context->getId());
-		} else {
-			// Create a new item
-			$sliderContent = $sliderHomeDao->newDataObject();
-			$sliderContent->setContextId($context->getId());
+		switch ($data['mode']) {
+            case 'edit':
+                // Load and update an existing content
+                $sliderContent = $sliderHomeDao->getById((int)$request->getUserVar('itemId'), $context->getId());
+                break;
+            case 'add':
+                // Create a new item
+                $sliderContent = $sliderHomeDao->newDataObject();
+                $sliderContent->setContextId($context->getId());
+                break;
+            case 'addFromIssue':
+                // Create a new item from publication
+                $sliderContent = $sliderHomeDao->newDataObject();
+                $sliderContent->setContextId($context->getId());
+                break;
 		}		
 		$sliderContent->setName($data['name']);
 		$sliderContent->setContent($data['content']);
@@ -126,19 +134,33 @@ class SliderHomeFormHandler extends APIHandler
 
 		// Copy an uploaded slider file
         foreach ($data['sliderImage'] as $locale => $imageData) {
-            if (isset($imageData['temporaryFileId']) && $temporaryFileId = $imageData['temporaryFileId']?:"") {
-                $user = $request->getUser();
-                $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
-                $temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
-    
-                $publicFileManager = new PublicFileManager();
-                $newFileName = 'slider_image_' . $locale . '_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
-                $data['sliderImage'][$locale]['uploadName'] = $newFileName;
-                $data['thumbnail'] = true;
-				$data['thumbnailUrl'] = $baseUrl.'/'.$newFileName;
-                $publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
-                $sliderContent->setData('sliderImage', $newFileName, $locale);
+            switch ($data['mode']) {
+                case 'edit':
+                case 'add':
+                    if (isset($imageData['temporaryFileId']) && $temporaryFileId = $imageData['temporaryFileId']?:"") {
+                        // a new file has been uploaded
+                        $user = $request->getUser();
+                        $temporaryFileDao = DAORegistry::getDAO('TemporaryFileDAO'); /* @var $temporaryFileDao TemporaryFileDAO */
+                        $temporaryFile = $temporaryFileDao->getTemporaryFile($temporaryFileId, $user->getId());
+            
+                        $publicFileManager = new PublicFileManager();
+                        $newFileName = 'slider_image_' . $locale . '_' . $temporaryFile->getData('fileName') . $publicFileManager->getImageExtension($temporaryFile->getFileType());
+                        $data['sliderImage'][$locale]['uploadName'] = $newFileName;
+                        $data['thumbnail'] = true;
+                        $data['thumbnailUrl'] = $baseUrl.'/'.$newFileName;
+                        $publicFileManager->copyContextFile($context->getId(), $temporaryFile->getFilePath(), $newFileName);
+                        $sliderContent->setData('sliderImage', $newFileName, $locale);
+                    }
+                    break;
+                case 'addFromIssue':
+                    // a cover image may have been selected from an issue, or an existing image is kept
+                    if ($data['mode'] == 'addFromIssue' && isset($imageData) && $imageData != "") {
+                        // an image from an issue has been selected
+                        $sliderContent->setData('sliderImage', $imageData['temporaryFileId'], $locale);
+                    }
+                    break;
             }
+
             if ($imageData == "") {
                 // we need to delete an existing image
                 $filename = $sliderContent->getData('sliderImage')[$locale];
@@ -151,39 +173,21 @@ class SliderHomeFormHandler extends APIHandler
         }
         $sliderContent->setSliderImageLink(isset($data['sliderImageLink'])?$data['sliderImageLink']:"");
 
-		if ($illuminateRequest->route('sliderContentId')) {
-			$sliderContent->setSequence($sliderContent->getData('sequence'));
-			$sliderHomeDao->updateObject($sliderContent);
-		} else {
-			$sliderContent->setSequence($sliderHomeDao->getMaxSequence($context->getId())+1);
-			$sliderHomeDao->insertObject($sliderContent);
-		}
-
-        return response()->json(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
-    }
-
-    function addFromPublication($slimRequest, $response, $args) {
-        $request = $this->getRequest();
-        $context = $request->getContext();
-        $data = array_merge(
-            [
-                'name' => "",
-                'content' => [],
-                'show_content' => false,
-                'copyright' => [],
-                'sliderImage' => [],
-                'sliderImageAltText' => "",
-                'thumbnail' => false,
-                'thumbnailUrl' => ""
-            ],
-             $slimRequest->getParsedBody()
-        );
-
-        if (!$context) {
-            throw new Exception('You can not add a slide without sending a request to the API endpoint of a particular context.');
+		switch ($request->getUserVar('mode')) {
+            case 'edit':
+                // Keep the existing sequence
+                $sliderContent->setSequence($sliderContent->getData('sequence'));
+                $sliderHomeDao->updateObject($sliderContent);
+                break;
+            case 'add':
+            case 'addFromIssue':
+                // Set sequence to the end of the list
+                $sliderContent->setSequence($sliderHomeDao->getMaxSequence($context->getId())+1);
+			    $sliderHomeDao->insertObject($sliderContent);
+                break;
         }
 
-
+        return response()->json(array_merge($data,['id' => $sliderContent->getData('id')]), 200);
     }
 
     /**

@@ -13,6 +13,7 @@ namespace APP\plugins\generic\sliderHome\classes\components\form\context;
 use \PKP\components\forms\FormComponent;
 use \PKP\components\forms\FieldText;
 use \PKP\components\forms\FieldOptions;
+use \PKP\components\forms\FieldHTML;
 
 define('FORM_SLIDER_SETTINGS', 'sliderSettings');
 
@@ -108,6 +109,17 @@ class SliderHomeSettingsForm extends FormComponent {
 			],
 			'value' => $context->getData('fallbackLocale') ?? "usePrimary",
 			'groupId' => 'slidersettings'
+		]))
+		->addGroup([
+            'id' => 'descriptionGroup',
+			'size' => 'large',
+		])
+		->addField(new FieldHTML('description', [
+			'label' => __('plugins.generic.sliderHome.contentForm.label'),
+			'isRequired' => false,
+			'description' => __('plugins.generic.sliderHome.contentForm.description'),
+			'size' => 'large',
+			'groupId' => 'descriptionGroup',
 		]));
 	}
 }

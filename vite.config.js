@@ -2,18 +2,18 @@ import { resolve } from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { viteStaticCopy } from 'vite-plugin-static-copy';
-// import i18nExtractKeys from "./i18nExtractKeys.vite.js";
+import i18nExtractKeys from "./i18nExtractKeys.vite.js";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   target: "es2016",
-  // plugins: [i18nExtractKeys(), vue()],
   resolve: {
     alias: {
       '@': resolve(__dirname, '../../../lib/ui-library/src'), // Adjust the path as necessary
     },
   },
   plugins: [
+    i18nExtractKeys(),
     vue(),
     viteStaticCopy({
       targets: [

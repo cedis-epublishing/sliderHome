@@ -111,7 +111,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$request = Application::get()->getRequest();
 				$apiHandler->addRoute(
 					'POST',
-					$request->getContext()->getId().'/sliderHome/add',   // The route uri on top of the given hook
+					$request->getContext()->getId().'/sliderHome/edit',   // The route uri on top of the given hook
 					function (IlluminateRequest $request) use ($controller): JsonResponse {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->edit($request);
@@ -151,7 +151,7 @@ class SliderHomePlugin extends GenericPlugin {
 				);
 				$apiHandler->addRoute(
 					'POST',
-					$request->getContext()->getId().'/sliderHome/toggleVisibility/{sliderContentId}',   // The route uri on top of the given hook
+					$request->getContext()->getId().'/sliderHome/toggleVisibility/{sliderContentId}',  
 					function (IlluminateRequest $request) use ($controller): JsonResponse {
 						$sliderContentFormHandler = new SliderHomeFormHandler($controller);
 						return $sliderContentFormHandler->toggleVisibility($request);
@@ -227,9 +227,15 @@ class SliderHomePlugin extends GenericPlugin {
 			$request,
 			Application::ROUTE_API,
 			$context->getPath(),
-			"contexts/" . $contextId . "/sliderHome/"
+			"contexts/" . $contextId . "/sliderHome/edit"
 		);
-		$sliderContentForm = new SliderContentForm($sliderContentFormApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $publicFileApiUrl, $contextUrl);
+		$searchApiUrl = $dispatcher->url(
+			$request,
+			Application::ROUTE_API,
+			$context->getPath(),
+			"/issues"
+		);
+		$sliderContentForm = new SliderContentForm($sliderContentFormApiUrl, $context, $baseUrl, $temporaryFileApiUrl, $searchApiUrl);
 		
 		$apiUrl = $dispatcher->url(
 			$request,
@@ -237,7 +243,7 @@ class SliderHomePlugin extends GenericPlugin {
 			$context->getPath(),
 			"contexts/" . $contextId . "/sliderHome"
 		);
-		$sliderHomeContentList = new SliderHomeContentList($apiUrl,$sliderImages);
+		$sliderHomeContentList = new SliderHomeContentList($apiUrl, $sliderImages);
 
 		# setup template, this allows us to use the constants in the tpl-file
 		$templateMgr->setConstants([
@@ -263,9 +269,26 @@ class SliderHomePlugin extends GenericPlugin {
 	// OJS: there's a template hook on the frontend journal index page
 	function callbackIndexJournal($hookName, $args) {	
 		$request = $this->getRequest();
+		$templateMgr =& $args[1];
+
+		// prepare and assign variables for the Smarty slider template
+		$this->assignSliderTemplateVariables($request, $templateMgr);
+
+		// ensure Swiper assets and the frontend initializer are available
+		$this->addHeader($templateMgr, $request->getBaseUrl());
+		// register a small frontend mount script that doesn't depend on backend Vue
+		$templateMgr->addJavaScript(
+			'sliderHomeFrontend',
+			"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/js/slider-mount.js",
+			[
+				'inline' => false,
+				'contexts' => ['frontend']
+			]
+		);
 
 		$output =& $args[2];
-		$output .= $this->getSliderContent($request);
+		// fetch the mount element for the Vue component
+		$output .= $templateMgr->fetch($this->getTemplateResource('slider.tpl'));
 
 		return false;
 	}	
@@ -278,13 +301,24 @@ class SliderHomePlugin extends GenericPlugin {
 		$applicationName = PKPApplication::get()->getName();		
 		switch ($template) {
 			case 'frontend/pages/index.tpl':
-				if ($applicationName=="omp") {
-					$sliderContent = $this->getSliderContent($request);
-					$templateMgr->assign('sliderContent',$sliderContent);
-					$this->addHeader($templateMgr,$request->getBaseUrl());
-					$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
-					return true;
-				}
+					if ($applicationName=="omp") {
+						// Prepare variables and assets for the Smarty slider template
+						$this->assignSliderTemplateVariables($request, $templateMgr);
+						$this->addHeader($templateMgr, $request->getBaseUrl());
+						$templateMgr->addJavaScript(
+							'sliderHomeFrontend',
+							"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/js/slider-mount.js",
+							[
+								'inline' => false,
+								'contexts' => ['frontend']
+							]
+						);
+						// Render the server-side Smarty slider and assign into home template
+						$sliderHtml = $templateMgr->fetch($this->getTemplateResource('slider.tpl'));
+						$templateMgr->assign('sliderContent', $sliderHtml);
+						$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
+						return true;
+					}
 			case 'frontend/pages/indexJournal.tpl':
 				$this->addHeader($templateMgr,$request->getBaseUrl());
 			case 'management/website.tpl':
@@ -318,30 +352,31 @@ class SliderHomePlugin extends GenericPlugin {
 			"<script src='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.js'></script>"
 		);
 	}
-	
-	// get markup for slider content, incl. containers/wrappers
-	private function getSliderContent($request) {
-
-		$templateMgr = TemplateManager::getManager($request);
-		$locale = $templateMgr->getTemplateVars('currentLocale'); 
+    
+	/**
+	 * Prepare and assign variables required by the Smarty slider template.
+	 */
+	private function assignSliderTemplateVariables($request, $templateMgr) {
 		$context = $request->getContext();
 		$primaryLocale = $context->getPrimaryLocale();
 		$contextPath = get_class($context) === 'Press'?'/presses/':'/journals/';
 		$contextId = $context->getId();
+
 		$maxHeight = $context->getData('maxHeight');
 		$speed = $context->getData('speed');
 		$delay = $context->getData('delay');
-		$stopOnLastSlide = $context->getData('stopOnLastSlide')?"true":"false";
+		$stopOnLastSlide = $context->getData('stopOnLastSlide')?true:false;
 		$fallbackLocale = $context->getData('fallbackLocale')?:"usePrimary";
 		$slideEffect = $context->getData('slideEffect')?:"";
 
+		$locale = $templateMgr->getTemplateVars('currentLocale');
+
 		$sliderHomeDao = new SliderHomeDao();
 
-		# get slider content based on locale to show
-		if ($fallbackLocale =='usePrimary') {
+		if ($fallbackLocale == 'usePrimary') {
 			$contentArrayCurrentLocale = $sliderHomeDao->getAllContent($contextId, $locale);
 			$contentArrayPrimaryLocale = $sliderHomeDao->getAllContent($contextId, $primaryLocale);
-			$localizedFields = $sliderHomeDao->getLocaleFieldNames(); // @TODO @RS
+			$localizedFields = $sliderHomeDao->getLocaleFieldNames();
 			$contentArray = array_map(
 				function ($current, $primary) use ($localizedFields) {
 					foreach ($localizedFields as $field) {
@@ -354,115 +389,66 @@ class SliderHomePlugin extends GenericPlugin {
 			);
 		} else {
 			$contentArray = $sliderHomeDao->getAllContent($contextId, $locale);
-		};
-		
-		$sliderContent = "";
-
-		if (!empty($contentArray)) {
-			$sliderContent="<div class='swiper-container'><div class='swiper-wrapper'>";
-			foreach ($contentArray as $value) {
-
-				$contentHTML = new DOMDocument();
-
-				// get text content of slide
-				if ($value['content']) {
-					if (str_contains($value['content'], 'href')) {
-						$noclick = '';
-					} else {
-						$nocklick = ' noclick';
-					}
-
-					$contentHTML->loadHTML('<?xml encoding="utf-8" ?><div id="slider-text" class="slider-text'.$noclick.'">'.$value['content'].'</div>');
-				}
-				
-				// create slide tag
-				$slide = $contentHTML->createElement('div');
-				$slide->setAttribute("class", "swiper-slide");
-
-				// create slider figure and image tag
-				// figure
-				$sliderFigure = $contentHTML->createElement("figure");
-				$sliderFigure->setAttribute("class", "slider-figure");
-				
-				$baseUrl = Config::getVar('general', 'base_url');
-				$publicFilesDir = Config::getVar('files', 'public_files_dir');
-
-				// image
-				$sliderImg = $contentHTML->createElement('img');
-				$sliderImg->setAttribute("style", "max-height:".$maxHeight."vh");
-				$sliderImg->setAttribute("src", $baseUrl.'/'.$publicFilesDir.$contextPath.$contextId.'/'.$value['sliderImage']);
-				$sliderImg->setAttribute("alt", $value['sliderImageAltText']);
-
-				// image link
-				if ($value['sliderImageLink']) {
-					$sliderImgLink = $contentHTML->createElement('a');
-					$sliderImgLink->setAttribute("href", $value['sliderImageLink']);
-					$sliderImgLink->setAttribute("class", 'slider-link');
-					$sliderImgLink->appendChild($sliderImg);
-					$sliderFigure->appendChild($sliderImgLink);
-				} else {
-					$sliderFigure->appendChild($sliderImg);
-					$sliderImgLink = NULL;
-				}				
-				
-				if ($value['copyright']) {
-					$smallTag = $contentHTML->createElement("small", $value['copyright']);
-					$smallTag->setAttribute('class',"slider-copyright");
-					$sliderFigure->appendChild($smallTag);
-				}
-
-				// append overlay content to figure tag
-				if ($value['content']) {
-
-					$overlayContent = $contentHTML->createElement("div");
-					$overlayContent->setAttribute("id", "overlayContnent");
-					// copy all content tags
-					foreach ($contentHTML->getElementsByTagName('body')[0]->childNodes as $node) {
-						$node->setAttribute("class", "slider-text".$noclick);
-						$overlayContent->appendChild($node);
-					}
-					if ($sliderImgLink) {
-						$sliderImgLink->appendChild($overlayContent);
-					} elseif ($sliderFigure) {
-						$sliderFigure->appendChild($overlayContent);
-					} else {
-						$slide->appendChild($overlayContent);
-					}
-				}
-
-				// append slider image to slide tag
-				$slide->appendChild($sliderFigure);
-
-				// generate output HTML
-				$sliderContent.= $contentHTML->saveHTML($slide);
-
-			}
-			// add slider navigation 
-			$sliderContent.= "</div><div class='swiper-pagination'></div><div class='swiper-button-prev'></div><div class='swiper-button-next'></div></div>";
-			$sliderContent .= 
-			"<script>
-				var swiper = new Swiper('.swiper-container', {
-					autoHeight: true, //enable auto height
-					effect: '".$slideEffect."',
-					pagination: {
-						el: '.swiper-pagination',
-						clickable: true,
-						renderBullet: function (index, className) {
-							return '<span class=\"' + className + '\">' + '</span>';
-						},
-					},
-					navigation: {
-						nextEl: '.swiper-button-next',
-    					prevEl: '.swiper-button-prev',
-						addIcons: false,
-					},
-					speed: ".$speed.",
-					autoplay: { delay: ".$delay.",disableOnInteraction:true, stopOnLastSlide:".$stopOnLastSlide." },
-				});
-			</script>";
 		}
-		return $sliderContent;
-	}	
+
+		$baseUrl = Config::getVar('general', 'base_url');
+		$publicFilesDir = Config::getVar('files', 'public_files_dir');
+
+		$sliderItems = [];
+		foreach ($contentArray as $value) {
+			$noclick = false;
+			if (!empty($value['content'])) {
+				if (str_contains($value['content'], 'href')) {
+					$noclick = false;
+				} else {
+					$noclick = true;
+				}
+			}
+
+			$sliderItems[] = [
+				'id' => $value['id'] ?? null,
+				'name' => $value['name'] ?? '',
+				'content' => $value['content'] ?? '',
+				'copyright' => $value['copyright'] ?? '',
+				'show_content' => $value['show_content'] ?? false,
+				'sliderImage' => $value['sliderImage'] ?? '',
+				'sliderImageAltText' => $value['sliderImageAltText'] ?? '',
+				'sliderImageLink' => $value['sliderImageLink'] ?? '',
+				'noclick' => $noclick,
+			];
+		}
+
+		$templateMgr->assign([
+			'sliderItems' => $sliderItems,
+			'baseUrl' => $baseUrl,
+			'publicFilesDir' => $publicFilesDir,
+			'contextPath' => $contextPath,
+			'contextId' => $contextId,
+			'maxHeight' => $maxHeight,
+			'speed' => $speed,
+			'delay' => $delay,
+			'stopOnLastSlide' => $stopOnLastSlide,
+			'slideEffect' => $slideEffect,
+		]);
+
+		// also provide a JSON-encoded props payload for the frontend Vue component
+		$sliderProps = json_encode([
+			'slides' => $sliderItems,
+			'baseUrl' => $baseUrl,
+			'publicFilesDir' => $publicFilesDir,
+			'contextPath' => $contextPath,
+			'contextId' => $contextId,
+			'maxHeight' => $maxHeight,
+			'speed' => $speed,
+			'delay' => $delay,
+			'stopOnLastSlide' => $stopOnLastSlide,
+			'slideEffect' => $slideEffect,
+		]);
+
+		$templateMgr->assign('sliderProps', $sliderProps);
+	}
+	
+	
 
 	/**
 	 * @copydoc PKPPlugin::getDisplayName()

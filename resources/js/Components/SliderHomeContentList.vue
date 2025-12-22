@@ -11,6 +11,10 @@
 						<PkpButton @click="handleAdd" class="bg bg-default">
 							{{ data.ButtonLabelAdd }}
 						</PkpButton>
+						<!-- Add a button that allows the user to add a slider image by selecting a published publication -->
+						 <PkpButton @click="addFromIssue" class="bg bg-default">
+							{{ data.ButtonLabeladdFromIssue }}
+						</PkpButton>
 					</template>
 					<PkpButton @click="sortingEnabled ? saveSorting() : startSorting()" class="bg bg-default">
 						{{ sortingEnabled ? t('common.save') : t('common.order') }}
@@ -57,7 +61,8 @@
 <script setup>
 const { useOrdering } = pkp.modules.useOrdering;
 import { computed } from 'vue';
-import SliderContentSideModal from "./AddSliderContentSideModal.vue";
+import AddSliderContentSideModal from "./AddSliderContentSideModal.vue";
+import SelectIssueSideModal from "./SelectIssueSideModal.vue";
 const { useModal } = pkp.modules.useModal;
 const { openDialog, openSideModal } = useModal();
 const { useLocalize } = pkp.modules.useLocalize;
@@ -71,26 +76,45 @@ const props = defineProps({
 const emit = defineEmits(['add', 'edit', 'delete', 'set']);
 
 function handleAdd() {
-	openSideModal(SliderContentSideModal, {
+	const formClone = JSON.parse(JSON.stringify(props.slidercontentform));
+	openSideModal(AddSliderContentSideModal, {
 		modalProps: {
 			size: 'large',
 		},
 		mode: 'add',
-		form: props.slidercontentform,
+		form: formClone,
 		onFormSuccess: (data) => {
 			// data should contain whatever the modal returns (for consistency send { items: [...] }).
 			// Update parent state via set so the global state/components are updated:
 			const updatedItems = props.data.items.concat(data || []);
 			emit('set', 'sliderHomeContentListComponent', { items: updatedItems });
-			console.log('handleAdd - emitted set with data:', updatedItems);
 		},
 	});
 	emit('add');
 }
 
+function addFromIssue() {
+	// Create a deep clone of the form config so we can populate it
+	// with the selected item's values without mutating the shared config.
+	const formClone = JSON.parse(JSON.stringify(props.slidercontentform));
+	openSideModal(SelectIssueSideModal, {
+		modalProps: {
+			size: 'large',
+		},
+		mode: 'addFromIssue',
+		form: formClone,
+		onFormSuccess: (data) => {
+			// data should contain whatever the modal returns (for consistency send { items: [...] }).
+			// Update parent state via set so the global state/components are updated:
+			const updatedItems = props.data.items.concat(data || []);
+			emit('set', 'sliderHomeContentListComponent', { items: updatedItems });
+		},
+	});
+	emit('add');
+}
+console.log('props : ', props);
 function handleEdit(itemId) {
 	const item = props.data.items.find(i => i.id === itemId);
-	console.log('handleEdit - form:', props.slidercontentform, 'item:', item);
 
 	// Create a deep clone of the form config so we can populate it
 	// with the selected item's values without mutating the shared config.
@@ -125,7 +149,7 @@ function handleEdit(itemId) {
 		});
 	}
 
-	openSideModal(SliderContentSideModal, {
+	openSideModal(AddSliderContentSideModal, {
 		modalProps: {
 			size: 'large',
 		},
@@ -155,7 +179,7 @@ function handleDelete(itemId) {
 				isWarnable: true,
 				callback: (close) => {
 					$.ajax({
-						url: props.slidercontentform.action + itemId,
+						url: props.data.apiUrl + '/' + itemId,
 						type: 'DELETE',
 						headers: {
 							'X-Csrf-Token': pkp.currentUser.csrfToken,
@@ -185,7 +209,7 @@ function toggleVisibility(itemId) {
 	const newVisibility = !item.show_content;
 
 	$.ajax({
-		url: props.slidercontentform.action + 'toggleVisibility/' + itemId,
+		url: props.data.apiUrl + '/toggleVisibility/' + itemId,
 		type: 'POST',
 		headers: {
 			'X-Csrf-Token': pkp.currentUser.csrfToken,
@@ -218,7 +242,7 @@ function saveOrder(orderedItems) {
 	// Send the new order to the server
 	return new Promise((resolve, reject) => {
 		$.ajax({
-			url: props.slidercontentform.action + 'saveOrder',
+			url: props.data.apiUrl + '/saveOrder',
 			type: 'POST',
 			headers: {
 				'X-Csrf-Token': pkp.currentUser.csrfToken,

@@ -83,7 +83,7 @@ class SliderHomeDAO extends SchemaDAO {
 	function getMaxSequence($contextId): int {
 		return DB::table('slider')
 		->where('context_id', $contextId)
-		->max('sequence');
+		->max('sequence') || 0;
 	}
 	
 	function deleteById(int $sliderContentId): int {
