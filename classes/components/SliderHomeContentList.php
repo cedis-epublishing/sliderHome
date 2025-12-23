@@ -57,8 +57,8 @@ class SliderHomeContentList
         return [
             'ButtonLabelAdd' => __('plugins.generic.sliderHome.addSliderContent'),
             'ButtonLabelEdit' => __('plugins.generic.sliderHome.editSliderContent'),
-            'ButtonLabelShow' => __('plugins.generic.slider.tableview.show'),
-            'ButtonLabelHide' => __('plugins.generic.slider.tableview.hide'),
+            'ButtonLabelShow' => __('plugins.generic.sliderHome.tableview.show'),
+            'ButtonLabelHide' => __('plugins.generic.sliderHome.tableview.hide'),
             'ButtonLabeladdFromIssue' => __('plugins.generic.sliderHome.addFromIssue'),
             'apiUrl' => $this->apiUrl,
             'confirmDeleteMessage' => __('plugins.generic.sliderHome.ListPanel.confirmDelete'),

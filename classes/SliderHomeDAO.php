@@ -89,8 +89,7 @@ class SliderHomeDAO extends SchemaDAO {
 	function deleteById(int $sliderContentId): int {
 		return DB::table('slider')
 		->where('slider_content_id', $sliderContentId)
-		->delete();
-		DB::table('slider_settings')
+		->delete() && DB::table('slider_settings')
 		->where('slider_content_id', $sliderContentId)
 		->delete();
 	}

@@ -59,6 +59,9 @@
 </template>
 
 <script setup>
+// ==========================================
+// Imports
+// ==========================================
 const { useOrdering } = pkp.modules.useOrdering;
 import { computed } from 'vue';
 import AddSliderContentSideModal from "./AddSliderContentSideModal.vue";
@@ -68,6 +71,9 @@ const { openDialog, openSideModal } = useModal();
 const { useLocalize } = pkp.modules.useLocalize;
 const { t } = useLocalize();
 
+// ==========================================
+// Props & Emits
+// ==========================================
 const props = defineProps({
 	data: { type: Object, required: true },
 	slidercontentform: { type: Object, required: true },
@@ -75,79 +81,113 @@ const props = defineProps({
 
 const emit = defineEmits(['add', 'edit', 'delete', 'set']);
 
-function handleAdd() {
-	const formClone = JSON.parse(JSON.stringify(props.slidercontentform));
-	openSideModal(AddSliderContentSideModal, {
+// ==========================================
+// Helper Functions
+// ==========================================
+
+// Helper to clone form config
+const cloneForm = () => JSON.parse(JSON.stringify(props.slidercontentform));
+
+// Helper to map data to form fields
+const mapDataToFormFields = (formClone, sourceData, fieldMappings) => {
+	formClone.fields.forEach(field => {
+		const mapping = fieldMappings[field.name];
+		if (mapping !== undefined) {
+			if (typeof mapping === 'function') {
+				// Custom mapping logic
+				mapping(field, sourceData);
+			} else {
+				// Simple property mapping
+				field.value = sourceData[mapping] ?? field.value;
+			}
+		}
+	});
+};
+
+// Helper to open add/addFromIssue modals with shared callback
+const openAddModal = (mode, component) => {
+	const formClone = cloneForm();
+	openSideModal(component, {
 		modalProps: {
 			size: 'large',
 		},
-		mode: 'add',
+		mode,
 		form: formClone,
 		onFormSuccess: (data) => {
-			// data should contain whatever the modal returns (for consistency send { items: [...] }).
-			// Update parent state via set so the global state/components are updated:
 			const updatedItems = props.data.items.concat(data || []);
 			emit('set', 'sliderHomeContentListComponent', { items: updatedItems });
 		},
 	});
-	emit('add');
+	emit(mode === 'add' ? 'add' : 'add');
+};
+
+// Send the new order to the server
+function saveOrder(orderedItems) {
+	return new Promise((resolve, reject) => {
+		$.ajax({
+			url: props.data.apiUrl + '/saveOrder',
+			type: 'POST',
+			headers: {
+				'X-Csrf-Token': pkp.currentUser.csrfToken,
+			},
+			data: { orderedIds: orderedItems.map(item => item.id) },
+			success: (r) => {
+				resolve(r);
+			},
+			error: (err) => {
+				reject(err);
+			},
+		});
+	});
+}
+
+// ==========================================
+// Composables Setup
+// ==========================================
+const {
+	items: orderedItems,
+	sortingEnabled,
+	startSorting,
+	saveSorting,
+	moveUp,
+	moveDown,
+} = useOrdering({
+	items: computed(() => props.data.items),
+	columns: computed(() => props.data.columns),
+	onSave: async (orderedItems) => {
+		await saveOrder(orderedItems);
+		emit('set', 'sliderHomeContentListComponent', { items: orderedItems });
+	}
+});
+
+// ==========================================
+// Event Handlers
+// ==========================================
+
+function handleAdd() {
+	openAddModal('add', AddSliderContentSideModal);
 }
 
 function addFromIssue() {
-	// Create a deep clone of the form config so we can populate it
-	// with the selected item's values without mutating the shared config.
-	const formClone = JSON.parse(JSON.stringify(props.slidercontentform));
-	openSideModal(SelectIssueSideModal, {
-		modalProps: {
-			size: 'large',
-		},
-		mode: 'addFromIssue',
-		form: formClone,
-		onFormSuccess: (data) => {
-			// data should contain whatever the modal returns (for consistency send { items: [...] }).
-			// Update parent state via set so the global state/components are updated:
-			const updatedItems = props.data.items.concat(data || []);
-			emit('set', 'sliderHomeContentListComponent', { items: updatedItems });
-		},
-	});
-	emit('add');
+	openAddModal('addFromIssue', SelectIssueSideModal);
 }
-console.log('props : ', props);
+
 function handleEdit(itemId) {
 	const item = props.data.items.find(i => i.id === itemId);
 
 	// Create a deep clone of the form config so we can populate it
 	// with the selected item's values without mutating the shared config.
-	const formClone = JSON.parse(JSON.stringify(props.slidercontentform));
+	const formClone = cloneForm();
 
-	// Map item properties to form fields by matching field.name
-	if (formClone && Array.isArray(formClone.fields)) {
-		formClone.fields.forEach(field => {
-			switch (field.name) {
-				case 'name':
-					field.value = item.name ?? field.value;
-					break;
-				case 'sliderImage':
-					// sliderImage expects a locale-keyed object with uploadName/altText
-					field.value = item.sliderImage ?? field.value;
-					break;
-				case 'sliderImageLink':
-					field.value = item.sliderImageLink ?? field.value;
-					break;
-				case 'content':
-					field.value = item.content ?? field.value;
-					break;
-				case 'copyright':
-					field.value = item.copyright ?? field.value;
-					break;
-				case 'show_content':
-					field.value = item.show_content ?? field.value;
-					break;
-				default:
-					break;
-			}
-		});
-	}
+	// Map item properties to form fields
+	mapDataToFormFields(formClone, item, {
+		name: 'name',
+		sliderImage: 'sliderImage',
+		sliderImageLink: 'sliderImageLink',
+		content: 'content',
+		copyright: 'copyright',
+		show_content: 'show_content'
+	});
 
 	openSideModal(AddSliderContentSideModal, {
 		modalProps: {
@@ -222,41 +262,8 @@ function toggleVisibility(itemId) {
 	});
 }
 
-const {
-	items: orderedItems,
-	sortingEnabled,
-	startSorting,
-	saveSorting,
-	moveUp,
-	moveDown,
-} = useOrdering({
-	items: computed(() => props.data.items),
-	columns: computed(() => props.data.columns),
-	onSave: async (orderedItems) => {
-		await saveOrder(orderedItems);
-		emit('set', 'sliderHomeContentListComponent', { items: orderedItems });
-	}
-});
-
-function saveOrder(orderedItems) {
-	// Send the new order to the server
-	return new Promise((resolve, reject) => {
-		$.ajax({
-			url: props.data.apiUrl + '/saveOrder',
-			type: 'POST',
-			headers: {
-				'X-Csrf-Token': pkp.currentUser.csrfToken,
-			},
-			data: { orderedIds: orderedItems.map(item => item.id) },
-			success: (r) => {
-				resolve(r);
-			},
-			error: (err) => {
-				reject(err);
-			},
-		});
-	});
-}
-
+// ==========================================
+// Computed Properties
+// ==========================================
 const columns = computed(() => props.data.columns);
 </script>

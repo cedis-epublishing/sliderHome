@@ -52,17 +52,27 @@
 </template>
 
 <script setup>
-import { inject, watch, ref } from "vue";
+// ==========================================
+// Imports
+// ==========================================
+import { inject, watch, ref, onMounted } from "vue";
 import debounce from 'debounce';
+import AddSliderContentSideModal from "./AddSliderContentSideModal.vue";
 
+// ==========================================
+// Composables
+// ==========================================
 const { useLocalize } = pkp.modules.useLocalize;
 const { t } = useLocalize();
+const { useModal } = pkp.modules.useModal;
+const { openSideModal } = useModal();
 
 const closeModal = inject("closeModal");
 const emit = defineEmits(['set']);
-const publishedIssues = ref([]);
 
-// Accept params as component props
+// ==========================================
+// Props
+// ==========================================
 const props = defineProps({
 	mode: {
 		type: String,
@@ -83,31 +93,60 @@ const props = defineProps({
 	onFormSuccess: { type: Function, default: null }
 });
 
-import AddSliderContentSideModal from "./AddSliderContentSideModal.vue";
-const { useModal } = pkp.modules.useModal;
-const { openSideModal } = useModal();
-
-// If mode is 'addFromIssue' perform $ajax get request to fetch published issues
-if (props.mode === 'addFromIssue') {
-	$.ajax({
-		url: props.form.searchApiUrl + '?status=3',
-		method: 'GET',
-		dataType: 'json',
-	}).then((response) => {
-		if (response) {
-			issueResults.value = response.items;
-			publishedIssues.value = response.items;
-		}
-	}).catch((error) => {
-		console.error('Error fetching issue ID:', error);
-	});
-}
-
-// Search state
+// ==========================================
+// Reactive State
+// ==========================================
+const publishedIssues = ref([]);
 const searchPhrase = ref('');
 const issueResults = ref([]);
 const isSearching = ref(false);
 let searchRequestId = 0;
+
+// ==========================================
+// Helper Functions
+// ==========================================
+
+// Helper to map data to form fields
+const mapDataToFormFields = (formClone, sourceData, fieldMappings) => {
+	formClone.fields.forEach(field => {
+		const mapping = fieldMappings[field.name];
+		if (mapping !== undefined) {
+			if (typeof mapping === 'function') {
+				// Custom mapping logic
+				mapping(field, sourceData);
+			} else {
+				// Simple property mapping
+				field.value = sourceData[mapping] ?? field.value;
+			}
+		}
+	});
+};
+
+// ==========================================
+// Lifecycle
+// ==========================================
+
+// Fetch published issues when component mounts and mode is 'addFromIssue'
+onMounted(() => {
+	if (props.mode === 'addFromIssue') {
+		$.ajax({
+			url: props.form.searchApiUrl + '?status=3',
+			method: 'GET',
+			dataType: 'json',
+		}).then((response) => {
+			if (response) {
+				issueResults.value = response.items;
+				publishedIssues.value = response.items;
+			}
+		}).catch((error) => {
+			console.error('Error fetching issue ID:', error);
+		});
+	}
+});
+
+// ==========================================
+// Methods
+// ==========================================
 
 function setSearchPhrase(phrase) {
 	// update reactive value and trigger debounced search
@@ -139,13 +178,13 @@ const doIssueSearch = debounce(async (phrase) => {
 
 function selectIssue(issue) {
 	if (!issue || !props.form) return;
-	// populate form fields where appropriate
-	props.form.fields.forEach(field => {
-		if (field.name === 'name') {
-			field.value = issue.identification || '';
-		} else if (field.name === 'sliderImageLink') {
-			field.value = issue.publishedUrl || '';
-		} else if (field.name === 'sliderImage') {
+	
+	// Map issue properties to form fields
+	mapDataToFormFields(props.form, issue, {
+		name: 'identification',
+		sliderImageLink: 'publishedUrl',
+		sliderImage: (field, issue) => {
+			// Map cover images to locales
 			for (const localeKey in props.form.visibleLocales) {
 				const locale = props.form.visibleLocales[localeKey];
 				if (issue.coverImage && issue.coverImage[locale]) {
@@ -154,8 +193,9 @@ function selectIssue(issue) {
 					field.value[locale]['altText'] = issue.coverImageAltText && issue.coverImageAltText[locale] ? issue.coverImageAltText[locale] : '';
 				}
 			}
-		} else if (field.name === 'content') {
-			// map localized titles into form locales
+		},
+		content: (field, issue) => {
+			// Map localized titles to form locales
 			for (const localeKey in props.form.visibleLocales || {}) {
 				const locale = props.form.visibleLocales[localeKey];
 				if (!field.value) field.value = {};
@@ -163,6 +203,7 @@ function selectIssue(issue) {
 			}
 		}
 	});
+	
 	closeModal();
 	openSideModal(AddSliderContentSideModal, {
 				modalProps: {

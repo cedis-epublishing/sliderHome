@@ -12,22 +12,29 @@
 	  </span>
     </template>
     <PkpSideModalLayoutBasic>
-        <PkpForm v-bind="form" @success="handleSuccess" />
+        <PkpForm v-bind="localForm" @set="handleSet" @success="handleSuccess" />
     </PkpSideModalLayoutBasic>
   </PkpSideModalBody>
 </template>
 
 <script setup>
-import { inject, watch, ref } from "vue";
-// import { toggleLocale } from 'pkp/modules/FormLocales';
+// ==========================================
+// Imports
+// ==========================================
+import { inject, watch, ref, reactive } from "vue";
 
+// ==========================================
+// Composables
+// ==========================================
 const { useLocalize } = pkp.modules.useLocalize;
 const { t } = useLocalize();
 
 const closeModal = inject("closeModal");
 const emit = defineEmits(['set']);
 
-// Accept params as component props
+// ==========================================
+// Props
+// ==========================================
 const props = defineProps({
 	mode: {
 		type: String,
@@ -48,24 +55,51 @@ const props = defineProps({
 	onFormSuccess: { type: Function, default: null }
 });
 
-// add hidden fields so the endpoint receives `mode` and `itemId` as parameters when the form posts.
+// ==========================================
+// Reactive State
+// ==========================================
+
+// Make form reactive locally
+const localForm = reactive(props.form);
+
+// ==========================================
+// Helper Functions
+// ==========================================
+
+// Add hidden fields so the endpoint receives `mode` and `itemId` as parameters when the form posts
 const ensureHiddenField = (name, value) => {
-	if (!props.form || !Array.isArray(props.form.fields)) return;
-	const existing = props.form.fields.find(f => f.name === name);
+	if (!localForm || !Array.isArray(localForm.fields)) return;
+	const existing = localForm.fields.find(f => f.name === name);
 	if (existing) {
 		existing.value = value;
 	} else {
-		props.form.fields.push({ name, type: 'hidden', value });
+		localForm.fields.push({ name, type: 'hidden', value });
 	}
 };
 
-// initialize hidden fields
+// ==========================================
+// Initialization
+// ==========================================
+
+// Initialize hidden fields
 ensureHiddenField('mode', props.mode);
 ensureHiddenField('itemId', props.itemId ?? '');
 
-// keep them in sync if props change
+// ==========================================
+// Watchers
+// ==========================================
+
+// Keep hidden fields in sync if props change
 watch(() => props.mode, (v) => ensureHiddenField('mode', v));
 watch(() => props.itemId, (v) => ensureHiddenField('itemId', v ?? ''));
+
+// ==========================================
+// Event Handlers
+// ==========================================
+
+function handleSet(formId, updates) {
+	Object.assign(localForm, updates);
+}
 
 function handleSuccess(data) {
 	if (props.onFormSuccess) {

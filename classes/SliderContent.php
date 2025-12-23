@@ -79,11 +79,11 @@ class SliderContent extends DataObject {
 		return $this->setData('sequence', $sequence);
 	}
 
-	function getSliderImage(): string {
+	function getSliderImage(): array {
 		return $this->getData('sliderImage');
 	}
 
-	function setSliderImage($filename): ?string {
+	function setSliderImage($filename): ?array {
 		return $this->setData('sliderImage', $filename);
 	}
 	
@@ -95,17 +95,12 @@ class SliderContent extends DataObject {
 		return $this->setData('sliderImageLink', $link);
 	}
 
-	function getSliderImageAltText(): string {
+	function getSliderImageAltText(): array {
 		return $this->getData('sliderImageAltText');
 	}
 
-	function setSliderImageAltText($altText): ?string {
+	function setSliderImageAltText($altText): ?array {
 		return $this->setData('sliderImageAltText', $altText);
-	}
-
-	function getLocale(): string {
-		$request = Application::getRequest();
-		return $request->getContext()->getPrimaryLocale();
 	}
 }
 

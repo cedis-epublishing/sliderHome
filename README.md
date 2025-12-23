@@ -50,7 +50,10 @@ tinymcetoolbar=' | code'
 ## Development
 
 - Install `nvm` via `curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash`
+- Close and reopen terminal
+- If the required node version is not yet installed run `nvm install`
 - Run nvm use before each development session, this will select the correct node version as stated in `.nvmrc`
+- Run `npm install`
 - Use `npm run dev`
 
 

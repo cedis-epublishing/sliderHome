@@ -29,64 +29,55 @@ msgstr "Aggiungi contenuto allo slider"
 msgid "plugins.generic.sliderHome.editSliderContent"
 msgstr "Modifica il contenuto dello Slider"
 
-msgid "plugins.generic.sliderHome.grid.title"
-msgstr "Campi dello Slider"
-
-msgid "plugins.generic.sliderHome.noneCreated"
-msgstr "Nessun campo è stato ancora creato."
-
 msgid "plugins.generic.sliderHome.name"
 msgstr "Nome di questa immagine dello slider"
 
 msgid "plugins.generic.sliderHome.content"
-msgstr "Contenuto"
-
-msgid "plugins.generic.sliderHome.noneExist"
-msgstr "Ancora nessun contenuto."
+msgstr "Nota: Il codice HTML fornito qui verrà inserito in un &lt;div id=\"slider-overlay\" class=\"slider-text\"&gt;&lt;/div&gt; con uno sfondo trasparente. Puoi modificare lo stile dal foglio di stile della rivista. Non dovresti includere immagini qui."
 
 msgid "plugins.generic.sliderHome.showSliderContent"
 msgstr "Mostra il contenuto di questo slider sulla home page."
 
-msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.description"
 msgstr "Altezza massima del cursore come percentuale dell'altezza dello schermo."
 
-msgid "plugins.generic.slider.settings.form.maxHeight"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight"
 msgstr "Altezza dello Slider"
 
-msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.error"
 msgstr "Errore: l'altezza del cursore deve essere compresa tra 0 e 100!"
 
-msgid "plugins.generic.slider.settings.form.speed.description"
+msgid "plugins.generic.sliderHome.settings.form.speed.description"
 msgstr "Durata della transizione tra le diapositive (in ms)."
 
-msgid "plugins.generic.slider.settings.form.speed"
+msgid "plugins.generic.sliderHome.settings.form.speed"
 msgstr "Velocità dello slider"
 
-msgid "plugins.generic.slider.settings.form.speed.error"
+msgid "plugins.generic.sliderHome.settings.form.speed.error"
 msgstr "Errore: la velocità dello slider deve essere un numero positivo!"
 
-msgid "plugins.generic.slider.settings.form.delay.description"
+msgid "plugins.generic.sliderHome.settings.form.delay.description"
 msgstr "Ritardo tra le transizioni (in ms)."
 
-msgid "plugins.generic.slider.settings.form.delay"
+msgid "plugins.generic.sliderHome.settings.form.delay"
 msgstr "Ritardo dello Slider"
 
-msgid "plugins.generic.slider.settings.form.delay.error"
+msgid "plugins.generic.sliderHome.settings.form.delay.error"
 msgstr "Errore: il ritardo dello slider deve essere un numero positivo!"
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide"
 msgstr "Interrompi la presentazione dopo l'ultima diapositiva."
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide.boxLabel"
 msgstr "Ripetizione dello Slider"
 
-msgid "plugins.generic.slider.settings.form.success"
+msgid "plugins.generic.sliderHome.settings.form.success"
 msgstr "Le impostazioni dello slider sono state aggiornate.. <a href=\"{$url}\" target=\"_blank\">Visualizza ora</a>"
 
-msgid "plugins.generic.slider.settings.form.groupLabel"
+msgid "plugins.generic.sliderHome.settings.form.groupLabel"
 msgstr "Impostazioni dello Slider"
 
-msgid "plugins.generic.slider.settings.form.groupDescription"
+msgid "plugins.generic.sliderHome.settings.form.groupDescription"
 msgstr "Nota bene:<br>L'altezza dello slider è determinata dall'altezza dell'immagine più grande visualizzata. Solo se tale altezza supera la risoluzione verticale dello schermo, è possibile limitare l'altezza dello slider impostando l'altezza massima dello slider come percentuale della risoluzione verticale dello schermo. In caso contrario, questa impostazione non avrà alcun effetto. Sia l'altezza che la larghezza delle immagini saranno ridimensionate.<br>Per utilizzare l'intera larghezza dello slider, preparare le immagini con altezze inferiori alla risoluzione verticale dello schermo."
 
 msgid "plugins.generic.sliderHome.prevSlide"
@@ -95,31 +86,31 @@ msgstr "Diapositiva precedente"
 msgid "plugins.generic.sliderHome.nextSlide"
 msgstr "Diapositiva successiva"
 
-msgid "plugins.generic.slider.settings.form.coverflow"
+msgid "plugins.generic.sliderHome.settings.form.coverflow"
 msgstr "Coverflow"
 
-msgid "plugins.generic.slider.settings.form.cube"
+msgid "plugins.generic.sliderHome.settings.form.cube"
 msgstr "Cube"
 
-msgid "plugins.generic.slider.settings.form.default"
+msgid "plugins.generic.sliderHome.settings.form.default"
 msgstr "Nessuno"
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.boxLabel"
 msgstr "Impostazioni di localizzazione"
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.description"
 msgstr "Questa opzione determina se applicare la lingua primaria per i campi localizzati (Copyright, Contenuto HTML, Testo alternativo immagine) se sono vuoti."
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.useNone"
 msgstr "Attuale {$label}"
 
-msgid "plugins.generic.slider.settings.form.slideEffect"
+msgid "plugins.generic.sliderHome.settings.form.slideEffect"
 msgstr "Effetto di transizione dello slider"
 
-msgid "plugins.generic.slider.tableview.show"
+msgid "plugins.generic.sliderHome.tableview.show"
 msgstr "Mostra"
 
-msgid "plugins.generic.slider.tableview.hide"
+msgid "plugins.generic.sliderHome.tableview.hide"
 msgstr "Nascondi"
 
 msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
@@ -130,12 +121,6 @@ msgstr "Aggiungi numero/volume"
 
 msgid "plugins.generic.sliderHome.copyright"
 msgstr "Nota sul copyright"
-
-msgid "plugins.generic.sliderHome.grid.visible"
-msgstr "Visibile"
-
-msgid "plugins.generic.sliderHome.imageDetailsHint"
-msgstr "Se vuoi aggiungere un link all'immagine o un testo alternativo, carica e salva prima l'immagine e poi modifica la voce salvata."
 
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Carica immagine dello slider"
@@ -154,3 +139,10 @@ msgstr "Contenuto HTML sovrapposto dello slider"
 
 msgid "plugins.generic.sliderHome.noResults"
 msgstr "Please search for an issue"
+
+msgid "plugins.generic.sliderHome.contentForm.label"
+msgstr "Informazioni per lo styling delle diapositive tramite CSS"
+
+msgid "plugins.generic.sliderHome.contentForm.description"
+msgstr "L'aspetto delle immagini dello slider e dell'overlay HTML può essere modificato tramite il foglio di stile CSS della rivista.<br>Le immagini dello slider sono incorporate in un elemento HTML &ltfigure&gt, che può essere selezionato tramite il selettore CSS figure.slider-figure.<br>Il contenuto sovrapposto può essere selezionato tramite #slider-overlay.slider-text.<br>Se non viene caricata alcuna immagine, il contenuto sovrapposto viene visualizzato centrato senza sfondo. In questo caso, l'elemento HTML può essere selezionato tramite #slide-no-image-container o .slide-no-image-container."
+

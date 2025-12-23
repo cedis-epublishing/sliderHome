@@ -29,9 +29,6 @@ msgstr "Sliderinhalt hinzufügen"
 msgid "plugins.generic.sliderHome.editSliderContent"
 msgstr "Sliderinhalt bearbeiten"
 
-msgid "plugins.generic.sliderHome.grid.visible"
-msgstr "Sichtbar"
-
 msgid "plugins.generic.sliderHome.name"
 msgstr "Name des Sliderbildes"
 
@@ -53,64 +50,58 @@ msgstr "Sliderbild"
 msgid "plugins.generic.sliderHome.sliderImageLink"
 msgstr "Wenn Sie das Sliderbild verlinken möchten können Sie hier eine URL angeben."
 
-msgid "plugins.generic.sliderHome.imageDetailsHint"
-msgstr "Wenn Sie das Sliderbild verlinken wollen oder einen Alternativtext eingeben wollen laden Sie bitte erst ein Sliderbild hoch und editieren Sie den gespeicherten Slidereintrag."
-
-msgid "plugins.generic.sliderHome.noneExist"
-msgstr "Kein Inhalt vorhanden."
-
 msgid "plugins.generic.sliderHome.showSliderContent"
 msgstr "Diesen Sliderinhalt auf der Startseite anzeigen."
 
-msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.description"
 msgstr "Maximale Höhe des Sliders in Prozent des Bildschirms."
 
-msgid "plugins.generic.slider.settings.form.maxHeight"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight"
 msgstr "Höhe des Sliders"
 
-msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.error"
 msgstr "Fehler: Die Höhe sollte im Bereich 0 to 100 liegen!"
 
-msgid "plugins.generic.slider.settings.form.speed.description"
+msgid "plugins.generic.sliderHome.settings.form.speed.description"
 msgstr "Dauer des Übergangs zwischen Slides (in ms)."
 
-msgid "plugins.generic.slider.settings.form.speed"
+msgid "plugins.generic.sliderHome.settings.form.speed"
 msgstr "Geschwindigkeit des Sliders"
 
-msgid "plugins.generic.slider.settings.form.speed.error"
+msgid "plugins.generic.sliderHome.settings.form.speed.error"
 msgstr "Fehler: Die Geschwindigkeit sollte eine positive Zahl sein!"
 
-msgid "plugins.generic.slider.settings.form.delay.description"
+msgid "plugins.generic.sliderHome.settings.form.delay.description"
 msgstr "Verzögerung zwischen den Übergängen (in ms)."
 
-msgid "plugins.generic.slider.settings.form.delay"
+msgid "plugins.generic.sliderHome.settings.form.delay"
 msgstr "Verzögerung des Sliders"
 
-msgid "plugins.generic.slider.settings.form.delay.error"
+msgid "plugins.generic.sliderHome.settings.form.delay.error"
 msgstr "Fehler: Die Verzögerung sollte eine positive Zahl sein!"
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide"
 msgstr "Slideshow nach einem Durchlauf anhalten."
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide.boxLabel"
 msgstr "Slider Wiederholung"
 
-msgid "plugins.generic.slider.settings.form.success"
+msgid "plugins.generic.sliderHome.settings.form.success"
 msgstr "Die Slider-Einstellungen wurden aktualisiert. <a href=\"{$url}\" target=\"_blank\">Hier ansehen</a>"
 
-msgid "plugins.generic.slider.settings.form.groupLabel"
+msgid "plugins.generic.sliderHome.settings.form.groupLabel"
 msgstr "Slider Einstellungen"
 
-msgid "plugins.generic.slider.settings.form.groupDescription"
+msgid "plugins.generic.sliderHome.settings.form.groupDescription"
 msgstr "Bitte beachten:<br>Die Sliderhöhe wird durch die Höhe des größten angezeigten Bildes bestimmt. Nur wenn diese Höhe die vertikale Bildschirmauflösung übersteigt, kann die Sliderhöhe durch setzen der maximalen Sliderhöhe in Prozent der vertikalen Auflösung limitiert werden. Ansonsten hat diese Einstellung keinen Effekt. Dabei wird sowohl die Höhe als auch die Breite der Bilder skaliert.<br>Um die volle Sliderbreite zu nutzen sollte die Höhe der Bilder kleiner als die vertikale Bildschirmauflösung sein."
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.description"
 msgstr "Diese Option bestimmt, ob für lokalisierte Felder (Copyright, HTML-Inhalt, Image Alt Text) falls diese leer sind, die primäre Sprache übernommen werden soll oder nicht."
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.boxLabel"
 msgstr "Lokalisierungseinstellung"
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.useNone"
 msgstr "Aktuelle {$label}"
 
 msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
@@ -119,22 +110,22 @@ msgstr "Wollen Sie diesen Sliderinhalt wirklisch löschen?"
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Sliderbild hochladen"
 
-msgid "plugins.generic.slider.settings.form.slideEffect"
+msgid "plugins.generic.sliderHome.settings.form.slideEffect"
 msgstr "Slide-Übergangseffekt"
 
-msgid "plugins.generic.slider.settings.form.default"
-msgstr "Kein Übergnagseffekt"
+msgid "plugins.generic.sliderHome.settings.form.default"
+msgstr "Kein Übergangseffekt"
 
-msgid "plugins.generic.slider.settings.form.coverflow"
+msgid "plugins.generic.sliderHome.settings.form.coverflow"
 msgstr "Coverflow"
 
-msgid "plugins.generic.slider.settings.form.cube"
+msgid "plugins.generic.sliderHome.settings.form.cube"
 msgstr "Cube"
 
-msgid "plugins.generic.slider.tableview.show"
+msgid "plugins.generic.sliderHome.tableview.show"
 msgstr "Anzeigen"
 
-msgid "plugins.generic.slider.tableview.hide"
+msgid "plugins.generic.sliderHome.tableview.hide"
 msgstr "Verstecken"
 
 msgid "plugins.generic.sliderHome.addFromIssue"

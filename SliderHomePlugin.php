@@ -35,7 +35,6 @@ use Illuminate\Http\JsonResponse;
  */
 class SliderHomePlugin extends GenericPlugin {
 
-	protected $_endpointsSetup = false;
 	/**
 	 * Register the plugin.
 	 * @param $category string
@@ -179,12 +178,10 @@ class SliderHomePlugin extends GenericPlugin {
 		$locales = array_map(function($localeKey) use ($localeNames) {
 			return ['key' => $localeKey, 'label' => $localeNames[$localeKey]->locale];
 		}, $supportedFormLocales);
-		$formLocaleNames = $context->getSupportedFormLocaleNames(); // TODO @RS
 
 		$publicFileManager = new PublicFileManager();
 		$baseUrl = $request->getBaseUrl() . '/' . $publicFileManager->getContextFilesPath($context->getId());
 		$temporaryFileApiUrl = $dispatcher->url($request, Application::ROUTE_API, $context->getPath(), 'temporaryFiles');
-		$publicFileApiUrl = $dispatcher->url($request, Application::ROUTE_API, $context->getPath(), '_uploadPublicFile');
 		$contextApiUrl = $dispatcher->url(
 			$request,
 			Application::ROUTE_API,

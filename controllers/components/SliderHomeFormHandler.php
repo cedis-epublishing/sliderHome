@@ -200,6 +200,16 @@ class SliderHomeFormHandler extends APIHandler
     {
         $sliderHomeDao = new SliderHomeDAO();
         $sliderContentId = (int)$illuminateRequest->route('sliderContentId');
+        $request = Application::get()->getRequest();
+        $contextId = $request->getContext()->getId();
+
+        // Delete associated files for each locale
+        $sliderImages = $sliderHomeDao->getById($sliderContentId, $contextId)->getSliderImage();
+        $publicFileManager = new PublicFileManager();
+        foreach ($sliderImages as $filename) {
+            $publicFileManager->removeContextFile($contextId, $filename);
+        }
+        // Delete database entry
         if ($sliderHomeDao->deleteById($sliderContentId)) {
             return response()->json($sliderContentId, 200);
         } else {

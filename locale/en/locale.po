@@ -29,9 +29,6 @@ msgstr "Add Slider Content"
 msgid "plugins.generic.sliderHome.editSliderContent"
 msgstr "Edit Slider Content"
 
-msgid "plugins.generic.sliderHome.grid.visible"
-msgstr "Visible"
-
 msgid "plugins.generic.sliderHome.name"
 msgstr "Name of this slider image"
 
@@ -47,70 +44,64 @@ msgstr "Slider image"
 msgid "plugins.generic.sliderHome.sliderImageLink"
 msgstr "If you want to put a link on the slider image you can provide an URL here."
 
-msgid "plugins.generic.sliderHome.imageDetailsHint"
-msgstr "If you want to put a link on the slider image or want to add an alternative text please first upload and save the slider image and then edit the saved slider entry again."
-
 msgid "plugins.generic.sliderHome.content"
 msgstr "Note: The HTML provided here will be wrapped in a &lt;div id=\"slider-overlay\" class=\"slider-text\"&gt;&lt;/div&gt; providing a transparent background. You can modify the style from your journal stylesheet. You should not include images here."
 
 msgid "plugins.generic.sliderHome.sliderTextContentLabel"
 msgstr "Slider overlay HTML content"
 
-msgid "plugins.generic.sliderHome.noneExist"
-msgstr "No content yet."
-
 msgid "plugins.generic.sliderHome.showSliderContent"
 msgstr "Show this slider content on home page."
 
-msgid "plugins.generic.slider.settings.form.maxHeight.description"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.description"
 msgstr "Maximum slider height as percentage of screen height."
 
-msgid "plugins.generic.slider.settings.form.maxHeight"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight"
 msgstr "Slider height"
 
-msgid "plugins.generic.slider.settings.form.maxHeight.error"
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.error"
 msgstr "Error: slider height should be in the range of 0 to 100!"
 
-msgid "plugins.generic.slider.settings.form.speed.description"
+msgid "plugins.generic.sliderHome.settings.form.speed.description"
 msgstr "Duration of transition between slides (in ms)."
 
-msgid "plugins.generic.slider.settings.form.speed"
+msgid "plugins.generic.sliderHome.settings.form.speed"
 msgstr "Slider speed"
 
-msgid "plugins.generic.slider.settings.form.speed.error"
+msgid "plugins.generic.sliderHome.settings.form.speed.error"
 msgstr "Error: slider speed should be a positive number!"
 
-msgid "plugins.generic.slider.settings.form.delay.description"
+msgid "plugins.generic.sliderHome.settings.form.delay.description"
 msgstr "Delay between transitions (in ms)."
 
-msgid "plugins.generic.slider.settings.form.delay"
+msgid "plugins.generic.sliderHome.settings.form.delay"
 msgstr "Slider delay"
 
-msgid "plugins.generic.slider.settings.form.delay.error"
+msgid "plugins.generic.sliderHome.settings.form.delay.error"
 msgstr "Error: slider delay should be a positive number!"
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide"
 msgstr "Stop slideshow after last slide."
 
-msgid "plugins.generic.slider.settings.form.stopOnLastSlide.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide.boxLabel"
 msgstr "Slider repetition"
 
-msgid "plugins.generic.slider.settings.form.success"
+msgid "plugins.generic.sliderHome.settings.form.success"
 msgstr "The slider settings have been updated. <a href=\"{$url}\" target=\"_blank\">View Now</a>"
 
-msgid "plugins.generic.slider.settings.form.groupLabel"
+msgid "plugins.generic.sliderHome.settings.form.groupLabel"
 msgstr "Slider Settings"
 
-msgid "plugins.generic.slider.settings.form.groupDescription"
+msgid "plugins.generic.sliderHome.settings.form.groupDescription"
 msgstr "Please note:<br>The slider height is determined by the height of largest image shown. Only if this height exceeds the vertical resolution of the screen the slider height can be limited by setting the maximum slider height as percentage of the screen vertical resolution. Otherwise this setting will have no effect. Both, the height and the width of the images will be scaled.<br>To use the full slider width prepare the images with heights smaller than the vertical screen  resolution."
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.description"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.description"
 msgstr "This option determines whether or not to apply the primary language for localized fields (Copyright, HTML Content, Image Alt Text) if they are empty."
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.boxLabel"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.boxLabel"
 msgstr "Localization settings"
 
-msgid "plugins.generic.slider.settings.form.fallbackLocale.useNone"
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.useNone"
 msgstr "Current {$label}"
 
 msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
@@ -119,22 +110,22 @@ msgstr "Do you really want to delete this silder content?"
 msgid "plugins.generic.sliderHome.imageUploadHeading"
 msgstr "Upload slider image"
 
-msgid "plugins.generic.slider.settings.form.slideEffect"
+msgid "plugins.generic.sliderHome.settings.form.slideEffect"
 msgstr "Slide transition effect"
 
-msgid "plugins.generic.slider.settings.form.default"
+msgid "plugins.generic.sliderHome.settings.form.default"
 msgstr "None"
 
-msgid "plugins.generic.slider.settings.form.coverflow"
+msgid "plugins.generic.sliderHome.settings.form.coverflow"
 msgstr "Coverflow"
 
-msgid "plugins.generic.slider.settings.form.cube"
+msgid "plugins.generic.sliderHome.settings.form.cube"
 msgstr "Cube"
 
-msgid "plugins.generic.slider.tableview.show"
+msgid "plugins.generic.sliderHome.tableview.show"
 msgstr "Show"
 
-msgid "plugins.generic.slider.tableview.hide"
+msgid "plugins.generic.sliderHome.tableview.hide"
 msgstr "Hide"
 
 msgid "plugins.generic.sliderHome.addFromIssue"
@@ -148,3 +139,10 @@ msgstr "Next slide"
 
 msgid "plugins.generic.sliderHome.noResults"
 msgstr "Please search for an issue"
+
+msgid "plugins.generic.sliderHome.contentForm.label"
+msgstr "Information for styling slides using CSS"
+
+msgid "plugins.generic.sliderHome.contentForm.description"
+msgstr "The appearance of the slider images and HTML overlay can be modified via the journal's CSS stylesheet.<br>The slider images are embedded in an HTML &ltfigure&gt element, which can be selected via the CSS selector figure.slider-figure.<br>Overlay content can be selected via #slider-overlay.slider-text.<br>If no image is uploaded, the overlay content is displayed centered without background. In this case, the HTML element can be selected via #slide-no-image-container or .slide-no-image-container."
+
