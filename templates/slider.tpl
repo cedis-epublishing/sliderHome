@@ -2,7 +2,7 @@
 {* sliderItems, baseUrl, publicFilesDir, contextPath, contextId, maxHeight, speed, delay, stopOnLastSlide, slideEffect *}
 {if $sliderItems|@count > 0}
     <div class="slider-home-mount">
-        <div class="swiper-container" data-effect="{$slideEffect|escape:'html'}" data-speed="{$speed|default:0}"
+        <div class="swiper slider-home-swiper" data-effect="{$slideEffect|escape:'html'}" data-speed="{$speed|default:0}"
             data-delay="{$delay|default:0}" data-stop-on-last="{$stopOnLastSlide|default:false}"
             data-prev-slide-message="{translate key='plugins.generic.sliderHome.prevSlide'}"
             data-next-slide-message="{translate key='plugins.generic.sliderHome.nextSlide'}">

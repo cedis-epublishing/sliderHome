@@ -21,6 +21,9 @@
     if (swiperEl._sliderInitialized) return; // guard against double init
     var cfg = readConfigFromContainer(swiperEl);
     try {
+      if (swiperEl.swiper && typeof swiperEl.swiper.destroy === 'function') {
+        swiperEl.swiper.destroy(true, true);
+      }
       var instance = new Swiper(swiperEl, {
         autoHeight: true,
         effect: cfg.slideEffect || undefined,
@@ -57,15 +60,15 @@
     var mounts = document.querySelectorAll('.slider-home-mount');
     if (!mounts || mounts.length === 0) return;
     mounts.forEach(function (mountEl) {
-      var swiperEl = mountEl.querySelector('.swiper-container');
+      var swiperEl = mountEl.querySelector('.slider-home-swiper');
       if (!swiperEl) return;
       initSwiperForContainer(swiperEl);
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', mountAll);
-  } else {
+  if (document.readyState === 'complete') {
     mountAll();
+  } else {
+    window.addEventListener('load', mountAll);
   }
 })();

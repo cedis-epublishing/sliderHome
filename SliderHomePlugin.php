@@ -16,7 +16,6 @@ use PKP\config\Config;
 use APP\file\PublicFileManager;
 use APP\template\TemplateManager;
 use PKP\facades\Locale;
-use DOMDocument;
 use APP\plugins\generic\sliderHome\classes\SliderHomeDAO;
 use APP\plugins\generic\sliderHome\classes\components\form\context\SliderHomeSettingsForm;
 use APP\plugins\generic\sliderHome\classes\components\form\SliderContentForm;
@@ -272,16 +271,7 @@ class SliderHomePlugin extends GenericPlugin {
 		$this->assignSliderTemplateVariables($request, $templateMgr);
 
 		// ensure Swiper assets and the frontend initializer are available
-		$this->addHeader($templateMgr, $request->getBaseUrl());
-		// register a small frontend mount script that doesn't depend on backend Vue
-		$templateMgr->addJavaScript(
-			'sliderHomeFrontend',
-			"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/js/slider-mount.js",
-			[
-				'inline' => false,
-				'contexts' => ['frontend']
-			]
-		);
+		$this->addFrontendAssets($templateMgr, $request);
 
 		$output =& $args[2];
 		// fetch the mount element for the Vue component
@@ -301,15 +291,7 @@ class SliderHomePlugin extends GenericPlugin {
 					if ($applicationName=="omp") {
 						// Prepare variables and assets for the Smarty slider template
 						$this->assignSliderTemplateVariables($request, $templateMgr);
-						$this->addHeader($templateMgr, $request->getBaseUrl());
-						$templateMgr->addJavaScript(
-							'sliderHomeFrontend',
-							"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/js/slider-mount.js",
-							[
-								'inline' => false,
-								'contexts' => ['frontend']
-							]
-						);
+						$this->addFrontendAssets($templateMgr, $request);
 						// Render the server-side Smarty slider and assign into home template
 						$sliderHtml = $templateMgr->fetch($this->getTemplateResource('slider.tpl'));
 						$templateMgr->assign('sliderContent', $sliderHtml);
@@ -354,6 +336,29 @@ class SliderHomePlugin extends GenericPlugin {
                 'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
                 'contexts' => ['frontend'],
             ],
+		);
+	}
+
+	private function addFrontendAssets($templateMgr, $request) {
+		$this->addHeader($templateMgr, $request->getBaseUrl());
+		$templateMgr->addJavaScript(
+			'sliderHomeSwiper',
+			"{$request->getBaseUrl()}/{$this->getPluginPath()}/build/swiper/swiper-bundle.min.js",
+			[
+				'inline' => false,
+				'contexts' => ['frontend'],
+				'priority' => TemplateManager::STYLE_SEQUENCE_LAST
+			]
+		);
+		// register a small frontend mount script that doesn't depend on backend Vue
+		$templateMgr->addJavaScript(
+			'sliderHomeFrontend',
+			"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/js/slider-mount.js",
+			[
+				'inline' => false,
+				'contexts' => ['frontend'],
+				'priority' => TemplateManager::STYLE_SEQUENCE_LAST
+			]
 		);
 	}
     
