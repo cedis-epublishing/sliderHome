@@ -316,8 +316,10 @@ class SliderHomePlugin extends GenericPlugin {
 						$templateMgr->display($this->getTemplateResource('homeOMP.tpl'));
 						return true;
 					}
+					break;
 			case 'frontend/pages/indexJournal.tpl':
 				$this->addHeader($templateMgr,$request->getBaseUrl());
+				break;
 			case 'management/website.tpl':
 				$templateMgr->addJavaScript(
 					'sliderHomeJS',
@@ -331,6 +333,7 @@ class SliderHomePlugin extends GenericPlugin {
 				$templateMgr->addStyleSheet('sliderHomeContentListStyle',"{$request->getBaseUrl()}/{$this->getPluginPath()}/resources/css/sliderHome.css", [
 					'contexts' => ['backend']
 				] );
+				break;
 		}
 		return false;
 	}
@@ -338,15 +341,19 @@ class SliderHomePlugin extends GenericPlugin {
 	private function addHeader($templateMgr,$baseUrl) {
 		$templateMgr->addHeader(
 			'slider',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/resources/css/sliderHome.css'>"
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/resources/css/sliderHome.css'>",
+			[
+                'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
+                'contexts' => ['frontend'],
+            ],
 		);
 		$templateMgr->addHeader(
 			'swiper-min',
-			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.css'>"
-		);		
-		$templateMgr->addHeader(
-			'swiper-min-js',
-			"<script src='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.js'></script>"
+			"<link rel='stylesheet' href='".$baseUrl."/plugins/generic/sliderHome/build/swiper/swiper-bundle.min.css'>",
+			[
+                'priority' => TemplateManager::STYLE_SEQUENCE_LAST,
+                'contexts' => ['frontend'],
+            ],
 		);
 	}
     
@@ -362,7 +369,7 @@ class SliderHomePlugin extends GenericPlugin {
 		$maxHeight = $context->getData('maxHeight');
 		$speed = $context->getData('speed');
 		$delay = $context->getData('delay');
-		$stopOnLastSlide = $context->getData('stopOnLastSlide')?true:false;
+		$stopOnLastSlide = $context->getData('stopOnLastSlide')?"true":"false";
 		$fallbackLocale = $context->getData('fallbackLocale')?:"usePrimary";
 		$slideEffect = $context->getData('slideEffect')?:"";
 
