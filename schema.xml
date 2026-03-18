@@ -4,7 +4,7 @@
 <!--
   * schema.xml
   *
-  * Copyright (c) 2021 Freie Universität Berlin
+  * Copyright (c) 2021 Universitätsbibliothek Freie Universität Berlin
   * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
   *
   * Static pages plugin schema in XML.
@@ -29,6 +29,18 @@
 			<NOTNULL/>
 		</field>
 		<field name="content" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="copyright" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="sliderImage" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="sliderImageLink" type="C2" size="255">
+			<NOTNULL/>
+		</field>
+		<field name="sliderIamgeAltText" type="C2" size="255">
 			<NOTNULL/>
 		</field>		
 		<field name="sequence" type="I8">

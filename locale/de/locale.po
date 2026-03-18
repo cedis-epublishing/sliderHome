@@ -1,0 +1,147 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Zeigt auf der Startseite einen Slider an."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Sliderinhalte"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Sliderinhalt hinzufügen"
+
+msgid "plugins.generic.sliderHome.editSliderContent"
+msgstr "Sliderinhalt bearbeiten"
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Name des Sliderbildes"
+
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Sliderbild Name"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "Hinweis: Das hier eingegebene HTML wird in ein &lt;div id=\"slider-overlay\" class=\"slider-text\"&gt;&lt;/div&gt; eingefügt welches einen transparenten Hintergrund erzeugt. Sie können diesen im Stylesheet der Zeitschrift modifizieren. Hier sollten keine Bilder eingefügt werden."
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "HTML-Inhalt für Überlagerung"
+
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Copyright Hinweis"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Sliderbild"
+
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "Wenn Sie das Sliderbild verlinken möchten können Sie hier eine URL angeben."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Diesen Sliderinhalt auf der Startseite anzeigen."
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.description"
+msgstr "Maximale Höhe des Sliders in Prozent des Bildschirms."
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight"
+msgstr "Höhe des Sliders"
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.error"
+msgstr "Fehler: Die Höhe sollte im Bereich 0 to 100 liegen!"
+
+msgid "plugins.generic.sliderHome.settings.form.speed.description"
+msgstr "Dauer des Übergangs zwischen Slides (in ms)."
+
+msgid "plugins.generic.sliderHome.settings.form.speed"
+msgstr "Geschwindigkeit des Sliders"
+
+msgid "plugins.generic.sliderHome.settings.form.speed.error"
+msgstr "Fehler: Die Geschwindigkeit sollte eine positive Zahl sein!"
+
+msgid "plugins.generic.sliderHome.settings.form.delay.description"
+msgstr "Verzögerung zwischen den Übergängen (in ms)."
+
+msgid "plugins.generic.sliderHome.settings.form.delay"
+msgstr "Verzögerung des Sliders"
+
+msgid "plugins.generic.sliderHome.settings.form.delay.error"
+msgstr "Fehler: Die Verzögerung sollte eine positive Zahl sein!"
+
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide"
+msgstr "Slideshow nach einem Durchlauf anhalten."
+
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Slider Wiederholung"
+
+msgid "plugins.generic.sliderHome.settings.form.success"
+msgstr "Die Slider-Einstellungen wurden aktualisiert. <a href=\"{$url}\" target=\"_blank\">Hier ansehen</a>"
+
+msgid "plugins.generic.sliderHome.settings.form.groupLabel"
+msgstr "Slider Einstellungen"
+
+msgid "plugins.generic.sliderHome.settings.form.groupDescription"
+msgstr "Bitte beachten:<br>Die Sliderhöhe wird durch die Höhe des größten angezeigten Bildes bestimmt. Nur wenn diese Höhe die vertikale Bildschirmauflösung übersteigt, kann die Sliderhöhe durch setzen der maximalen Sliderhöhe in Prozent der vertikalen Auflösung limitiert werden. Ansonsten hat diese Einstellung keinen Effekt. Dabei wird sowohl die Höhe als auch die Breite der Bilder skaliert.<br>Um die volle Sliderbreite zu nutzen sollte die Höhe der Bilder kleiner als die vertikale Bildschirmauflösung sein."
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.description"
+msgstr "Diese Option bestimmt, ob für lokalisierte Felder (Copyright, HTML-Inhalt, Image Alt Text) falls diese leer sind, die primäre Sprache übernommen werden soll oder nicht."
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.boxLabel"
+msgstr "Lokalisierungseinstellung"
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.useNone"
+msgstr "Aktuelle {$label}"
+
+msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
+msgstr "Wollen Sie diesen Sliderinhalt wirklisch löschen?"
+
+msgid "plugins.generic.sliderHome.imageUploadHeading"
+msgstr "Sliderbild hochladen"
+
+msgid "plugins.generic.sliderHome.settings.form.slideEffect"
+msgstr "Slide-Übergangseffekt"
+
+msgid "plugins.generic.sliderHome.settings.form.default"
+msgstr "Kein Übergangseffekt"
+
+msgid "plugins.generic.sliderHome.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.sliderHome.settings.form.cube"
+msgstr "Cube"
+
+msgid "plugins.generic.sliderHome.tableview.show"
+msgstr "Anzeigen"
+
+msgid "plugins.generic.sliderHome.tableview.hide"
+msgstr "Verstecken"
+
+msgid "plugins.generic.sliderHome.addFromIssue"
+msgstr "Ausgabe hinzufügen"
+
+msgid "plugins.generic.sliderHome.prevSlide"
+msgstr "Vorherige Folie"
+
+msgid "plugins.generic.sliderHome.nextSlide"
+msgstr "Nächste Folie"
+
+msgid "plugins.generic.sliderHome.noResults"
+msgstr "Bitte eine Ausgabe suchen"
+
+msgid "plugins.generic.sliderHome.contentForm.label"
+msgstr "Informationen für das Styling von Slides mittels CSS"
+
+msgid "plugins.generic.sliderHome.contentForm.description"
+msgstr "Die Darstellung der Sliderbilder und des HTML-Overlays können über das CSS-Stylesheet der Zeitschrift modifiziert werden.<br>Die Sliderbilder werden in ein HTML &ltfigure&gt-Element eingebettet, welches über den CSS-Selektor figure.slider-figure selektiert werden kann.<br>Overlay-Inhalt kann über #slider-overlay.slider-text selektiert werden.<br>Falls kein Bild hochgeladen wird, wird der Overlay-Inhalt zentriert ohne Hintergrund angezeigt. In diesem Fall ist das HTML-Element über #slide-no-image-container oder .slide-no-image-container selektierbar."

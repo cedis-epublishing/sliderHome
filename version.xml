@@ -5,7 +5,7 @@
 /**
  * @file plugins/generic/home/version.xml
  *
- * Copyright (c) 2021 Freie Universität Berlin
+ * Copyright (c) 2021 Universitätsbibliothek Freie Universität Berlin
  * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
  *
  */
@@ -13,8 +13,8 @@
 <version>
 	<application>sliderHome</application>
 	<type>plugins.generic</type>
-	<release>2.2.0.0</release>
-	<date>2021-07-07</date>
+	<release>2.5.0.0</release>
+	<date>2026-03-18</date>
 	<lazy-load>1</lazy-load>
 	<sitewide>0</sitewide>
 	<class>SliderHomePlugin</class>

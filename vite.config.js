@@ -1,0 +1,58 @@
+import { resolve } from "path";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+import i18nExtractKeys from "./i18nExtractKeys.vite.js";
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  target: "es2016",
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, '../../../lib/ui-library/src'), // Adjust the path as necessary
+    },
+  },
+  plugins: [
+    i18nExtractKeys(),
+    vue(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: 'node_modules/swiper/swiper-bundle.min.js',
+          dest: 'swiper' 
+        },
+        {
+          src: 'node_modules/swiper/swiper-bundle.min.css',
+          dest: 'swiper'
+        }
+      ]
+    })
+  ],
+  build: {
+    lib: {
+      // Could also be a dictionary or array of multiple entry points
+      entry: resolve(__dirname, "resources/js/main.js"),
+      name: "sliderHomePlugin",
+      // the proper extensions will be added
+      fileName: "sliderHome",
+      // important to generate Immediately Invoked Function Expression as output
+      // this can be easily loaded via script tag and ensure it will be executed immediatelly
+      // otherwise there would be risk that page will be rendered before plugin components gets registered
+      formats: ["iife"],
+    },
+    outDir: resolve(__dirname, "build"),
+    publicDir: resolve(__dirname, "public"),
+    rollupOptions: {
+      // make sure to externalize deps that shouldn't be bundled
+      // into your library
+      external: ["vue"],
+      output: {
+        // Provide global variables to use in the UMD build
+        // for externalized deps
+        globals: {
+          vue: "pkp.modules.vue",
+        },
+      },
+    },
+  },
+});

@@ -1,0 +1,130 @@
+/**
+ * @file plugins/generic/sliderContent/resources/css/sliderHome.css
+ *
+ * Copyright (c) 2021 Freie Universität Berlin
+ * Distributed under the GNU GPL v3. For full terms see the file docs/COPYING.
+ * 
+ * @brief File implemeting additional css styles.
+ */
+ 
+.swiper-container {
+	padding-bottom: 10px !important;
+	padding-top: 10px !important;
+	margin-bottom: 1rem !important;
+	overflow: hidden;
+}
+
+.swiper-wrapper {
+	padding-bottom: 10px !important;
+	align-items: center;
+}
+
+.swiper-wrapper p {
+	margin:0 !important;
+}
+
+.slider-text {
+	z-index: 1000;
+	background-color:rgba(255,255,255,0.6);
+	text-align: center;
+	position: absolute;
+	top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	width: 100%;
+}
+
+.slider-text-no-image {
+	/* center text vertically and horizontally inside its parent */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 1rem;
+	margin: 0% !important;
+	box-sizing: border-box;
+	text-align: center;
+	/* contrast-aware color: default to light text, can be overridden by parent */
+	color: var(--slider-text-color, #fff);
+	text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.slider-text-no-image a {
+	color: inherit;
+	text-decoration: underline;
+}
+
+/* Optional modifier for light backgrounds */
+.slider-text-no-image.light {
+	color: #000;
+	text-shadow: none;
+}
+
+.slider-text p {
+	min-width: 20vw;
+}
+
+.noclick {
+	pointer-events:none;
+}
+
+.slider-text p {
+	margin: 10px 0 10px 0 !important;
+}
+
+.slider-text h3 {
+	margin: 0 !important;
+} 
+
+.swiper-slide {
+	position: relative !important;
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: center !important;
+	justify-content: center !important;
+}
+
+.swiper-pagination {
+	position:relative !important;
+	--swiper-theme-color: #666 !important ;	
+}
+
+.swiper-pagination-bullets {
+	bottom: 0px !important;
+	padding: 1rem;
+}
+	
+.swiper-pagination-bullet {
+	margin: 0 7px !important;
+	height: 13px !important;
+	width: 13px !important;
+}
+
+.swiper-button-prev, .swiper-button-next {
+	--swiper-theme-color: rgba(102, 102, 102, 0.548) !important ;	
+}
+
+.slider-copyright {
+	display: block;
+	text-align: right;
+	font-size: xx-small;
+}
+
+.slider-link {
+	display: block;
+}
+
+.slider-figure {
+	transform: translate(0%, 0%);
+	text-align: center;
+	max-width: 90%;
+	width: fit-content;
+}
+
+.slide-no-image-container {
+	--slider-text-color: #000000;
+  }
+
+.slider-text-no-image.slider-text {
+	top: 50%!important;
+}

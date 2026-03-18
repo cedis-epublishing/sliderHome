@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-02T13:34:36+00:00\n"
+"PO-Revision-Date: 2021-07-02T13:34:36+00:00\n"
+"Language: \n"
+
+msgid "plugins.generic.sliderHome.displayName"
+msgstr "Plugin Slider in Home"
+
+msgid "plugins.generic.sliderHome.description"
+msgstr "Mostra uno slider in home page."
+
+msgid "plugins.generic.sliderHome.tabname"
+msgstr "Slider Plugin"
+
+msgid "plugins.generic.sliderHome.gridTitle"
+msgstr "Contenuto dello slider"
+
+msgid "plugins.generic.sliderHome.addSliderContent"
+msgstr "Aggiungi contenuto allo slider"
+
+msgid "plugins.generic.sliderHome.editSliderContent"
+msgstr "Modifica il contenuto dello Slider"
+
+msgid "plugins.generic.sliderHome.name"
+msgstr "Nome di questa immagine dello slider"
+
+msgid "plugins.generic.sliderHome.content"
+msgstr "Nota: Il codice HTML fornito qui verrà inserito in un &lt;div id=\"slider-overlay\" class=\"slider-text\"&gt;&lt;/div&gt; con uno sfondo trasparente. Puoi modificare lo stile dal foglio di stile della rivista. Non dovresti includere immagini qui."
+
+msgid "plugins.generic.sliderHome.showSliderContent"
+msgstr "Mostra il contenuto di questo slider sulla home page."
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.description"
+msgstr "Altezza massima del cursore come percentuale dell'altezza dello schermo."
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight"
+msgstr "Altezza dello Slider"
+
+msgid "plugins.generic.sliderHome.settings.form.maxHeight.error"
+msgstr "Errore: l'altezza del cursore deve essere compresa tra 0 e 100!"
+
+msgid "plugins.generic.sliderHome.settings.form.speed.description"
+msgstr "Durata della transizione tra le diapositive (in ms)."
+
+msgid "plugins.generic.sliderHome.settings.form.speed"
+msgstr "Velocità dello slider"
+
+msgid "plugins.generic.sliderHome.settings.form.speed.error"
+msgstr "Errore: la velocità dello slider deve essere un numero positivo!"
+
+msgid "plugins.generic.sliderHome.settings.form.delay.description"
+msgstr "Ritardo tra le transizioni (in ms)."
+
+msgid "plugins.generic.sliderHome.settings.form.delay"
+msgstr "Ritardo dello Slider"
+
+msgid "plugins.generic.sliderHome.settings.form.delay.error"
+msgstr "Errore: il ritardo dello slider deve essere un numero positivo!"
+
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide"
+msgstr "Interrompi la presentazione dopo l'ultima diapositiva."
+
+msgid "plugins.generic.sliderHome.settings.form.stopOnLastSlide.boxLabel"
+msgstr "Ripetizione dello Slider"
+
+msgid "plugins.generic.sliderHome.settings.form.success"
+msgstr "Le impostazioni dello slider sono state aggiornate.. <a href=\"{$url}\" target=\"_blank\">Visualizza ora</a>"
+
+msgid "plugins.generic.sliderHome.settings.form.groupLabel"
+msgstr "Impostazioni dello Slider"
+
+msgid "plugins.generic.sliderHome.settings.form.groupDescription"
+msgstr "Nota bene:<br>L'altezza dello slider è determinata dall'altezza dell'immagine più grande visualizzata. Solo se tale altezza supera la risoluzione verticale dello schermo, è possibile limitare l'altezza dello slider impostando l'altezza massima dello slider come percentuale della risoluzione verticale dello schermo. In caso contrario, questa impostazione non avrà alcun effetto. Sia l'altezza che la larghezza delle immagini saranno ridimensionate.<br>Per utilizzare l'intera larghezza dello slider, preparare le immagini con altezze inferiori alla risoluzione verticale dello schermo."
+
+msgid "plugins.generic.sliderHome.prevSlide"
+msgstr "Diapositiva precedente"
+
+msgid "plugins.generic.sliderHome.nextSlide"
+msgstr "Diapositiva successiva"
+
+msgid "plugins.generic.sliderHome.settings.form.coverflow"
+msgstr "Coverflow"
+
+msgid "plugins.generic.sliderHome.settings.form.cube"
+msgstr "Cube"
+
+msgid "plugins.generic.sliderHome.settings.form.default"
+msgstr "Nessuno"
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.boxLabel"
+msgstr "Impostazioni di localizzazione"
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.description"
+msgstr "Questa opzione determina se applicare la lingua primaria per i campi localizzati (Copyright, Contenuto HTML, Testo alternativo immagine) se sono vuoti."
+
+msgid "plugins.generic.sliderHome.settings.form.fallbackLocale.useNone"
+msgstr "Attuale {$label}"
+
+msgid "plugins.generic.sliderHome.settings.form.slideEffect"
+msgstr "Effetto di transizione dello slider"
+
+msgid "plugins.generic.sliderHome.tableview.show"
+msgstr "Mostra"
+
+msgid "plugins.generic.sliderHome.tableview.hide"
+msgstr "Nascondi"
+
+msgid "plugins.generic.sliderHome.ListPanel.confirmDelete"
+msgstr "Vuoi davvero eliminare questo contenuto dello slider?"
+
+msgid "plugins.generic.sliderHome.addFromIssue"
+msgstr "Aggiungi numero/volume"
+
+msgid "plugins.generic.sliderHome.copyright"
+msgstr "Nota sul copyright"
+
+msgid "plugins.generic.sliderHome.imageUploadHeading"
+msgstr "Carica immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderImage"
+msgstr "Immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderImageLink"
+msgstr "Se vuoi mettere un link sull'immagine dello slider puoi fornire un URL qui."
+
+msgid "plugins.generic.sliderHome.sliderName"
+msgstr "Nome dell'immagine dello slider"
+
+msgid "plugins.generic.sliderHome.sliderTextContentLabel"
+msgstr "Contenuto HTML sovrapposto dello slider"
+
+msgid "plugins.generic.sliderHome.noResults"
+msgstr "Please search for an issue"
+
+msgid "plugins.generic.sliderHome.contentForm.label"
+msgstr "Informazioni per lo styling delle diapositive tramite CSS"
+
+msgid "plugins.generic.sliderHome.contentForm.description"
+msgstr "L'aspetto delle immagini dello slider e dell'overlay HTML può essere modificato tramite il foglio di stile CSS della rivista.<br>Le immagini dello slider sono incorporate in un elemento HTML &ltfigure&gt, che può essere selezionato tramite il selettore CSS figure.slider-figure.<br>Il contenuto sovrapposto può essere selezionato tramite #slider-overlay.slider-text.<br>Se non viene caricata alcuna immagine, il contenuto sovrapposto viene visualizzato centrato senza sfondo. In questo caso, l'elemento HTML può essere selezionato tramite #slide-no-image-container o .slide-no-image-container."
+
