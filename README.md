@@ -1,27 +1,31 @@
-- Slider Home Plugin
+# Slider Home Plugin
 - Version: 2.5.0.0
-- Date: 25.11.2024
+- Date: 18.03.2026
 - Author: Carola Fanselow, Ronald Steffen
 
-About
------
-This plugin creates a swiper slider on the OJS/OMP homepage. Images and image caputes can be added in the OJS backend (website settings). Data is stored in table "slider". 
+## About
 
-This plugin is based on [Swiper](https://swiperjs.com) version 6.3.2 by Vladimir Kharlampidi (License MIT)
+This plugin creates a swiper slider on the OJS/OMP homepage. Slides may contain linked images with HTML overlay or HTML only content. Additional supported features:
 
-License
--------
+- Copyright notice below the slider image
+- Multilingual slides and texts
+- Configurable slider transitions and delays
+
+This plugin is based on [Swiper](https://swiperjs.com) version 12.0.3 by Vladimir Kharlampidi (License MIT)
+
+## License
+
 Copyright (c) 2021 Universitätsbiblithek Freie Universität Berlin
 
 This plugin is licensed under the GNU General Public License v3. 
 
-System Requirements
--------------------
-This plugin is compatible with...
- - OJS/OMP 3.4
+## System Requirements
 
-Installation
-------------
+This plugin is compatible with...
+ - OJS/OMP 3.5
+
+## Installation
+
 To install a release package of the plugin:
  - Upload the tar.gz file (Management > Website Settings > Plugins > Generic Plugins)
 
@@ -34,12 +38,11 @@ npm install
 npm run build
 ```
 
-Usage
-------------
+## Usage
 
 Go to "Website -> Appearance -> Slider Plugin" and create new slider entries. You can add a slider image and HTML content to overlay onto the slider image separately.
 
-A config.inc.php setting is supported to enable TinyMCE plugins and add functions to the toolbars. E.g. to enable HTML source code editing add the following to config.inc.php. Only plugins that are enable by OJS are available.
+A config.inc.php setting is supported to enable TinyMCE plugins and add functions to the toolbars. E.g. to enable HTML source code editing add the following to config.inc.php. Only plugins that are enabled by OJS are available.
 
 ```php
 [sliderHome]
