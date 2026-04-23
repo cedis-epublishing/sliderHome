@@ -90,6 +90,51 @@ class SliderHomeSchemaMigration extends Migration {
 
         } else {
             echo "SliderHomeSchemaMigration: 'slider_settings' table already exists, skipping migration.\n";
+
+            # for each locale, update the locale value to match the new format (e.g. de_DE to de)
+            DB::table('slider_settings')->distinct()
+                ->select('locale')
+                ->where('locale', 'like', '%\_%')
+                ->get()
+                ->each(function ($setting) {
+                    $newLocale = explode('_', $setting->locale)[0];
+                    DB::table('slider_settings')
+                        ->where('locale', $setting->locale)
+                        ->update(['locale' => $newLocale]);
+                });
+
+            # for each sliderImage: copy image from default locale to all other locales if not already set
+            $sliderContents = DB::table('slider')->get();
+            foreach ($sliderContents as $content) {
+                $defaultImage = DB::table('slider_settings')
+                    ->where('slider_content_id', $content->slider_content_id)
+                    ->where('setting_name', 'sliderImage')
+                    ->where('locale', '')
+                    ->first();
+                if ($defaultImage) {
+                    $otherLocales = DB::table('slider_settings')
+                        ->distinct()
+                        ->select('locale')
+                        ->where('locale', '!=', '')
+                        ->get();
+                    foreach ($otherLocales as $locale) {
+                        $existingImage = DB::table('slider_settings')
+                            ->where('slider_content_id', $content->slider_content_id)
+                            ->where('setting_name', 'sliderImage')
+                            ->where('locale', $locale->locale)
+                            ->first();
+                        if (!$existingImage) {
+                            DB::table('slider_settings')->insert([
+                                'slider_content_id' => $content->slider_content_id,
+                                'setting_name' => 'sliderImage',
+                                'setting_value' => $defaultImage->setting_value,
+                                'setting_type' => 'string',
+                                'locale' => $locale->locale,
+                            ]);
+                        }
+                    }
+                }
+            }
         }
     }
 }
