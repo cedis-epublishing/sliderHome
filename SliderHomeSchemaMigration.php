@@ -25,7 +25,6 @@ class SliderHomeSchemaMigration extends Migration {
      * @return void
      */
     public function up() {
-        echo "Running SliderHomeSchemaMigration...\n";
         // we need to update tables if at least one doesn't exist
         if (!Schema::hasTable('slider_settings') || !Schema::hasTable('slider')) {
 
@@ -33,24 +32,16 @@ class SliderHomeSchemaMigration extends Migration {
             // This script is not context-aware PublicFileManager cannot be used and public files must be handled globally
             // search for slider images and print to stdout to delete them manually
             $publicFilePath = Config::getVar('files', 'public_files_dir') . '/journals';
-            $sliderFiles = glob($publicFilePath . '/*/slider_image_*');
-            if ($sliderFiles) {
-                echo "The following slider image files were found and should be deleted manually:\n";
-                foreach ($sliderFiles as $file) {
-                    echo $file . "\n";
-                }
-            }
+            $sliderFiles = glob($publicFilePath . '/' . '*/slider_image_*'); // to avoid comment
 
             // remove old slider data and tables
             if (Schema::hasTable('slider')) {
-                echo "Removing old slider data and tables...\n";
                 Schema::drop('slider');
             }
             if (Schema::hasTable('slider_settings')) {
                 Schema::drop('slider_settings');
             }
 
-            echo "Creating new slider tables...\n";
             // main slider table
             Schema::create('slider', function (Blueprint $table) {
                 $table->increments('slider_content_id');
@@ -87,9 +78,6 @@ class SliderHomeSchemaMigration extends Migration {
                 ->where('setting_name', 'slideEffect')
                 ->whereNull('setting_value')
                 ->update(['setting_value' => '']);
-
-        } else {
-            echo "SliderHomeSchemaMigration: 'slider_settings' table already exists, skipping migration.\n";
-        }
+        } 
     }
 }
