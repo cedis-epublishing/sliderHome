@@ -1,7 +1,7 @@
 # Slider Home Plugin
-- Version: 2.5.0.0
-- Date: 18.03.2026
-- Author: Carola Fanselow, Ronald Steffen
+- Version: 2.5.0.2
+- Date: 02.06.2026
+- Author: Ronald Steffen, Carola Fanselow
 
 ## About
 
@@ -59,4 +59,6 @@ tinymcetoolbar=' | code'
 - Run `npm install`
 - Use `npm run dev`
 
+## Migration
 
+You may need to delete images manually after migration to plugin version 2.5.0.
